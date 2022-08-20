@@ -1,0 +1,18 @@
+/* 自定义配色 */
+:root {
+  --el-color-primary-dark-1: #409EFF;
+  --el-color-primary-dark-2: #337ecc;
+  --el-color-primary-light-3: #79bbff;
+  --el-color-primary-light-5: #a0cfff;
+  --el-color-primary-light-7: #c6e2ff;
+  --el-color-primary-light-8: #d9ecff;
+  --el-color-primary-light-9: #ecf5ff;
+  --root-global-color: #34d399;
+  /* 进度条高度 */
+  --progress-bar-height: 4px;
+  /* 图标颜色 */
+  --icon-color-default-light-1: #9AA8BC;
+  --icon-color-hover-light-1: #34d399;
+  /* 字体颜色 */
+  --font-color-default-dark-1: #334155;
+}
