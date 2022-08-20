@@ -37,14 +37,4 @@ export default defineConfig({
       }
     }
   },
-  // 打包设置去掉console.log
-  build: {
-    terserOptions: {
-      compress: {
-        //生产环境时移除console
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
-  },
 })
