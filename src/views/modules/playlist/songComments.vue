@@ -1,5 +1,5 @@
 <template>
-  <div>登录</div>
+  <div>歌曲评论组件</div>
 </template>
 
 <script setup>

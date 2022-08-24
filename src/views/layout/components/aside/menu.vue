@@ -47,7 +47,6 @@ const store = reactive([
 const currentActive = (item) => {
   currentPath.value = item.path;
   console.log(item.path);
-  console.log(route.path);
   if (item.path) {
     router.push(item.path);
   } else {

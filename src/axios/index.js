@@ -1,4 +1,6 @@
 import axios from "axios";
+import NProgress from "nprogress"; //引入nprogress 进度条插件
+import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
 
 const http = axios.create({
   withCredentials: true,// 跨域请求时是否需要使用凭证
@@ -8,12 +10,14 @@ const http = axios.create({
 // 添加请求拦截器
 http.interceptors.request.use(
   function (config) {
+    // 开启进度条
+    NProgress.start();
     // 添加 token 验证的 Authorization 字段
     // 判断后台服务器地址添加不同的请求头
     if (config.baseURL === '/api') {
       config.headers.Authorization = window.sessionStorage.getItem("token");
     }
-    console.log("请求拦截器触发：", config);
+    // console.log("请求拦截器触发：", config);
     // 在发送请求之前做些什么
     return config;
   },
@@ -26,9 +30,11 @@ http.interceptors.request.use(
 // 添加响应拦截器
 http.interceptors.response.use(
   function (response) {
+    // 关闭进度条
+    NProgress.done();
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
-    console.log("响应拦截器触发：", response);
+    // console.log("响应拦截器触发：", response);
     return response;
   },
   function (error) {

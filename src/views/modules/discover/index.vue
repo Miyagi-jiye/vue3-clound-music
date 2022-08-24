@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="discover">
     <p class="title">推荐</p>
     <Banner :myData='banner' />
     <Title title="你的专属歌单" />
@@ -19,19 +19,20 @@ import Recommend from '@/views/modules/discover/recommend.vue'
 import Title from "@/components/Title.vue"
 import Banner from "@/views/modules/discover/banner.vue"
 import useStore from "@/pinia/index.js"
-const { discover } = useStore()
-discover.get_banner()
-discover.get_recommend()
-discover.get_newSong()
-discover.get_mv()
-let banner = computed(() => discover.banner)
-let recommend = computed(() => discover.recommend)
-let newsong = computed(() => discover.newSong)
-let mv = computed(() => discover.mv)
+
+const { Discover } = useStore()
+Discover.get_banner()
+Discover.get_recommend()
+Discover.get_newSong()
+Discover.get_mv()
+let banner = computed(() => Discover.banner)
+let recommend = computed(() => Discover.recommend)
+let newsong = computed(() => Discover.newSong)
+let mv = computed(() => Discover.mv)
 </script>
 
 <style lang="less" scoped>
-.main {
+.discover {
   width: 100%;
   box-sizing: border-box;
   padding: 0 20px;

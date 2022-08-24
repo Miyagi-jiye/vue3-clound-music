@@ -2,8 +2,10 @@
   <div style="width:100%">
     <div class="header">
       <div class="left">
-        <icon-left theme="outline" size="26" :strokeWidth="2" />
-        <icon-right theme="outline" size="26" :strokeWidth="2" />
+        <div class="goBack">
+          <icon-left theme="outline" size="26" :strokeWidth="2" @click="router.back()" />
+          <icon-right theme="outline" size="26" :strokeWidth="2" @click="router.forward()" />
+        </div>
         <el-input v-model="search" placeholder="搜索音乐、MV、歌单" :prefix-icon="Search" />
       </div>
       <div class="right">
@@ -30,7 +32,7 @@
         </el-form>
       </div>
       <template #footer>
-        <el-button class="loginBtn" type="primary" @click="login">登录</el-button>
+        <el-button class="loginBtn" type="primary" @click="login" :loading="btnLoding">登录</el-button>
       </template>
     </el-dialog>
   </div>
@@ -38,8 +40,12 @@
 
 <script setup>
 import { ref, reactive } from "vue"
+import { useRouter } from "vue-router"
 import { Search } from '@icon-park/vue-next'//字节跳动图标组件
 import { useLogin } from "@/api/index.js"
+import { ElMessage } from 'element-plus'
+// 路由
+const router = useRouter()
 // 搜索关键字
 let search = ref('')
 // 登录弹框
@@ -49,6 +55,8 @@ let loginForm = reactive({
   username: '',
   password: ''
 })
+// 登录按钮加载状态
+let btnLoding = ref(false)
 // 表单对象
 const loginFormRef = ref(null);
 // 登录表单验证规则
@@ -70,11 +78,45 @@ const loginShow = () => {
 const login = () => {
   loginFormRef.value.validate((valid) => {
     if (valid) {
-      useLogin(loginForm.username, loginForm.password).then(res => {
-        console.log(res)
-      })
+      // 按钮开始加载
+      btnLoding.value = true
+      useLogin(loginForm.username, loginForm.password)
+        // 请求成功
+        .then(res => {
+          console.log("获取登录信息", res.data)
+          if (res.data.code == 502) {
+            ElMessage({
+              showClose: true,//是否显示关闭按钮
+              grouping: true,//是否将多条消息组合到一条消息中
+              message: res.data.msg || '登录失败',//内容保底
+              type: 'error',//消息类型
+            })
+          } else {
+            ElMessage({
+              showClose: true,//是否显示关闭按钮
+              grouping: true,//是否将多条消息组合到一条消息中
+              message: res.data.msg || '登录成功',//内容保底
+              type: 'success',//消息类型
+            })
+            if (res.data.token) {
+              localStorage.setItem('token', JSON.stringify(res.data.token))
+            }
+            if (res.data.cookie) {
+              localStorage.setItem('cookie', JSON.stringify(res.data.cookie))
+            }
+          }
+        })
+        // 请求错误
+        .catch(err => {
+          console.log(err)
+        })
+        // 请求结束
+        .finally(() => {
+          // 按钮结束加载
+          btnLoding.value = false
+        })
     } else {
-      console.log('error submit!!')
+      console.log('表单验证不通过')
       return false
     }
   })
@@ -83,6 +125,15 @@ const login = () => {
 </script>
 
 <style lang="less" scoped>
+:deep(.el-input__wrapper) {
+  border-radius: 20px;
+  background-color: #F1F5F9;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px #34d399 inset;
+}
+
 .header {
   width: 100%;
   height: 100%;
@@ -98,37 +149,34 @@ const login = () => {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 20px;
 
-    span:nth-child(1) {
-      padding-right: 8px;
-      cursor: pointer;
-
-      &:hover {
-        color: rgb(52 211 153);
+    .goBack {
+      @media screen and (max-width: 600px) {
+        display: none;
       }
-    }
 
-    span:nth-child(2) {
-      padding-left: 8px;
-      cursor: pointer;
+      span:nth-child(1) {
+        padding-right: 8px;
+        cursor: pointer;
 
-      &:hover {
-        color: rgb(52 211 153);
+        &:hover {
+          color: rgb(52 211 153);
+        }
+      }
+
+      span:nth-child(2) {
+        padding-left: 8px;
+        cursor: pointer;
+
+        &:hover {
+          color: rgb(52 211 153);
+        }
       }
     }
 
     .el-input {
-      margin: 0 16px;
       width: 200px;
-    }
-
-    :deep(.el-input__wrapper) {
-      border-radius: 20px;
-      background-color: #F1F5F9;
-    }
-
-    :deep(.el-input__wrapper.is-focus) {
-      box-shadow: 0 0 0 1px #34d399 inset;
     }
   }
 

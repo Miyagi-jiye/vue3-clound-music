@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
+  <div class="MV">
     <div class="vfor" v-for="item in myData" :key="item.id">
-
       <div class="mv">
         <img class="img" v-img-lazy="item.picUrl + '?param=1080y600'" :alt="'MVID=' + item.id">
         <div class="playCount">
@@ -12,7 +11,6 @@
       </div>
       <p class="name">{{ item.name }}</p>
       <p class="artistName">{{ item.artistName }}</p>
-
     </div>
   </div>
 </template>
@@ -29,7 +27,7 @@ defineProps({
 </script>
 
 <style lang="less" scoped>
-.container {
+.MV {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); //自动分配列宽
   grid-gap: 20px;
@@ -39,7 +37,7 @@ defineProps({
     .mv {
       position: relative;
       overflow: hidden;
-      border-radius: 4px;
+      border-radius: var(--my-border-radius);
 
       &:hover {
         cursor: pointer;
@@ -60,7 +58,7 @@ defineProps({
       .img {
         width: 100%;
         height: auto;
-        border-radius: 4px;
+        border-radius: var(--my-border-radius);
         transition: all 1s ease;
 
         &:hover {

@@ -25,13 +25,16 @@ const routes = [
           keepAlive: true,
         }
       },
+      {
+        path: 'playlist',
+        name: 'playlist',
+        component: () => import("@/views/modules/playlist/index.vue"),
+        meta: {
+          menu: 'playlist',
+          keepAlive: true,
+        }
+      }
     ]
-  },
-  // 登录页面
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/global/login.vue"),
   },
   // 404页面
   {
@@ -49,8 +52,8 @@ const router = createRouter({
 
 // 页面路由刚开始切换的时候
 router.beforeEach((to, from, next) => {
-  // 开启进度条
-  NProgress.start();
+  // // 开启进度条
+  // NProgress.start();
   // 登录页直接放行
   if (to.path === "/login") return next();
   // // 获取token
@@ -63,8 +66,8 @@ router.beforeEach((to, from, next) => {
 
 // 页面路由切换完毕的时候
 router.afterEach(() => {
-  // 关闭进度条
-  NProgress.done();
+  // // 关闭进度条
+  // NProgress.done();
 });
 
 export default router

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid">
+  <div class="newSong">
     <div class="flex" v-for="item in myData">
       <span class="father">
         <img class="img" v-img-lazy="item.picUrl + '?param=100y100'" :alt="'新歌ID=' + item.id">
@@ -23,7 +23,7 @@ defineProps({
 </script>
 
 <style lang="less" scoped>
-.grid {
+.newSong {
   display: grid;
   // 自适应列
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -38,24 +38,23 @@ defineProps({
     &:hover {
       background-color: #fff;
       cursor: pointer;
-      border-radius: 4px;
-    }
+      border-radius: var(--my-border-radius);
 
-    .father {
-      position: relative;
-
-      &:hover {
+      .father {
         .playIcon {
           opacity: 1; //显示播放图标
           cursor: pointer;
         }
       }
+    }
 
+    .father {
+      position: relative;
 
       .img {
         width: 60px;
         height: 60px;
-        border-radius: 4px;
+        border-radius: var(--my-border-radius);
       }
 
       .playIcon {

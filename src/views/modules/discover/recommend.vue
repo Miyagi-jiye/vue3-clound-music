@@ -1,9 +1,11 @@
 <template>
-  <div class="container">
+  <div class="recommend">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="cardImg">
-        <img class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id">
-        <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放' />
+        <img class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
+          @click="toPlaylist(item.id)">
+        <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
+          @click="playMusic(item.id)" />
         <div class="playCount">
           <icon-headset theme="filled" size="12" :strokeWidth="4" />
           <text>{{ playCountFilter(item.playCount) }}</text>
@@ -17,18 +19,37 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import useStore from "@/pinia/index.js"
 // 过滤播放量
 import { playCountFilter } from '@/utils/playCountFilter'
+
+const router = useRouter()
+const { Playlist } = useStore()
+
 defineProps({
   myData: {
     type: Array,
     default: () => [{ id: 123456, picUrl: '', name: '默认简介' }]
   }
 })
+
+// 跳转到歌单详情页
+const toPlaylist = async (id) => {
+  Playlist.get_songlistComment(id)
+  await Playlist.get_songlistDetail(id)
+  router.push({ name: 'playlist' })
+}
+// 获取歌单所有歌曲
+const playMusic = async (id) => {
+  await Playlist.get_songlistDetail(id)
+  Playlist.push_musicToPlayList()
+  console.log("将歌单歌曲全部添加到播放列表");
+}
 </script>
 
 <style lang="less" scoped>
-.container {
+.recommend {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 20px;
@@ -41,7 +62,7 @@ defineProps({
       height: auto;
       width: 100%;
       overflow: hidden;
-      border-radius: 4px;
+      border-radius: var(--my-border-radius);
       position: relative;
       transition: all 1s ease;
 
@@ -72,7 +93,7 @@ defineProps({
       .discoverImg {
         max-width: 100%;
         height: auto;
-        border-radius: 4px;
+        border-radius: var(--my-border-radius);
         transition: all 1s ease;
       }
 
