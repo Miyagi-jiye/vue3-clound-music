@@ -59,18 +59,11 @@ function format(times) {
   // 返回格式 00：00 不足两位的补零
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 }
+// 添加到播放列表，并改变当前播放的对象
 const play = (item) => {
   console.log('播放', item)
-  // 改变播放的对象
-  Playlist.currentPlayMusic = item
-  // 判断是否已经存在该歌曲
-  let res = Playlist.toPlayList.some((e) => e.id === item.id)
-  if (res) {
-    return false
-  } else {
-    // 将歌曲添加到播放列表
-    Playlist.toPlayList.push({ name: item.name, id: item.id, al: item.al, ar: item.ar, dt: item.dt })
-  }
+  Playlist.push_toPlayList(item)
+  Playlist.change_playMusic(item)
 }
 </script>
 

@@ -16,7 +16,6 @@
   --my-border-radius: 8px;
   /* 进度条高度 */
   --progress-bar-height: 4px;
-
 }
 
 /* 溢出隐藏不换行 */
@@ -51,6 +50,20 @@
 /* 屏幕宽度大于600px就隐藏元素 */
 @media (min-width: 600px) {
   .hidden-more-600 {
+    display: none !important;
+  }
+}
+
+/* 屏幕宽度小于1000px就隐藏元素 */
+@media (max-width: 1000px) {
+  .hidden-less-1000 {
+    display: none !important;
+  }
+}
+
+/* 屏幕宽度大于1000px就隐藏元素 */
+@media (min-width: 1000px) {
+  .hidden-more-1000 {
     display: none !important;
   }
 }

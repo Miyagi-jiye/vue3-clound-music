@@ -6,14 +6,14 @@
           <icon-left theme="outline" size="26" :strokeWidth="2" @click="router.back()" />
           <icon-right theme="outline" size="26" :strokeWidth="2" @click="router.forward()" />
         </div>
-        <el-input v-model="search" placeholder="搜索音乐、MV、歌单" :prefix-icon="Search" />
+        <SearchPopover />
       </div>
       <div class="right">
-        <div class="avatar" @click="loginShow">
+        <div class="avatar hidden-less-600" @click="loginShow">
           <el-avatar :size="32" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
           <a>点击登录</a>
         </div>
-        <icon-hamburger-button theme="outline" size="28" :strokeWidth="2" />
+        <HamburgerIcon iconSize='28' class="hamburgerIcon" />
       </div>
     </div>
     <!-- 登陆弹框 -->
@@ -39,15 +39,14 @@
 </template>
 
 <script setup>
+import HamburgerIcon from "@/components/HamburgerIcon.vue"//汉堡按钮弹框
+import SearchPopover from "@/components/SearchPopover.vue"//搜索组件
 import { ref, reactive } from "vue"
 import { useRouter } from "vue-router"
-import { Search } from '@icon-park/vue-next'//字节跳动图标组件
 import { useLogin } from "@/api/index.js"
 import { ElMessage } from 'element-plus'
 // 路由
 const router = useRouter()
-// 搜索关键字
-let search = ref('')
 // 登录弹框
 let dialogVisible = ref(false)
 // 登录表单
@@ -125,6 +124,15 @@ const login = () => {
 </script>
 
 <style lang="less" scoped>
+// 汉堡按钮
+.hamburgerIcon {
+  cursor: pointer;
+
+  &:hover {
+    color: #34d399;
+  }
+}
+
 :deep(.el-input__wrapper) {
   border-radius: 20px;
   background-color: #F1F5F9;
@@ -132,6 +140,10 @@ const login = () => {
 
 :deep(.el-input__wrapper.is-focus) {
   box-shadow: 0 0 0 1px #34d399 inset;
+}
+
+:deep(.el-dialog) {
+  border-radius: 8px;
 }
 
 .header {
@@ -152,31 +164,17 @@ const login = () => {
     gap: 20px;
 
     .goBack {
-      @media screen and (max-width: 600px) {
-        display: none;
-      }
+      display: flex;
+      align-items: center;
+      gap: 16px;
 
-      span:nth-child(1) {
-        padding-right: 8px;
+      span {
         cursor: pointer;
 
         &:hover {
           color: rgb(52 211 153);
         }
       }
-
-      span:nth-child(2) {
-        padding-left: 8px;
-        cursor: pointer;
-
-        &:hover {
-          color: rgb(52 211 153);
-        }
-      }
-    }
-
-    .el-input {
-      width: 200px;
     }
   }
 
@@ -192,20 +190,9 @@ const login = () => {
       flex-direction: row;
       flex-wrap: nowrap;
       align-items: center;
+      gap: 8px;
       cursor: pointer;
       font-size: 14px;
-
-      .el-avatar {
-        margin: 0 8px;
-      }
-
-      &:hover {
-        color: #34d399;
-      }
-    }
-
-    span {
-      cursor: pointer;
 
       &:hover {
         color: #34d399;
@@ -216,5 +203,6 @@ const login = () => {
 
 .loginBtn {
   width: 100%;
+  border-radius: 20px;
 }
 </style>

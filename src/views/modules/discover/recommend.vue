@@ -44,7 +44,7 @@ const toPlaylist = async (id) => {
 const playMusic = async (id) => {
   await Playlist.get_songlistDetail(id)
   Playlist.push_musicToPlayList()
-  console.log("将歌单歌曲全部添加到播放列表");
+  console.log("将歌单添加到播放列表");
 }
 </script>
 

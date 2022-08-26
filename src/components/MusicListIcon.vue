@@ -1,8 +1,10 @@
 <template>
   <div>
-    <!-- 播放列表图标 -->
-    <icon-music-list class="musicList hidden-more-600" theme="filled" :size="iconSize" :strokeWidth="2" title='歌曲列表'
-      @click="drawer = true" />
+    <el-badge :value="myData.length" :hidden="myData.length == 0 ? true : false">
+      <!-- 播放列表图标 -->
+      <icon-music-list class="musicList" theme="filled" :size="iconSize" :strokeWidth="2" title='歌曲列表'
+        @click="drawer = true" />
+    </el-badge>
     <!-- 弹出框 -->
     <el-drawer v-model="drawer" direction="rtl" :size="size" :with-header="false">
       <!-- 头部插槽 -->
@@ -11,7 +13,7 @@
           <div class="large-title">播放列表</div>
           <div class="small-title">
             <span>共{{ myData.length }}首歌曲</span>
-            <div class="icon">
+            <div class="icon" @click="clearPlayList">
               <icon-delete theme="outline" size="14" :strokeWidth="4" title='清空' />
               <span>清空</span>
             </div>
@@ -41,7 +43,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const emit = defineEmits(['dblclickChild'])
+const emit = defineEmits(['dblclickChild', 'clearChild'])
 
 defineProps({
   myData: {
@@ -64,6 +66,7 @@ defineProps({
     default: () => { }
   }
 })
+// 弹框显示
 let drawer = ref(false)
 // 格式化毫秒
 function format(times) {
@@ -76,8 +79,11 @@ function format(times) {
 }
 // 切换歌曲
 function switchPlayMiusic(item) {
-  console.log("切换", item);
   emit('dblclickChild', item)
+}
+// 清空播放列表
+function clearPlayList() {
+  emit('clearChild')
 }
 </script>
 
@@ -171,8 +177,13 @@ function switchPlayMiusic(item) {
     width: 100%;
 
     span {
+      word-break: break-word;
+      -webkit-line-clamp: 1;
       text-overflow: ellipsis;
+      white-space: normal;
       overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
     }
 
     .author {

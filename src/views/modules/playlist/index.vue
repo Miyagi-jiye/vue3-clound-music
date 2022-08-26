@@ -1,5 +1,5 @@
 <template>
-  <div class="playlist">
+  <div class="playlist" v-if="Playlist.playlist">
     <div class="flex">
       <Info :myData='playlist' />
       <el-tabs class="tab" v-model="activeTab">
@@ -15,12 +15,13 @@
 </template>
 
 <script setup>
-import SongComments from "@/views/modules/playlist/songComments.vue"// 歌曲评论组件
-import SongList from '@/views/modules/playlist/songList.vue'// 歌曲列表组件
+import SongComments from "@/views/modules/playlist/songComments.vue"// 歌单评论组件
+import SongList from '@/views/modules/playlist/songList.vue'// 歌单列表组件
 import Info from "@/views/modules/playlist/info.vue"// 歌单详情组件
 import { ref, computed } from "vue"
 import useStore from "@/pinia/index.js"
 const { Playlist } = useStore()
+
 // 默认激活菜单
 const activeTab = ref("tracks")
 // 歌曲数量

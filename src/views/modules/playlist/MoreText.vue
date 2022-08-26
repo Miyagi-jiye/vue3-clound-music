@@ -1,5 +1,5 @@
 <template>
-  <div style="line-height: 1.25rem;color:#6B7280">
+  <div style="line-height: 1.25rem;color:#6B7280" v-if="props.text">
     <template v-if="show">
       <span v-if="!isShow">{{ text.substring(0, end) }}...</span>
       <span v-else>{{ text }}...</span>
@@ -15,7 +15,7 @@ import { ref } from "vue";
 const props = defineProps({
   text: {
     type: String,
-    default: '默认介绍'
+    default: '默认简介'
   },
   end: {
     type: Number,
