@@ -6,35 +6,45 @@ import vue from '@vitejs/plugin-vue'
 // import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'// 自动注册组件的解析器
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  //本地运行时的路径
-  base: "./",
-  // 插件
-  plugins: [
-    vue(),
-    // AutoImport({
-    //   resolvers: [ElementPlusResolver()],
-    // }),
-    // Components({
-    //   resolvers: [ElementPlusResolver()],
-    // }),
-  ],
-  // 路径别名
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    }
-  },
-  // 代理服务器
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
+// command: serve or build
+// mode: development or production
+export default defineConfig(({ command, mode }) => {
+  // 判断是开发模式还是生产模式，返回不同的配置
+  // if (mode === 'development') {
+  //   return {}
+  // } else {
+  //   return {}
+  // }
+  return {
+    //本地运行时的路径
+    base: "./",
+    // 插件
+    plugins: [
+      vue(),
+      // AutoImport({
+      //   resolvers: [ElementPlusResolver()],
+      // }),
+      // Components({
+      //   resolvers: [ElementPlusResolver()],
+      // }),
+    ],
+    // 路径别名
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      }
+    },
+    // 代理服务器
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          }
         }
       }
-    }
-  },
+    },
+  }
 })

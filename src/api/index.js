@@ -135,3 +135,11 @@ export function useSearchMultimatch(keywords) {
     params: { keywords: keywords }
   });
 }
+// 获取歌词
+export function useLyric(id) {
+  return http({
+    method: "get",
+    url: "/lyric",
+    params: { id: id }
+  });
+}

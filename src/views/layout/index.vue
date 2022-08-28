@@ -2,7 +2,9 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="240px">
-        <Menu />
+        <el-scrollbar>
+          <Menu />
+        </el-scrollbar>
       </el-aside>
       <el-container>
         <el-header>

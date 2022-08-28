@@ -4,7 +4,7 @@ import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
 
 const http = axios.create({
   withCredentials: true,// 跨域请求时是否需要使用凭证
-  baseURL: import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR || 'https://netease-cloud-music-api-alpha-sepia.vercel.app', //默认请求路径
+  baseURL: 'http://localhost:3000', //默认请求路径 import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR || 
 });
 
 // 添加请求拦截器

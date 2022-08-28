@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useSonglistDetail, useSonglistComment, useMusicUrl } from "@/api/index.js";
+import { useSonglistDetail, useSonglistComment, useMusicUrl, useLyric } from "@/api/index.js";
 import vue from "@/assets/img/vue.svg"//默认播放音乐的图片
 
 const usePlaylistStore = defineStore("playlist", {
@@ -11,6 +11,7 @@ const usePlaylistStore = defineStore("playlist", {
     currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 100 * 1000 },// 当前播放的音乐
     toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 100 * 1000 }],//歌单播放列表
     playListIndex: 0,//播放列表索引下标
+    lyric: []
   }),
   // 相当于 computed 计算属性
   getters: {
@@ -82,9 +83,10 @@ const usePlaylistStore = defineStore("playlist", {
       }
     },
     // 改变当前播放音乐
-    change_playMusic(obj) {
+    async change_playMusic(obj) {
       // 判断当前播放音乐是否是该歌曲
       if (this.currentPlayMusic.id !== obj.id) {
+        await this.get_lyric(obj.id)
         this.currentPlayMusic = obj
       } else {
         return false
@@ -108,11 +110,74 @@ const usePlaylistStore = defineStore("playlist", {
     // 上一首音乐
     pre_music() {
       this.currentPlayMusic = this.prevSong
+      this.get_lyric(this.currentPlayMusic.id)
     },
     // 下一首音乐
     next_music() {
       this.currentPlayMusic = this.nextSong
+      this.get_lyric(this.currentPlayMusic.id)
     },
+    // 获取歌词
+    async get_lyric(id) {
+      const res = await useLyric(id)
+      this.lyric = this.parse_lyric(res.data.lrc.lyric)
+      console.log("获取歌词", res.data);
+    },
+    // 处理歌词
+    handle_lyric(lyric) {
+      let array = []
+      // 截取 [00:01.02] 以及过滤为null或undefined的字符串，返回新数组
+      array = lyric.split(/\s*\n*\[.*?\]\s*/).filter(v => !!v)
+      // console.log("处理后的歌词", array);
+      return array
+    },
+    // 格式化歌词方法
+    parse_lyric(lrc) {
+      // 分割歌词，返回数组
+      let lyrics = lrc.split("\n");
+      // 1.定义正则表达式提取[00:00.000]
+      let reg1 = /\[\d*:\d*\.\d*\]/g;
+      // 2.定义正则表达式提取 [00
+      let reg2 = /\[\d*/i;
+      // 3.定义正则表达式提取 :00
+      let reg3 = /\:\d*/i;
+      // 4.定义数组保存处理好的歌词
+      let lyricArray = [];
+      // 5.遍历歌词数组
+      lyrics.forEach(function (lyric) {
+        // 1.提取时间 [00:00.000]
+        let timeStr = lyric.match(reg1);
+        if (!timeStr) { return }
+        timeStr = timeStr[0];
+        // 2.提取分钟
+        let minStr = timeStr.match(reg2)[0].substring(1);
+        // 3.提取秒钟
+        let secondStr = timeStr.match(reg3)[0].substring(1);
+        // 4.合并时间, 将分钟和秒钟都合并为秒钟
+        let time = parseInt(minStr) * 60 + parseInt(secondStr);
+        // 5.处理歌词
+        let text = lyric.replace(reg1, "").trim();
+        // 6.保存数据
+        lyricArray.push({ time: time, lyric: text, pre: 0 })
+      });
+      // 添加下一句歌词的时间
+      lyricArray.forEach((item, index) => {
+        // 如果是最后一句歌词
+        if (index == lyricArray.length - 1) {
+          item.pre = item.time + 999
+        } else {
+          item.pre = lyricArray[index + 1].time
+        }
+        // if (index == 0) {
+        //   item.pre = 0
+        // } else {
+        //   item.pre = lyricArray[index - 1].time
+        // }
+      })
+      // 添加歌曲播放结束的时间
+      console.log("格式化后的歌词", lyricArray);
+      return lyricArray;
+    }
   }
 })
 

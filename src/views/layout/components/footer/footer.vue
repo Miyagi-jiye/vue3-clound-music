@@ -1,17 +1,15 @@
 <template>
   <div class="palyer">
     <!-- 原生播放器 -->
-    <!--chrome浏览器不支持自动播放-->
     <audio type="file" ref="audio" :src="`https://music.163.com/song/media/outer/url?id=${songID}.mp3`"
-      preload="metadata">
-      您的浏览器不支持audio标签,您还是换个浏览器吧
-    </audio>
+      preload="metadata">您的浏览器不支持audio标签,您还是换个浏览器吧</audio>
     <!-- 进度条 -->
     <el-slider ref="progressBar" v-model="progressStatus" @input="progressBarClick" :show-tooltip="false" />
     <!-- 播放器 -->
     <div class="group">
       <div class="detail">
-        <img :src="Playlist.currentPlayMusic.al.picUrl + '?param=50y50'" fit="cover" />
+        <LyricDialog :lyric="Playlist.lyric" :currentTime="audio.currentTime"
+          :imgUrl='Playlist.currentPlayMusic.al.picUrl' :duration="audio.duration" />
         <div class="info">
           <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
           <div class="bottom">
@@ -46,16 +44,17 @@
         <p>{{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}</p>
         <icon-text-message theme="outline" size="18" :strokeWidth="3" title='歌词' />
         <!-- 待播放歌曲列表 -->
-          <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
-            @clearChild='clearEvent' iconSize='18' />
+        <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
+          @clearChild='clearEvent' iconSize='18' />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import MusicListIcon from '@/components/MusicListIcon.vue';
-import { ref, nextTick, onMounted, watch, computed } from 'vue'
+import LyricDialog from '@/components/LyricDialog.vue';
+import MusicListIcon from '@/components/MusicListIcon.vue';//音乐播放列表
+import { ref, onMounted, watch, computed } from 'vue'
 import { ElMessage } from 'element-plus';
 import useStore from "@/pinia/index.js"
 const { Playlist } = useStore()
@@ -128,12 +127,10 @@ function pauseIconClick() {
 // 上一首
 function preMusic() {
   Playlist.pre_music()
-  console.log(Playlist.prevSong);
 }
 // 下一首
 function nextMusic() {
   Playlist.next_music()
-  console.log(Playlist.nextSong);
 }
 // 点击显示控制音量条
 function showVolumeStep() {
@@ -178,7 +175,7 @@ onMounted(() => {
   // dom渲染完毕，监听播放时间更新的事件
   audio.value.ontimeupdate = function () {
     progressStatus.value = Number(audio.value.currentTime / audio.value.duration * 100)//百分比进度条
-    audioCurrentTime.value = audio.value.currentTime//当前时间
+    audioCurrentTime.value = parseInt(audio.value.currentTime)//当前时间
     audioDuration.value = audio.value.duration//总时长
   };
   // 监听音频结束播放事件

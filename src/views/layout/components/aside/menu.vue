@@ -1,10 +1,10 @@
 <template>
   <div style="padding-top:20px">
-    <div class="group" v-for="item in store" :key="item.id">
+    <div class="group" v-for="item in menuStore" :key="item.id">
       <p class="group-titlle">{{ item.groupName }}</p>
       <div class="group-item" :class="currentPath == item1.path ? 'active' : ''" v-for="item1 in item.children"
         :key="item1.path" @click="currentActive(item1)">
-        <component :is="'icon-' + item1.icon" theme="outline" size="22" :strokeWidth="2" />
+        <component :is="item1.icon" theme="outline" size="22" :strokeWidth="2" />
         <span>{{ item1.name }}</span>
       </div>
     </div>
@@ -21,29 +21,29 @@ const route = useRoute()
 // 当前激活路径
 let currentPath = ref(route.path)
 // 数据
-const store = reactive([
+const menuStore = reactive([
   {
     id: 1,
     groupName: '在线音乐',
     children: [
-      { name: '推荐', icon: 'planet', path: '/discover' },
-      { name: '音乐馆', icon: 'music', path: '/music' },
-      { name: '视频', icon: 'video-one', path: '/video' },
-      { name: '电台', icon: 'fm', path: '/dj' }
+      { name: '推荐', icon: 'icon-planet', path: '/discover' },
+      { name: '音乐馆', icon: 'icon-music', path: '/music' },
+      { name: '视频', icon: 'icon-video-one', path: '/video' },
+      { name: '电台', icon: 'icon-fm', path: '/dj' }
     ]
   },
   {
     id: 2,
     groupName: '我的音乐',
     children: [
-      { name: '我喜欢', icon: 'like' },
-      { name: '本地歌曲', icon: 'computer' },
-      { name: '下载歌曲', icon: 'download-three' },
-      { name: '最近播放', icon: 'play-two' }
+      { name: '我喜欢', icon: 'icon-like' },
+      { name: '本地歌曲', icon: 'icon-computer' },
+      { name: '下载歌曲', icon: 'icon-download-three' },
+      { name: '最近播放', icon: 'icon-play-two' }
     ]
   }
 ])
-// 点击激活事件
+// 点击激活菜单跳转相应页面
 const currentActive = (item) => {
   currentPath.value = item.path;
   console.log(item.path);
@@ -53,7 +53,6 @@ const currentActive = (item) => {
     ElMessage.error('暂无该路径');
   }
 }
-// 组件点击跳转相应页面
 </script>
 
 <style lang="less" scoped>
