@@ -8,8 +8,8 @@
     <!-- 播放器 -->
     <div class="group">
       <div class="detail">
-        <LyricDialog :lyric="Playlist.lyric" :currentTime="audio.currentTime"
-          :imgUrl='Playlist.currentPlayMusic.al.picUrl' :duration="audio.duration" />
+        <LyricDialog :lyric="Playlist.lyric" :currentTime="audio.currentTime" :duration="audio.duration"
+          :imgUrl="Playlist.currentPlayMusic.al.picUrl" />
         <div class="info">
           <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
           <div class="bottom">
@@ -18,24 +18,24 @@
         </div>
       </div>
       <div class="button">
-        <icon-play-once class="hidden-less-600" theme="outline" size="22" :strokeWidth="2" title='顺序播放' />
+        <icon-play-once v-show="orderPlay === true" class="hidden-less-600" theme="outline" size="22" :strokeWidth="2"
+          title='顺序播放' @click="playOnce" />
+        <icon-play-cycle v-show="cyclePlay === true" class="hidden-less-600" theme="outline" size="22" :strokeWidth="2"
+          title='循环播放' @click="playCycle" />
+
         <icon-go-start class="hidden-less-600" theme="outline" size="28" :strokeWidth="4" title='上一首'
           @click="preMusic" />
+
         <icon-play style="color: #34d399;" v-show="audioStatus === false" theme="filled" size="38" :strokeWidth="2"
           title='点击播放' @click="playIconClick" />
         <icon-pause-one style="color: #34d399;" v-show="audioStatus === true" theme="filled" size="38" :strokeWidth="2"
           title='点击暂停' @click="pauseIconClick" />
+
         <icon-go-end class="hidden-less-600" theme="outline" size="28" :strokeWidth="4" title='下一首'
           @click='nextMusic' />
-        <!-- 动态音量效果图标组件 -->
-        <component class="hidden-less-600"
-          :is="volumeStatus === 0 ? 'icon-volume-mute' : volumeStatus == 100 ? 'icon-volume-notice' : 'icon-volume-small'"
-          ref="volumeIcon" theme="outline" size="22" :strokeWidth="2" title='音量' @click="showVolumeStep" />
-        <!-- 音量按钮 -->
-        <div class="volume" ref="volumeSetting">
-          <el-slider v-model="volumeStatus" vertical height="100px" :show-tooltip='false' @input="volumeChange" />
-          <p>{{ volumeStatus }}</p>
-        </div>
+
+        <!-- 动态音量图标组件 -->
+        <VolumeIcon :volumeStatus="volumeStatus" @volumeEmit="volumeChange" />
         <!-- 待播放歌曲列表 -->
         <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
           @clearChild='clearEvent' class="hidden-more-600" />
@@ -52,7 +52,8 @@
 </template>
 
 <script setup>
-import LyricDialog from '@/components/LyricDialog.vue';
+import VolumeIcon from "@/components/VolumeIcon.vue"//音量组件
+import LyricDialog from '@/components/LyricDialog.vue';//歌词弹窗
 import MusicListIcon from '@/components/MusicListIcon.vue';//音乐播放列表
 import { ref, onMounted, watch, computed } from 'vue'
 import { ElMessage } from 'element-plus';
@@ -84,9 +85,7 @@ watch(songID, () => {
 
 // 定义虚拟dom对象
 const audio = ref('')
-const volumeIcon = ref('')
 const progressBar = ref('')
-const volumeSetting = ref('')
 
 // 当前播放时间
 let audioCurrentTime = ref(0)
@@ -98,7 +97,21 @@ let audioStatus = ref(false)
 let progressStatus = ref(0)//默认0-100
 // 音量
 let volumeStatus = ref(1)
+// 循环播放
+let cyclePlay = ref(false)
+// 顺序播放
+let orderPlay = ref(true)//默认
 
+// 显示顺序播放
+function playOnce() {
+  orderPlay.value = false
+  cyclePlay.value = true
+}
+// 显示循环播放
+function playCycle() {
+  orderPlay.value = true
+  cyclePlay.value = false
+}
 // 播放
 function playIconClick() {
   audioStatus.value = true//显示播放按钮
@@ -132,17 +145,9 @@ function preMusic() {
 function nextMusic() {
   Playlist.next_music()
 }
-// 点击显示控制音量条
-function showVolumeStep() {
-  if (volumeSetting.value.style.display == '') {
-    volumeSetting.value.style.display = 'flex'
-  } else {
-    volumeSetting.value.style.display = ''
-  }
-}
-// 音量条改变
-function volumeChange() {
-  audio.value.volume = volumeStatus.value / 100//绑定音量
+// 子组件音量条改变
+function volumeChange(e) {
+  audio.value.volume = e / 100//拿到子组件改变后的音量，重新赋值给播放器
 }
 // 点击进度条/拖动进度条
 function progressBarClick() {
@@ -150,6 +155,10 @@ function progressBarClick() {
 }
 // 格式化时间
 function formatTime(time) {
+  // 如果时间 等于0 或者 等于NaN 先显示00：00
+  if (time == 0 || window.isNaN(time)) {
+    return '00:00'
+  }
   let sec = Math.floor(time % 60);
   let min = Math.floor(time / 60);
   // 返回格式 00：00 不足两位的补零
@@ -181,12 +190,17 @@ onMounted(() => {
   // 监听音频结束播放事件
   audio.value.onended = function () {
     audioStatus.value = false // 显示暂停图标
-    console.log("播放结束开始下一首播放");
-    // 如果还有剩余歌曲，继续播放
-    // if (Playlist.toPlayList.length !== 0 && Playlist.toPlayList.length >= 1) {
-    //   Playlist.change_playMusic(Playlist.toPlayList[Playlist.playListIndex++])
-    //   console.log(Playlist.playListIndex++);
-    // }
+    console.log("播放结束");
+    // 如果是单曲循环，继续播放
+    if (Playlist.toPlayList.length !== 0 && cyclePlay.value == true) {
+      playIconClick()
+      console.log("循环播放");
+    }
+    // 如果是顺序播放，继续播放
+    if (Playlist.toPlayList.length - 1 !== 0 && orderPlay.value == true) {
+      nextMusic()
+      console.log("顺序播放");
+    }
   };
 
   // // // 当音量改变时
@@ -325,27 +339,6 @@ onMounted(() => {
     gap: 20px;
     // 音量控制
     position: relative;
-
-    .volume {
-      position: absolute;
-      right: 0px;
-      bottom: 60px;
-      z-index: 1;
-      height: 170px;
-      border-radius: 4px;
-      // width: 40px;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      align-content: center;
-      box-sizing: border-box;
-      box-shadow: rgb(0 0 0 / 15%) 0px 2px 8px;
-      // 默认隐藏
-      display: none;
-    }
 
     span:hover {
       color: #34d399;

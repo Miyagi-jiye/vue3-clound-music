@@ -8,7 +8,6 @@
             <!-- 退出按钮 -->
             <div class="header">
               <icon-down theme="filled" size="40" @click="drawer = false" class="downIcon" />
-              <!-- <div style="color:#fff">{{ parseInt(currentTime) }}</div> -->
             </div>
             <!-- 歌词容器 -->
             <div class="lyric-container">
@@ -54,31 +53,28 @@ const prop = defineProps({
 })
 
 onMounted(() => {
-  console.log(prop.lyric.forEach(e => {
-    return e.time
-  }));
+
   watch(prop, () => {
     let lyricTop = document.querySelector('.lyric-item.lyricActive')
     let lyricDiv = document.querySelector('.lyric-container')
 
     //如果dom元素已经渲染出来了
     if (lyricTop && lyricDiv) {
+
       // console.log("高亮歌词距离顶部高度", lyricTop.offsetTop);
       // console.log("容器高度", lyricDiv.scrollHeight);
-
       // 如果歌词距离顶部高度大于等于屏幕高度的一半
       // 通过 transform：translateY(减去歌词距离顶部高度距离，加上屏幕高度的一半，减去歌词自身高度) 
       // 偏移父盒子的y轴，使歌词一直显示在屏幕中心
       if (lyricTop.offsetTop >= (window.screen.height / 2)) {
         lyricDiv.style.transform = `translateY(-${lyricTop.offsetTop - (window.screen.height / 2) + 60}px)`
       }
-      // 如果播放结束或者切换歌曲时当前时间重置为0时，还原样式
+
+      // 如果播放结束或当前时间重置为0时(切换歌曲)，还原样式
       if (prop.currentTime == prop.duration || prop.currentTime == 0) {
         lyricDiv.style.transform = 'translateY(0)'
       }
 
-    } else {
-      console.log('没打开歌词页');
     }
   })
 })
@@ -94,14 +90,12 @@ onMounted(() => {
 }
 
 .img {
+  width: 50px;
+  height: 50px;
   box-shadow: 0 6px 8px -2px rgb(0 0 0 / 16%);
   border-radius: 4px;
   cursor: pointer;
 }
-
-
-
-
 
 .default {
   width: 100vw;

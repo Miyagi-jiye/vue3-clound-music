@@ -9,10 +9,12 @@
     </div>
     <!-- 歌曲详情栏 -->
     <div class="list">
-      <div class="item" v-for="item in myData.tracks" :key="item.id">
+      <div class="item" v-for="item in myData.tracks" :key="item.id"
+        :class="{ active: Playlist.currentPlayMusic.id == item.id }">
         <span class="overflow">
           <icon-like class="likeIcon" theme="outline" size="16" :strokeWidth="4" title='喜欢' />
           <p class="name">{{ item.name }}</p>
+          <!-- hover操作栏 -->
           <div class="block">
             <div class="iconList">
               <icon-play theme="outline" size="16" :strokeWidth="4" title='播放' @click="play(item)" />
@@ -42,6 +44,7 @@
 import useStore from "@/pinia/index.js"
 const { Playlist } = useStore()
 
+
 defineProps({
   myData: {
     type: Object,
@@ -50,6 +53,7 @@ defineProps({
     })
   }
 })
+
 // 格式化毫秒
 function format(times) {
   // 秒
@@ -174,5 +178,16 @@ const play = (item) => {
       }
     }
   }
+}
+
+// 激活歌曲
+.active {
+  color: #16da92 !important;
+  border-radius: 4px !important;
+}
+
+// 激活图标
+.activeIcon {
+  color: #ff5b5b !important;
 }
 </style>

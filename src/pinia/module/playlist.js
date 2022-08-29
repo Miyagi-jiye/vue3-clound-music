@@ -8,10 +8,9 @@ const usePlaylistStore = defineStore("playlist", {
     playlistCache: [],//缓存请求过的歌单数据
     comments: JSON.parse(localStorage.getItem('comments')) || [],// 歌单评论列表
     hotComments: JSON.parse(localStorage.getItem('hotComments')) || [],// 热评论列表
-    currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 100 * 1000 },// 当前播放的音乐
-    toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 100 * 1000 }],//歌单播放列表
-    playListIndex: 0,//播放列表索引下标
-    lyric: []
+    currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 },// 当前播放的音乐
+    toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }],//歌单播放列表
+    lyric: [],//歌词
   }),
   // 相当于 computed 计算属性
   getters: {
@@ -77,7 +76,7 @@ const usePlaylistStore = defineStore("playlist", {
     push_musicToPlayList() {
       this.toPlayList = this.playlist.tracks;
       if (this.toPlayList.length !== 0) {
-        this.change_playMusic(this.toPlayList[this.playListIndex])// 从歌单第一首开始播放
+        this.change_playMusic(this.toPlayList[0])// 从歌单第一首开始播放
       } else {
         return false
       }
@@ -120,7 +119,7 @@ const usePlaylistStore = defineStore("playlist", {
     // 获取歌词
     async get_lyric(id) {
       const res = await useLyric(id)
-      this.lyric = this.parse_lyric(res.data.lrc.lyric)
+      this.lyric = this.parse_lyric(res.data.lrc.lyric)//格式化歌词
       console.log("获取歌词", res.data);
     },
     // 处理歌词
@@ -168,13 +167,7 @@ const usePlaylistStore = defineStore("playlist", {
         } else {
           item.pre = lyricArray[index + 1].time
         }
-        // if (index == 0) {
-        //   item.pre = 0
-        // } else {
-        //   item.pre = lyricArray[index - 1].time
-        // }
       })
-      // 添加歌曲播放结束的时间
       console.log("格式化后的歌词", lyricArray);
       return lyricArray;
     }
