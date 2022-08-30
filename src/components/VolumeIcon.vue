@@ -4,13 +4,13 @@
     <div class="volumeIcon hidden-less-600">
       <component
         :is="volumeStatus === 0 ? 'icon-volume-mute' : volumeStatus == 100 ? 'icon-volume-notice' : 'icon-volume-small'"
-        theme="outline" size="22" :strokeWidth="2" title='音量' />
+        theme="outline" size="22" :strokeWidth="2" title='音量' @dblclick="mute" />
     </div>
     <!-- 音量条 -->
     <div class="hidden">
       <div class="volume">
         <el-slider v-model="volumeStatus" vertical height="100px" :show-tooltip='false' @input="volumeChange" />
-        <p>{{ volumeStatus }}</p>
+        <p>{{  volumeStatus  }}</p>
       </div>
     </div>
   </div>
@@ -28,9 +28,13 @@ const prop = defineProps({
 })
 const emit = defineEmits(["volumeEmit"])
 
+// 音量调拖动
 function volumeChange() {
-  console.log("触发", prop.volumeStatus);
   emit("volumeEmit", prop.volumeStatus)
+}
+// 双击静音
+function mute() {
+  emit("volumeEmit", 0)
 }
 
 onMounted(() => {

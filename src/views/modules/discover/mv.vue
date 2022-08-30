@@ -2,15 +2,15 @@
   <div class="MV">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="mv">
-        <img class="img" v-img-lazy="item.picUrl + '?param=1080y600'" :alt="'MVID=' + item.id">
+        <img class="img" v-img-lazy="item.picUrl + '?param=400y200'" :alt="'MVID=' + item.id">
         <div class="playCount">
           <icon-play theme="outline" size="12" :strokeWidth="4" title='播放量' />
-          <p>{{ playCountFilter(item.playCount) }}</p>
+          <p>{{  playCountFilter(item.playCount)  }}</p>
         </div>
         <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放' />
       </div>
-      <p class="name">{{ item.name }}</p>
-      <p class="artistName">{{ item.artistName }}</p>
+      <p class="name">{{  item.name  }}</p>
+      <p class="artistName">{{  item.artistName  }}</p>
     </div>
   </div>
 </template>

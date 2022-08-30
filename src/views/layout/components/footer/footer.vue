@@ -8,12 +8,14 @@
     <!-- 播放器 -->
     <div class="group">
       <div class="detail">
+        <!-- img歌词弹窗 -->
         <LyricDialog :lyric="Playlist.lyric" :currentTime="audio.currentTime" :duration="audio.duration"
           :imgUrl="Playlist.currentPlayMusic.al.picUrl" />
+        <!-- 播放歌曲详情 -->
         <div class="info">
-          <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
+          <p class="top">{{  Playlist.currentPlayMusic.name  }}</p>
           <div class="bottom">
-            <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{ item.name }}</a>
+            <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{  item.name  }}</a>
           </div>
         </div>
       </div>
@@ -41,8 +43,8 @@
           @clearChild='clearEvent' class="hidden-more-600" />
       </div>
       <div class="list hidden-less-1000">
-        <p>{{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}</p>
-        <icon-text-message theme="outline" size="18" :strokeWidth="3" title='歌词' />
+        <p>{{  formatTime(audioCurrentTime)  }} / {{  formatTime(audioDuration)  }}</p>
+        <icon-text-message theme="outline" size="18" :strokeWidth="3" title='歌曲评论' />
         <!-- 待播放歌曲列表 -->
         <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
           @clearChild='clearEvent' iconSize='18' />
@@ -79,7 +81,7 @@ const currentPlayMusic = computed(() => Playlist.currentPlayMusic)
 
 // 监听歌曲id的变化
 watch(songID, () => {
-  console.log("歌曲id变化", songID.value);
+  console.log("歌曲id发生变化", songID.value);
   playIconClick()//播放
 })
 
@@ -148,6 +150,7 @@ function nextMusic() {
 // 子组件音量条改变
 function volumeChange(e) {
   audio.value.volume = e / 100//拿到子组件改变后的音量，重新赋值给播放器
+  volumeStatus.value = parseInt(audio.value.volume * 100)
 }
 // 点击进度条/拖动进度条
 function progressBarClick() {
@@ -194,12 +197,10 @@ onMounted(() => {
     // 如果是单曲循环，继续播放
     if (Playlist.toPlayList.length !== 0 && cyclePlay.value == true) {
       playIconClick()
-      console.log("循环播放");
     }
     // 如果是顺序播放，继续播放
     if (Playlist.toPlayList.length - 1 !== 0 && orderPlay.value == true) {
       nextMusic()
-      console.log("顺序播放");
     }
   };
 

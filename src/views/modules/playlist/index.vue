@@ -6,8 +6,8 @@
         <el-tab-pane lazy :label="`歌曲 ${songLength} `" name="tracks">
           <SongList :myData='playlist' />
         </el-tab-pane>
-        <el-tab-pane lazy label="评论" name="comments">
-          <SongComments />
+        <el-tab-pane lazy :label="`评论 ${commentLength} `" name="comments">
+          <SongComments :comments="comments" :hotComments="hotComments" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -28,11 +28,15 @@ const activeTab = ref("tracks")
 const songLength = computed(() => Playlist.playlist.tracks.length)
 // 歌单数据
 const playlist = computed(() => Playlist.playlist)
+// 评论数量
+const commentLength = computed(() => Playlist.comments.total)
+// 评论数据
+const comments = computed(() => Playlist.comments.comments)
+const hotComments = computed(() => Playlist.comments.hotComments)
 // 监听页面刷新，刷新时localStorage保存数据，防止页面刷新丢失数据
 window.addEventListener("beforeunload", () => {
   localStorage.setItem("playlist", JSON.stringify(Playlist.playlist))
   localStorage.setItem("comments", JSON.stringify(Playlist.comments))
-  localStorage.setItem("hotComments", JSON.stringify(Playlist.hotComments))
 })
 </script>
 
@@ -55,5 +59,10 @@ window.addEventListener("beforeunload", () => {
       margin-top: 15px;
     }
   }
+}
+
+:deep(.el-tabs__item.is-active) {
+  font-size: 16px !important;
+  font-weight: 600 !important;
 }
 </style>

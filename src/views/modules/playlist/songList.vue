@@ -13,24 +13,24 @@
         :class="{ active: Playlist.currentPlayMusic.id == item.id }">
         <span class="overflow">
           <icon-like class="likeIcon" theme="outline" size="16" :strokeWidth="4" title='喜欢' />
-          <p class="name">{{ item.name }}</p>
+          <p class="name">{{  item.name  }}</p>
           <!-- hover操作栏 -->
           <div class="block">
             <div class="iconList">
               <icon-play theme="outline" size="16" :strokeWidth="4" title='播放' @click="play(item)" />
-              <icon-add theme="outline" size="16" :strokeWidth="4" title='添加到' />
+              <icon-add theme="outline" size="16" :strokeWidth="4" title='添加到播放列表' @click="addPlayList(item)" />
               <icon-down-two theme="outline" size="16" :strokeWidth="4" title='下载' />
               <icon-more-two theme="outline" size="16" :strokeWidth="4" title='更多操作' />
             </div>
           </div>
         </span>
         <span class="overflow">
-          <p class="name" v-for="item1 in item.ar" :key="item1.id">{{ item1.name }}</p>
+          <p class="name" v-for="item1 in item.ar" :key="item1.id">{{  item1.name  }}</p>
         </span>
         <span class="overflow">
-          <p class="name">{{ item.al.name }}</p>
+          <p class="name">{{  item.al.name  }}</p>
         </span>
-        <span class="overflow">{{ format(item.dt) }}</span>
+        <span class="overflow">{{  format(item.dt)  }}</span>
       </div>
     </div>
     <!-- 加载更多 -->
@@ -68,6 +68,11 @@ const play = (item) => {
   console.log('播放', item)
   Playlist.push_toPlayList(item)
   Playlist.change_playMusic(item)
+}
+// 添加到播放列表
+const addPlayList = (item) => {
+  console.log('添加到播放列表', item)
+  Playlist.push_toPlayList(item)
 }
 </script>
 

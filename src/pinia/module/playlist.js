@@ -6,8 +6,7 @@ const usePlaylistStore = defineStore("playlist", {
   state: () => ({
     playlist: JSON.parse(localStorage.getItem('playlist')) || {},// 歌单列表是否有保存数据
     playlistCache: [],//缓存请求过的歌单数据
-    comments: JSON.parse(localStorage.getItem('comments')) || [],// 歌单评论列表
-    hotComments: JSON.parse(localStorage.getItem('hotComments')) || [],// 热评论列表
+    comments: JSON.parse(localStorage.getItem('comments')) || {},// 歌单评论数据
     currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 },// 当前播放的音乐
     toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
@@ -62,8 +61,7 @@ const usePlaylistStore = defineStore("playlist", {
     // 获取歌单评论
     async get_songlistComment(id) {
       const res = await useSonglistComment(id);
-      this.comment = res.data.comments;
-      this.hotComments = res.data.hotComments;
+      this.comments = res.data
       console.log("获取歌单评论", res.data);
     },
     // 获取歌曲url
@@ -102,17 +100,19 @@ const usePlaylistStore = defineStore("playlist", {
     },
     // 清空播放列表
     clear_toPlayList() {
-      this.toPlayList = []
-      // 恢复默认
+      // 恢复默认设置
+      this.toPlayList = [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }]
       this.currentPlayMusic = { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }
     },
     // 上一首音乐
     pre_music() {
+      if (this.toPlayList == []) { console.log("空数组"); return }
       this.currentPlayMusic = this.prevSong
       this.get_lyric(this.currentPlayMusic.id)
     },
     // 下一首音乐
     next_music() {
+      if (this.toPlayList == []) { console.log("空数组"); return }
       this.currentPlayMusic = this.nextSong
       this.get_lyric(this.currentPlayMusic.id)
     },

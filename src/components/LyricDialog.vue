@@ -1,6 +1,7 @@
 <template>
   <div>
     <img :src="imgUrl + '?param=50y50'" fit="cover" @click="drawer = true" class="img" />
+
     <el-drawer v-model="drawer" direction="btt" :size="size" :with-header="false">
       <el-scrollbar>
         <slot name="default">
@@ -14,7 +15,7 @@
               <!-- 歌词 -->
               <p class="lyric-item" :class="{ lyricActive: (currentTime >= item.time && currentTime <= item.pre) }"
                 v-for="item in lyric">
-                {{ item.lyric }}
+                {{  item.lyric  }}
               </p>
             </div>
           </div>

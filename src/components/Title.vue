@@ -1,7 +1,6 @@
 <template>
-  <div
-    style="display: flex;align-items: center;flex-direction: row;align-content: center;justify-content: flex-start;flex-wrap: nowrap;font-size: 18px;margin: 20px 0;">
-    <p>{{ title }}</p>
+  <div class="title">
+    <p>{{  title  }}</p>
     <icon-right theme="outline" size="22" :strokeWidth="2" />
   </div>
 </template>
@@ -16,4 +15,14 @@ defineProps({
 </script>
 
 <style lang="less" scoped>
+.title {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-content: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  font-size: 18px;
+  margin: 20px 0;
+}
 </style>

@@ -2,22 +2,22 @@
   <div class="info">
     <div class="flex">
       <div class="left">
-        <img :src="myData.coverImgUrl + '?params=180y180'" alt="封面">
+        <img :src="myData.coverImgUrl + '?param=180y180'" alt="封面">
       </div>
       <div class="right">
-        <p class="title">{{ myData.name }}</p>
+        <p class="title">{{  myData.name  }}</p>
         <div class="box">
           <img class="avatar" :src="myData.creator.avatarUrl" alt="作者">
-          <span class="nickname">{{ myData.creator.nickname }}</span>
+          <span class="nickname">{{  myData.creator.nickname  }}</span>
           <div class="tags">
-            <a v-for="item in myData.tags" :key="item">#{{ item }}</a>
+            <a v-for="item in myData.tags" :key="item">#{{  item  }}</a>
           </div>
         </div>
         <div class="description">
           <MoreText :text="myData.description" :end="90" />
         </div>
         <div class="btnGroup">
-          <button class="btn1">
+          <button class="btn1" @click="addPlayList">
             <icon-play-one class="playIcon" theme="outline" size="22" :strokeWidth="4" title='点击播放' />
             <span>播放全部</span>
           </button>
@@ -36,6 +36,9 @@
 
 <script setup>
 import MoreText from '@/views/modules/playlist/MoreText.vue'// 更多详情组件
+import useStore from "@/pinia/index.js"
+const { Playlist } = useStore()
+
 defineProps({
   myData: {
     type: Object,
@@ -52,6 +55,11 @@ defineProps({
     })
   }
 })
+
+// 全部添加到播放列表
+const addPlayList = () => {
+  Playlist.push_musicToPlayList()
+}
 </script>
 
 <style lang="less" scoped>
