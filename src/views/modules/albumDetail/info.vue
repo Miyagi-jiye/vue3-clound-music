@@ -1,22 +1,27 @@
 <template>
   <div class="info">
+    <!-- <img :src="album.picUrl + '?param=180y180'" alt="" class="filter"> -->
     <div class="flex">
       <div class="left">
-        <img :src="myData.coverImgUrl + '?param=180y180'" alt="封面">
+        <img :src="album.picUrl + '?param=180y180'" alt="封面">
       </div>
       <div class="right">
-        <p class="title">{{ myData.name }}</p>
+        <p class="title">{{ album.name }}</p>
+        <!-- 改动部分 -->
+        <div class="alias">
+          <p v-for="item in album.artists">{{ item.name }}</p>
+        </div>
+        <!-- 改动部分 -->
         <div class="box">
-          <img class="avatar" :src="myData.creator.avatarUrl + '?param=40y40'" alt="作者">
-          <span class="nickname">{{ myData.creator.nickname }}</span>
-          <div class="tags">
-            <a v-for="item in myData.tags" :key="item">#{{ item }}</a>
-          </div>
+          <p>发布时间：{{ timestampToTime(album.publishTime) }}</p>
+          <p>音源：{{ album.subType }}</p>
+          <p>版权：{{ album.company }}</p>
         </div>
         <div class="description">
-          <MoreText :text="myData.description" :end="90" />
+          <MoreText :text="album.description" :end="90" v-if="album.description" />
         </div>
-        <div class="btnGroup">
+        <!-- 需要抽离 -->
+        <!-- <div class="btnGroup">
           <button class="btn1" @click="addPlayList">
             <icon-play-one class="playIcon" theme="outline" size="22" :strokeWidth="4" title='点击播放' />
             <span>播放全部</span>
@@ -28,51 +33,69 @@
           <button class="btn3">
             <icon-more class="playIcon" theme="outline" size="18" :strokeWidth="4" title='更多' />
           </button>
-        </div>
-        <!-- <PlayAllButton /> -->
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// import PlayAllButton from '@/components/PlayAllButton.vue';
 import MoreText from '@/views/modules/playlist/MoreText.vue'// 更多详情组件
-import useStore from "@/pinia/index.js"
-const { Playlist } = useStore()
 
 defineProps({
-  myData: {
+  album: {
     type: Object,
     default: () => ({
-      coverImgUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-      name: '默认标题',
-      creator: {
-        avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-        nickname: '默认昵称',
-        backgroundUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      },
-      tags: ['默认标签1', '默认标签2', '默认标签3'],
-      description: '默认描述'
+      // description: '描述',
+      name: '专辑名',
+      picUrl: '',
+      subType: "音源",
+      company: "版权",
+      artists: [{ name: "歌手" }],
+      publishTime: 123456
     })
   }
 })
-
-// 全部添加到播放列表
-const addPlayList = () => {
-  Playlist.push_musicToPlayList()
+/* 时间戳转换为时间 */
+function timestampToTime(timestamp) {
+  timestamp = timestamp ? timestamp : null;
+  let date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  let Y = date.getFullYear() + '-';
+  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+  let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+  // 下面不需要
+  let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+  let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+  let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+  return Y + M + D;
 }
 </script>
 
 <style lang="less" scoped>
+.filter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .info {
   width: 100%;
   height: 100%;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
 
   .flex {
     display: flex;
     flex-direction: row;
     gap: 20px;
+    // 玻璃态
+    background: rgba(255, 255, 255, .2);
+    backdrop-filter: blur(30px);
+    // padding: 10px;
+    border-radius: 8px;
 
     .left {
       max-width: 100%;
@@ -105,38 +128,24 @@ const addPlayList = () => {
         line-height: 1.2;
       }
 
+      .alias {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-top: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
       .box {
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        gap: 10px;
         padding: 12px 0 8px 0;
-        font-size: 12px;
-        // 不允许换行
+        font-size: 14px;
         white-space: nowrap;
-
-        .avatar {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-        }
-
-        .nickname {
-          margin-left: 8px;
-        }
-
-        .tags {
-          margin-left: 20px;
-
-          a {
-            margin-left: 8px;
-            color: #999;
-
-            &:hover {
-              cursor: pointer;
-              color: #34d399;
-            }
-          }
-        }
+        flex-wrap: wrap;
       }
 
       .description {

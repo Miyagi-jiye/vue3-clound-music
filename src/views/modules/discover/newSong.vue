@@ -6,8 +6,8 @@
         <icon-play-one class="playIcon" theme="filled" size="25" :strokeWidth="4" title='点击播放' />
       </span>
       <div class="title">
-        <span>{{ item.song.artists[0].name }}</span>
-        <p>{{ item.name }}</p>
+        <span>{{  item.song.artists[0].name  }}</span>
+        <p>{{  item.name  }}</p>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@ defineProps({
     transition: all 0.3s ease;
 
     &:hover {
-      background-color: #fff;
+      background-color: var(--my-hover-background-color);
       cursor: pointer;
       border-radius: var(--my-border-radius);
 

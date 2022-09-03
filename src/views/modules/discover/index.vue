@@ -25,6 +25,7 @@ Discover.get_banner()
 Discover.get_recommend()
 Discover.get_newSong()
 Discover.get_mv()
+Discover.get_registerAnonimous()
 let banner = computed(() => Discover.banner)
 let recommend = computed(() => Discover.recommend)
 let newsong = computed(() => Discover.newSong)
@@ -35,7 +36,8 @@ let mv = computed(() => Discover.mv)
 .discover {
   width: 100%;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 0 20px 20px 20px;
+  background-color: var(--my-background-color);
 }
 
 .title {

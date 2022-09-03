@@ -33,6 +33,53 @@ const routes = [
           menu: 'playlist',
           keepAlive: true,
         }
+      },
+      {
+        path: 'artistDetail/:id',
+        name: 'artistDetail',
+        component: () => import("@/views/modules/artistDetail/index.vue"),
+        meta: {
+          menu: 'artistDetail',
+          keepAlive: true,
+        },
+        // props: true
+      },
+      {
+        path: 'albumDetail/:id',
+        name: 'albumDetail',
+        component: () => import("@/views/modules/albumDetail/index.vue"),
+        meta: {
+          menu: 'albumDetail',
+          keepAlive: true,
+        },
+        // props: true
+      },
+      {
+        path: 'music',
+        name: 'music',
+        component: () => import("@/views/modules/music/index.vue"),
+        meta: {
+          menu: 'music',
+          keepAlive: true,
+        }
+      },
+      {
+        path: 'video',
+        name: 'video',
+        component: () => import("@/views/modules/video/index.vue"),
+        meta: {
+          menu: 'video',
+          keepAlive: true,
+        }
+      },
+      {
+        path: 'dj',
+        name: 'dj',
+        component: () => import("@/views/modules/dj/index.vue"),
+        meta: {
+          menu: 'dj',
+          keepAlive: true,
+        }
       }
     ]
   },

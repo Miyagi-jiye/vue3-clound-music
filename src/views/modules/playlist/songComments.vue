@@ -15,38 +15,41 @@
       </div>
     </div>
     <!-- 热门评论 -->
-    <div class="comment-hot">
+    <div class="comment-hot" v-show="hotComments.length !== 0">
       <p class="title">
         <icon-fire theme="two-tone" size="16" :fill="['#d31427', '#ff0021']" strokeLinejoin="miter" />
         热门评论
       </p>
       <div class="grid">
-        <div class="box" v-for="item in hotComments" :key="item.user.userId">
-          <div class="left">
-            <img v-img-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
-          </div>
-          <div class="right">
-            <div class="top">
-              <div class="column">
-                <div class="nikename">
-                  <div class="vip">
-                    <p>{{  item.user.nickname  }}</p>
-                    <icon-vip-one v-show="item.user.vipType !== 0" theme="outline" size="14" fill="#34d399" />
-                  </div>
-                  <icon-share-three theme="outline" size="14" class="share" />
-                </div>
-                <p>{{  timestampToTime(item.time)  }}</p>
-              </div>
-              <span class="content">{{  item.content  }}</span>
+        <!-- :style="{ backgroundImage: `url(${item.user.avatarUrl + '?param=20y20'})` }" -->
+        <div v-for="item in hotComments" :key="item.user" class="filter">
+          <div class="box">
+            <div class="left">
+              <img v-img-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
             </div>
-            <div class="row">
-              <div>
-                <icon-thumbs-up theme="outline" size="16" />
-                <p>{{  item.likedCount  }}</p>
+            <div class="right">
+              <div class="top">
+                <div class="column">
+                  <div class="nikename">
+                    <div class="vip">
+                      <p>{{ item.user.nickname }}</p>
+                      <icon-vip-one v-show="item.user.vipType !== 0" theme="outline" size="14" fill="#34d399" />
+                    </div>
+                    <icon-share-three theme="outline" size="14" class="share" />
+                  </div>
+                  <p>{{ timestampToTime(item.time) }}</p>
+                </div>
+                <span class="content">{{ item.content }}</span>
               </div>
-              <div>
-                <icon-comment theme="outline" size="16" />
-                <p>评论</p>
+              <div class="row">
+                <div>
+                  <icon-thumbs-up theme="outline" size="16" />
+                  <p>{{ item.likedCount }}</p>
+                </div>
+                <div>
+                  <icon-comment theme="outline" size="16" />
+                  <p>评论</p>
+                </div>
               </div>
             </div>
           </div>
@@ -56,7 +59,7 @@
     <!-- 全部评论 -->
     <div class="comment-all">
       <p class="title">全部评论</p>
-      <div class="box" v-for="item in comments" :key="item.user.userId">
+      <div class="box" v-for="item in comments" :key="item.user">
         <div class="left">
           <img v-img-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
         </div>
@@ -64,18 +67,18 @@
           <div class="column">
             <div class="nikename">
               <div class="vip">
-                <p>{{  item.user.nickname  }}</p>
+                <p>{{ item.user.nickname }}</p>
                 <icon-vip-one v-show="item.user.vipType !== 0" theme="outline" size="14" fill="#34d399" />
               </div>
               <icon-share-three theme="outline" size="14" class="share" />
             </div>
-            <p>{{  timestampToTime(item.time)  }}</p>
+            <p>{{ timestampToTime(item.time) }}</p>
           </div>
-          <span class="content">{{  item.content  }}</span>
+          <span class="content">{{ item.content }}</span>
           <div class="row">
             <div>
               <icon-thumbs-up theme="outline" size="16" />
-              <p>{{  item.likedCount  }}</p>
+              <p>{{ item.likedCount }}</p>
             </div>
             <div>
               <icon-comment theme="outline" size="16" />
@@ -113,7 +116,6 @@ function timestampToTime(timestamp) {
   return Y + M + D + h + m + s;
 }
 
-console.log(prop.comments, prop.hotComments);
 </script>
 
 <style lang="less" scoped>
@@ -186,7 +188,7 @@ console.log(prop.comments, prop.hotComments);
 
     .title {
       font-weight: bold;
-      border-bottom: 1px solid #10161a4d;
+      // border-bottom: 1px solid #10161a4d;
       padding: 10px 0;
       margin-bottom: 10px;
     }
@@ -196,55 +198,79 @@ console.log(prop.comments, prop.hotComments);
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 20px;
 
-      .box {
-        display: flex;
-        flex-direction: row;
-        padding: 10px;
-        gap: 15px;
-        font-size: 14px;
-        box-sizing: border-box;
+      .filter {
+        background-repeat: no-repeat;
+        background-size: cover;
         border-radius: 4px;
-        background-color: #ffffff;
-        box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+        // padding: 2px;
 
-        .left {
-          img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px, rgb(0 0 0 / 30%) 0px 3px 7px -3px;
-          }
-        }
-
-        .right {
+        .box {
           display: flex;
-          flex-direction: column;
-          flex: 1;
-          justify-content: space-between;
+          flex-direction: row;
+          padding: 10px;
+          gap: 15px;
+          font-size: 14px;
+          box-sizing: border-box;
+          border-radius: 4px;
+          background-color: #ffffffdc;
+          height: 100%;
+          width: 100%;
+          // backdrop-filter: blur(10px);
+          box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
 
-          .top {
+          &:hover {
+            cursor: pointer;
+            box-shadow: rgb(0 0 0 / 40%) 0px 2px 4px, rgb(0 0 0 / 30%) 0px 7px 13px -3px, rgb(0 0 0 / 20%) 0px -3px 0px inset;
+          }
+
+          .left {
+            img {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px, rgb(0 0 0 / 30%) 0px 3px 7px -3px;
+            }
+          }
+
+          .right {
             display: flex;
             flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
 
-            .column {
+            .top {
               display: flex;
               flex-direction: column;
-              gap: 4px;
-              color: #6b7280;
 
-              .nikename {
+              .column {
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
+                flex-direction: column;
+                gap: 4px;
+                color: #6b7280;
 
-                .vip {
+                .nikename {
                   display: flex;
                   flex-direction: row;
                   align-items: center;
-                  gap: 8px;
+                  justify-content: space-between;
 
-                  p {
+                  .vip {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 8px;
+
+                    p {
+                      cursor: pointer;
+                      font-weight: bold;
+
+                      &:hover {
+                        color: #34d399;
+                      }
+                    }
+                  }
+
+                  .share {
                     cursor: pointer;
 
                     &:hover {
@@ -252,49 +278,41 @@ console.log(prop.comments, prop.hotComments);
                     }
                   }
                 }
+              }
 
-                .share {
+              .content {
+                margin: 10px 0;
+                line-height: 1.2;
+              }
+            }
+
+            .row {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 16px;
+              color: #6b7280;
+
+              div {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
+
+                &:nth-child(1) {
                   cursor: pointer;
 
                   &:hover {
                     color: #34d399;
                   }
                 }
-              }
-            }
 
-            .content {
-              margin: 10px 0;
-              line-height: 1.2;
-            }
-          }
+                &:nth-child(2) {
+                  cursor: pointer;
 
-          .row {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 16px;
-            color: #6b7280;
-
-            div {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              gap: 4px;
-
-              &:nth-child(1) {
-                cursor: pointer;
-
-                &:hover {
-                  color: #34d399;
-                }
-              }
-
-              &:nth-child(2) {
-                cursor: pointer;
-
-                &:hover {
-                  color: #34d399;
+                  &:hover {
+                    color: #34d399;
+                  }
                 }
               }
             }
@@ -308,7 +326,7 @@ console.log(prop.comments, prop.hotComments);
 
     .title {
       font-weight: bold;
-      border-bottom: 1px solid #10161a4d;
+      // border-bottom: 1px solid #10161a4d;
       padding: 10px 0;
     }
 
@@ -322,7 +340,12 @@ console.log(prop.comments, prop.hotComments);
       border-radius: 4px;
       margin: 14px 0;
       background-color: #ffffff;
-      box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+      &:hover {
+        cursor: pointer;
+        box-shadow: rgb(0 0 0 / 40%) 0px 2px 4px, rgb(0 0 0 / 30%) 0px 7px 13px -3px, rgb(0 0 0 / 20%) 0px -3px 0px inset;
+      }
 
       .left {
         img {

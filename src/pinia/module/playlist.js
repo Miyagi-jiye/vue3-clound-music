@@ -81,7 +81,7 @@ const usePlaylistStore = defineStore("playlist", {
     },
     // 改变当前播放音乐
     async change_playMusic(obj) {
-      // 判断当前播放音乐是否是该歌曲
+      // 判断当前播放音乐是否是自己
       if (this.currentPlayMusic.id !== obj.id) {
         await this.get_lyric(obj.id)
         this.currentPlayMusic = obj

@@ -5,12 +5,12 @@
         <img class="img" v-img-lazy="item.picUrl + '?param=400y200'" :alt="'MVID=' + item.id">
         <div class="playCount">
           <icon-play theme="outline" size="12" :strokeWidth="4" title='播放量' />
-          <p>{{  playCountFilter(item.playCount)  }}</p>
+          <p>{{ playCountFilter(item.playCount) }}</p>
         </div>
         <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放' />
       </div>
-      <p class="name">{{  item.name  }}</p>
-      <p class="artistName">{{  item.artistName  }}</p>
+      <p class="name">{{ item.name }}</p>
+      <p class="artistName">{{ item.artistName }}</p>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ defineProps({
 <style lang="less" scoped>
 .MV {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); //自动分配列宽
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); //自动分配列宽
   grid-gap: 20px;
 
   .vfor {

@@ -8,11 +8,11 @@
           @click="playMusic(item.id)" />
         <div class="playCount">
           <icon-headset theme="filled" size="12" :strokeWidth="4" />
-          <text>{{ playCountFilter(item.playCount) }}</text>
+          <text>{{  playCountFilter(item.playCount)  }}</text>
         </div>
       </div>
       <div class="name">
-        {{ item.name }}
+        {{  item.name  }}
       </div>
     </div>
   </div>
@@ -30,7 +30,7 @@ const { Playlist } = useStore()
 defineProps({
   myData: {
     type: Array,
-    default: () => [{ id: 123456, picUrl: '', name: '默认简介' }]
+    default: () => [{ id: 123456, picUrl: '', name: '默认简介', playCount: 999 }]
   }
 })
 

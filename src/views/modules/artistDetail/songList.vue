@@ -1,19 +1,20 @@
 <template>
-  <div class="songList">
+  <div class="artistDetail-songList">
     <!-- 标题栏 -->
     <div class="grid">
       <div>歌曲</div>
-      <div>歌手</div>
-      <div>专辑</div>
+      <div v-show="options == 0">专辑</div>
+      <div v-show="options == 1">歌手</div>
       <div>时长</div>
     </div>
     <!-- 歌曲详情栏 -->
     <div class="list">
-      <div class="item" v-for="item in myData.tracks" :key="item.id"
+      <div class="item" v-for="item in tracks" :key="item.id"
         :class="{ active: Playlist.currentPlayMusic.id == item.id }">
+        <!-- 歌曲名 -->
         <span class="overflow">
           <icon-like class="likeIcon" theme="outline" size="16" :strokeWidth="4" title='喜欢' />
-          <p class="name">{{  item.name  }}</p>
+          <p class="name">{{ item.name }}</p>
           <!-- hover操作栏 -->
           <div class="block">
             <div class="iconList">
@@ -24,13 +25,13 @@
             </div>
           </div>
         </span>
+        <!-- 专辑名 -->
         <span class="overflow">
-          <p class="name" v-for="item1 in item.ar" :key="item1.id">{{  item1.name  }}</p>
+          <p class="name" v-show="options == 0">{{ item.al.name }}</p>
+          <p class="name" v-show="options == 1" v-for="item1 in item.ar">{{ item1.name }}</p>
         </span>
-        <span class="overflow">
-          <p class="name">{{  item.al.name  }}</p>
-        </span>
-        <span class="overflow">{{  format(item.dt)  }}</span>
+        <!-- 时长 -->
+        <span class="overflow">{{ format(item.dt) }}</span>
       </div>
     </div>
     <!-- 加载更多 -->
@@ -42,17 +43,21 @@
 
 <script setup>
 import useStore from "@/pinia/index.js"
-const { Playlist } = useStore()
-
 
 defineProps({
-  myData: {
-    type: Object,
-    default: () => ({
-      tracks: [{ id: 0, name: '歌曲名', ar: [{ id: '歌手id', name: '歌手' }], al: { name: '专辑' }, dt: '时长' }]
-    })
+  tracks: {
+    type: Array,
+    default: () => [{ id: 0, name: '歌曲名', ar: [{ id: '歌手id', name: '歌手' }], al: { name: '专辑' }, dt: '时长' }]
+  },
+  // 0：歌曲，专辑，时长
+  // 1：歌曲，歌手，时长
+  options: {
+    type: Number,
+    default: () => 0
   }
 })
+
+const { Playlist } = useStore()
 
 // 格式化毫秒
 function format(times) {
@@ -63,6 +68,7 @@ function format(times) {
   // 返回格式 00：00 不足两位的补零
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 }
+
 // 添加到播放列表，并改变当前播放的对象
 const play = (item) => {
   console.log('播放', item)
@@ -103,14 +109,14 @@ const addPlayList = (item) => {
   }
 }
 
-.songList {
+.artistDetail-songList {
   display: flex;
   flex-direction: column;
 
   .grid {
     display: grid;
     // grid-template-columns: repeat(4, 1fr);
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 3fr 3fr 1fr;
     gap: 20px;
     font-size: 12px;
     color: #7f848c;
@@ -123,7 +129,7 @@ const addPlayList = (item) => {
     .item {
       display: grid;
       // grid-template-columns: repeat(4, 1fr);
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-columns: 3fr 3fr 1fr;
       gap: 20px;
       margin: 10px 0;
       padding: 10px 0;

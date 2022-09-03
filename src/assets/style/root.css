@@ -16,6 +16,10 @@
   --my-border-radius: 8px;
   /* 进度条高度 */
   --progress-bar-height: 4px;
+  /* 全局背景颜色 */
+  --my-background-color: #fff;
+  /* 全局hover背景颜色 */
+  --my-hover-background-color: #e0e0e065;
 }
 
 /* 溢出隐藏不换行 */

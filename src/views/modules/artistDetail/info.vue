@@ -1,22 +1,26 @@
 <template>
-  <div class="info">
+  <div class="info" v-if="artist.briefDesc">
     <div class="flex">
       <div class="left">
-        <img :src="myData.coverImgUrl + '?param=180y180'" alt="封面">
+        <img :src="artist.picUrl + '?param=180y180'" alt="封面">
       </div>
       <div class="right">
-        <p class="title">{{ myData.name }}</p>
+        <p class="title">{{ artist.name }}</p>
+        <!-- 改动部分 -->
+        <div class="alias">
+          <p v-for="item in artist.alias">{{ item }}</p>
+        </div>
+        <!-- 改动部分 -->
         <div class="box">
-          <img class="avatar" :src="myData.creator.avatarUrl + '?param=40y40'" alt="作者">
-          <span class="nickname">{{ myData.creator.nickname }}</span>
-          <div class="tags">
-            <a v-for="item in myData.tags" :key="item">#{{ item }}</a>
-          </div>
+          <p>专辑数：{{ artist.albumSize }}</p>
+          <p>单曲数：{{ artist.musicSize }}</p>
+          <p>MV：{{ artist.mvSize }}</p>
         </div>
         <div class="description">
-          <MoreText :text="myData.description" :end="90" />
+          <MoreText :text="artist.briefDesc" :end="90" />
         </div>
-        <div class="btnGroup">
+        <!-- 需要抽离 -->
+        <!-- <div class="btnGroup">
           <button class="btn1" @click="addPlayList">
             <icon-play-one class="playIcon" theme="outline" size="22" :strokeWidth="4" title='点击播放' />
             <span>播放全部</span>
@@ -28,40 +32,22 @@
           <button class="btn3">
             <icon-more class="playIcon" theme="outline" size="18" :strokeWidth="4" title='更多' />
           </button>
-        </div>
-        <!-- <PlayAllButton /> -->
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// import PlayAllButton from '@/components/PlayAllButton.vue';
 import MoreText from '@/views/modules/playlist/MoreText.vue'// 更多详情组件
-import useStore from "@/pinia/index.js"
-const { Playlist } = useStore()
 
 defineProps({
-  myData: {
+  artist: {
     type: Object,
-    default: () => ({
-      coverImgUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-      name: '默认标题',
-      creator: {
-        avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-        nickname: '默认昵称',
-        backgroundUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      },
-      tags: ['默认标签1', '默认标签2', '默认标签3'],
-      description: '默认描述'
-    })
+    default: () => ({ briefDesc: '描述', name: '歌手', picUrl: '', albumSize: 99, musicSize: 99, mvSize: 99, alias: ['英文名', '别名'] })
   }
 })
 
-// 全部添加到播放列表
-const addPlayList = () => {
-  Playlist.push_musicToPlayList()
-}
 </script>
 
 <style lang="less" scoped>
@@ -105,38 +91,23 @@ const addPlayList = () => {
         line-height: 1.2;
       }
 
+      .alias {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding-top: 12px;
+        font-size: 15px;
+      }
+
       .box {
         display: flex;
         flex-direction: row;
         align-items: center;
+        gap: 20px;
         padding: 12px 0 8px 0;
-        font-size: 12px;
+        font-size: 14px;
         // 不允许换行
         white-space: nowrap;
-
-        .avatar {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-        }
-
-        .nickname {
-          margin-left: 8px;
-        }
-
-        .tags {
-          margin-left: 20px;
-
-          a {
-            margin-left: 8px;
-            color: #999;
-
-            &:hover {
-              cursor: pointer;
-              color: #34d399;
-            }
-          }
-        }
       }
 
       .description {

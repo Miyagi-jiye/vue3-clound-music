@@ -35,7 +35,7 @@
                 </div>
                 <!-- 专辑 -->
                 <div v-for="item in suggestData.albums" :key="item.id" v-show="order === 'albums'" class="searchItem "
-                  @click="routerPush('album', item.id)">
+                  @click="routerPush('albumDetail', item.id)">
                   <span style="color:#34d399" class="truncate">{{ item.name }}</span>
                   <span style="margin-left:8px" class="truncate"> - {{ item.artist.name }}</span>
                 </div>
@@ -75,9 +75,15 @@ const router = useRouter()
 
 const { showSearchView, searchKeyword, showHot, searchHot, suggestData } = storeToRefs(useSearchStore())
 const { get_searchSuggest, get_searchHotDetail, get_songDetail } = useSearchStore()//获取搜索建议，热门搜索详情，函数或方法不会丢失响应式
-// 路由跳转到播放列表页
+
+// 路由跳转到专辑页面
+const routerPush = (name, id) => {
+  router.push({ name: name, params: { id: id } })
+}
+// 路由跳转到歌单列表页
 const toPlayList = async (id) => {
-  await Playlist.get_songlistDetail(id)
+  await Playlist.get_songlistDetail(id)//歌单详情
+  await Playlist.get_songlistComment(id)//歌单评论
   router.push({ name: 'playlist' })//跳转歌单详情页
   showSearchView.value = false;//关闭热门搜索
 }
@@ -88,9 +94,9 @@ const playMusic = async (id) => {
   Playlist.push_toPlayList(item)
 }
 // 点击热门推荐，获取搜索建议
-const hotClick = (keyword) => {
+const hotClick = async (keyword) => {
   searchKeyword.value = keyword
-  get_searchSuggest()
+  await get_searchSuggest()
   showSearchView.value = true
 }
 // 动态标题

@@ -10,7 +10,7 @@
     <div class="hidden">
       <div class="volume">
         <el-slider v-model="volumeStatus" vertical height="100px" :show-tooltip='false' @input="volumeChange" />
-        <p>{{  volumeStatus  }}</p>
+        <p>{{ volumeStatus }}</p>
       </div>
     </div>
   </div>
@@ -92,6 +92,7 @@ onMounted(() => {
   top: -150px;
   right: -5px;
   transition: all 1s;
+  z-index: 9999;
 }
 
 .volume {

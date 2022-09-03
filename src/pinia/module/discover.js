@@ -1,38 +1,73 @@
 import { defineStore } from "pinia";
-import { useBanner, useRecommend, useNewSong, useMv } from "@/api/index.js";
+import { useBanner, useRecommend, useNewSong, useMv, useRegisterAnonimous } from "@/api/index.js";
 
 const useDiscoverStore = defineStore("discover", {
   state: () => ({
     banner: [],
     recommend: [],
     newSong: [],
-    mv: []
+    mv: [],
+    cache: {},//缓存请求
   }),
   getters: {},
   actions: {
+    // 获取游客cookie
+    async get_registerAnonimous() {
+      if (window.localStorage.getItem("cookie")) {
+        console.log("已保存游客cookie");
+      } else {
+        const res = await useRegisterAnonimous();
+        window.localStorage.setItem("cookie", JSON.stringify(res.data.cookie))//存入cookie
+        console.log("获取游客cookie", res.data);
+      }
+    },
     // 获取轮播图
     async get_banner() {
-      const res = await useBanner();
-      this.banner = res.data.banners;
-      console.log("获取轮播图", res.data);
+      if (this.cache.banner) {
+        console.log("已缓存轮播图请求");
+        this.banner = this.cache.banner
+      } else {
+        const res = await useBanner();
+        this.banner = res.data.banners;
+        this.cache.banner = this.banner
+        console.log("获取轮播图", res.data);
+      }
     },
     // 获取推荐歌单
     async get_recommend() {
-      const res = await useRecommend();
-      this.recommend = res.data.result;
-      console.log("获取推荐歌单", res.data);
+      if (this.cache.recommend) {
+        console.log("已缓存推荐歌单请求");
+        this.recommend = this.cache.recommend
+      } else {
+        const res = await useRecommend();
+        this.recommend = res.data.result;
+        this.cache.recommend = this.recommend
+        console.log("获取推荐歌单", res.data);
+      }
     },
     // 获取推荐新音乐
     async get_newSong() {
-      const res = await useNewSong();
-      this.newSong = res.data.result;
-      console.log("获取推荐新音乐", res.data);
+      if (this.cache.newSong) {
+        console.log("已缓存推荐新音乐请求");
+        this.newSong = this.cache.newSong
+      } else {
+        const res = await useNewSong();
+        this.newSong = res.data.result;
+        this.cache.newSong = this.newSong
+        console.log("获取推荐新音乐", res.data);
+      }
     },
     // 获取推荐MV
     async get_mv() {
-      const res = await useMv();
-      this.mv = res.data.result;
-      console.log("获取推荐MV", res.data);
+      if (this.cache.mv) {
+        console.log("已缓存推荐mv请求");
+        this.mv = this.cache.mv
+      } else {
+        const res = await useMv();
+        this.mv = res.data.result;
+        this.cache.mv = this.mv
+        console.log("获取推荐MV", res.data);
+      }
     }
   },
 })

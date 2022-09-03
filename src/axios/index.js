@@ -1,10 +1,11 @@
 import axios from "axios";
 import NProgress from "nprogress"; //引入nprogress 进度条插件
 import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
+import { ElMessage } from "element-plus"
 
 const http = axios.create({
   withCredentials: true,// 跨域请求时是否需要使用凭证
-  baseURL: 'http://localhost:3000', //默认请求路径 import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR || 
+  baseURL: 'http://guowei.fun:3000', //默认请求路径 import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR || http://localhost:3000
 });
 
 // 添加请求拦截器
@@ -40,6 +41,19 @@ http.interceptors.response.use(
   function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
+    ElMessage({
+      showClose: true,//是否显示关闭按钮
+      grouping: true,//是否将多条消息组合到一条消息中
+      message: () => {
+        if (error.response.data.message) {
+          return error.response.data.message
+        } else {
+          return '网络繁忙'//内容保底
+        }
+      },
+      type: 'error',//消息类型
+    })
+    console.log(error.response.data.message);
     return Promise.reject(error);
   }
 );

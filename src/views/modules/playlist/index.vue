@@ -50,6 +50,7 @@ window.addEventListener("beforeunload", () => {
   height: 100%;
   padding: 20px;
   box-sizing: border-box;
+  background-color: var(--my-background-color);
 
   .flex {
     display: flex;
