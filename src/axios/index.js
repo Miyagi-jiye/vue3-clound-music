@@ -44,13 +44,7 @@ http.interceptors.response.use(
     ElMessage({
       showClose: true,//是否显示关闭按钮
       grouping: true,//是否将多条消息组合到一条消息中
-      message: () => {
-        if (error.response.data.message) {
-          return error.response.data.message
-        } else {
-          return '网络繁忙'//内容保底
-        }
-      },
+      message: '网络繁忙',//内容保底
       type: 'error',//消息类型
     })
     console.log(error.response.data.message);

@@ -13,9 +13,9 @@
           :imgUrl="Playlist.currentPlayMusic.al.picUrl" />
         <!-- 播放歌曲详情 -->
         <div class="info">
-          <p class="top">{{  Playlist.currentPlayMusic.name  }}</p>
+          <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
           <div class="bottom">
-            <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{  item.name  }}</a>
+            <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{ item.name }}</a>
           </div>
         </div>
       </div>
@@ -37,13 +37,13 @@
           @click='nextMusic' />
 
         <!-- 动态音量图标组件 -->
-        <VolumeIcon :volumeStatus="volumeStatus" @volumeEmit="volumeChange" />
+        <VolumeIcon @volumeEmit="volumeChange" />
         <!-- 待播放歌曲列表 -->
         <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
           @clearChild='clearEvent' class="hidden-more-600" />
       </div>
       <div class="list hidden-less-1000">
-        <p>{{  formatTime(audioCurrentTime)  }} / {{  formatTime(audioDuration)  }}</p>
+        <p>{{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}</p>
         <icon-text-message theme="outline" size="18" :strokeWidth="3" title='歌曲评论' />
         <!-- 待播放歌曲列表 -->
         <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
@@ -97,8 +97,6 @@ let audioDuration = ref(0)
 let audioStatus = ref(false)
 // 进度条
 let progressStatus = ref(0)//默认0-100
-// 音量
-let volumeStatus = ref(1)
 // 循环播放
 let cyclePlay = ref(false)
 // 顺序播放
@@ -150,7 +148,6 @@ function nextMusic() {
 // 子组件音量条改变
 function volumeChange(e) {
   audio.value.volume = e / 100//拿到子组件改变后的音量，重新赋值给播放器
-  volumeStatus.value = parseInt(audio.value.volume * 100)
 }
 // 点击进度条/拖动进度条
 function progressBarClick() {
@@ -179,7 +176,6 @@ function init() {
   // audio.value.pause // 音乐是否暂停播放 true--暂停 false--播放
   // audio.value.ended // 音乐是否结束播放 true--结束 false--没有结束 设置了loop 音频重复循环播放 不会结束
   // audio.value.playbackRate = 1// 播放速度 
-  volumeStatus.value = audio.value.volume * 100//音量初始值绑定设置
 }
 
 onMounted(() => {

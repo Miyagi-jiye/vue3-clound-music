@@ -18,19 +18,19 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
-
-const prop = defineProps({
-  // 播放器初始音量
-  volumeStatus: {
-    type: Number,
-    dafault: () => 0
-  },
-})
+let volumeStatus = ref(50)
+// const prop = defineProps({
+//   // 播放器初始音量
+//   volumeStatus: {
+//     type: Number,
+//     dafault: () => 0
+//   },
+// })
 const emit = defineEmits(["volumeEmit"])
 
 // 音量调拖动
 function volumeChange() {
-  emit("volumeEmit", prop.volumeStatus)
+  emit("volumeEmit", volumeStatus.value)
 }
 // 双击静音
 function mute() {
