@@ -2,18 +2,25 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import '@/assets/style/reset.css'// 全局样式重置
 import '@/assets/style/root.css'// 全局样式配置
+
 import ElementPlus from 'element-plus'//element-plus组件库
 import 'element-plus/dist/index.css'//element-plus组件库样式
 import 'element-plus/theme-chalk/dark/css-vars.css'; //element-plus暗黑模式主题样式
 import * as ElementPlusIconsVue from "@element-plus/icons-vue"; //element-plus图标
+
 import router from "@/router/index.js"// 路由配置
 import { createPinia } from "pinia";//pinia第一步
+
 import { install } from '@icon-park/vue-next/es/all';//引入字节跳动图标库
 import '@icon-park/vue-next/styles/index.css';//字节跳动图标库样式
+
 import { useIntersectionObserver } from '@vueuse/core';//引入vueuse中的判断方法:该元素是否在视口中
 
+
 const app = createApp(App)
+
 const pinia = createPinia();//pinia第二步
+
 install(app);//字节跳动图标库安装到app实例上
 
 // console.log(".env文件", import.meta.env);

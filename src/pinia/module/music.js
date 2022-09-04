@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useAlbum, useCommentAlbum, useToplistDetail, useToplistArtist, useArtistList, useArtistDetail, useArtists, useArtistDesc, useArtistAlbum, useArtistMV } from "@/api/index.js";
+import { useToplistDetail, useToplistArtist, useArtistList, useArtistDetail, useArtists, useArtistDesc, useArtistAlbum, useArtistMV } from "@/api/index.js";
 
 export const useMusicStore = defineStore("music", {
   state: () => ({
@@ -10,8 +10,6 @@ export const useMusicStore = defineStore("music", {
     artistDesc: {},//歌手更多详情
     artistAlbum: [],//歌手热门专辑
     artistMV: [],//歌手热门MV
-    commentAlbum: {},//专辑评论
-    album: {},//专辑详情
   }
   ),
   getters: {
@@ -35,16 +33,16 @@ export const useMusicStore = defineStore("music", {
       this.toplist = res.data.list
       console.log("获取所有榜单详情摘要", res.data);
     },
-    // 获取热门歌手列表100（未使用）
-    async get_toplistArtist() {
-      const res = await useToplistArtist()
-      console.log("获取热门歌手列表100", res.data);
-    },
     // 获取歌手分类列表
     async get_artistList(type, area, initial) {
       const res = await useArtistList(type, area, initial)
       this.artistList = res.data.artists
       console.log("获取歌手分类列表", res.data);
+    },
+    // 获取热门歌手列表100（未使用）
+    async get_toplistArtist() {
+      const res = await useToplistArtist()
+      console.log("获取热门歌手列表100", res.data);
     },
     // 获取歌手简略描述（未使用）
     async get_artistDetail(id) {
@@ -80,17 +78,5 @@ export const useMusicStore = defineStore("music", {
       this.artistMV = res.data.mvs
       console.log("获取歌手热门MV", res.data, this.artistMV);
     },
-    // 获取专辑评论
-    async get_commentAlbum(id) {
-      const res = await useCommentAlbum(id)
-      this.commentAlbum = res.data
-      console.log("获取专辑评论", res.data);
-    },
-    // 获取专辑详情
-    async get_album(id) {
-      const res = await useAlbum(id)
-      this.album = res.data
-      console.log("获取专辑详情", res.data);
-    }
   }
 })

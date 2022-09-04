@@ -2,12 +2,14 @@
   <div class="MV">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="mv">
-        <img class="img" v-img-lazy="item.picUrl + '?param=400y200'" :alt="'MVID=' + item.id">
+        <img v-if="item.picUrl" class="img" v-img-lazy="item.picUrl + '?param=400y200'" :alt="'MVID=' + item.id">
+        <img v-else class="img" v-img-lazy="item.cover + '?param=400y200'" :alt="'MVID=' + item.id">
         <div class="playCount">
           <icon-play theme="outline" size="12" :strokeWidth="4" title='播放量' />
           <p>{{ playCountFilter(item.playCount) }}</p>
         </div>
-        <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放' />
+        <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
+          @click="clickEmit(item.id)" />
       </div>
       <p class="name">{{ item.name }}</p>
       <p class="artistName">{{ item.artistName }}</p>
@@ -18,12 +20,20 @@
 <script setup>
 // 过滤播放量
 import { playCountFilter } from '@/utils/playCountFilter'
+
 defineProps({
   myData: {
     type: Array,
     default: () => [{ id: 123456, artistName: '默认作者', name: '默认歌曲', playCount: '默认播放量', picUrl: '' }]
   }
 })
+
+const emit = defineEmits(['clickEmit'])
+
+// 传mv的id给父组件
+const clickEmit = (id) => {
+  emit("clickEmit", id)
+}
 </script>
 
 <style lang="less" scoped>
@@ -38,9 +48,11 @@ defineProps({
       position: relative;
       overflow: hidden;
       border-radius: var(--my-border-radius);
+      transition: all 0.25s;
 
       &:hover {
         cursor: pointer;
+        transform: translateY(-4px);
 
         .playCount {
           display: none;
@@ -62,7 +74,7 @@ defineProps({
         transition: all 1s ease;
 
         &:hover {
-          transform: scale(1.3); //放大
+          // transform: scale(1.3); //放大
           filter: brightness(0.5); //颜色变暗
         }
       }

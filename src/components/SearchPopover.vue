@@ -24,8 +24,8 @@
               </div>
             </div>
             <!-- 输入框有值时显示 -->
-            <div v-else>
-              <div v-if="suggestData" v-for="order in suggestData.order">
+            <div v-else v-if="suggestData">
+              <div v-for="order in suggestData.order">
                 <div class="searchTitle">{{ getTitle(order) }}</div>
                 <!-- 单曲 -->
                 <div v-for="item in suggestData.songs" :key="item.id" v-show="order === 'songs'" class="searchItem "

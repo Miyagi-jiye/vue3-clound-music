@@ -35,9 +35,11 @@ get_commentAlbum(route.params.id)//获取专辑评论
 
 // 监听路由参数专辑id变化
 watch(() => route.params.id, () => {
-  console.log("监听id变化");
-  get_album(route.params.id)
-  get_commentAlbum(route.params.id)
+  // 只在当前页触发
+  if (route.name == "albumDetail") {
+    get_album(route.params.id)
+    get_commentAlbum(route.params.id)
+  }
 })
 </script>
 

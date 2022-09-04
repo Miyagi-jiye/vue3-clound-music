@@ -22,6 +22,7 @@ export function useRegisterAnonimous() {
     url: "/register/anonimous",
   });
 }
+/*______________________________________首页推荐__________________________________________*/
 // 获取轮播图
 export function useBanner() {
   return http({
@@ -57,6 +58,7 @@ export function useDj() {
     url: "/personalized/djprogram"
   });
 }
+/*______________________________________歌单__________________________________________*/
 // 获取歌单详情
 export function useSonglistDetail(id) {
   return http({
@@ -81,6 +83,7 @@ export function useSonglistComment(id) {
     params: { id: id }
   });
 }
+/*______________________________________歌曲__________________________________________*/
 // 获取歌曲详情
 export function useSongDetail(id) {
   return http({
@@ -97,6 +100,15 @@ export function useMusicUrl(id) {
     params: { id: id, br: 320000 }
   });
 }
+// 获取歌词
+export function useLyric(id) {
+  return http({
+    method: "get",
+    url: "/lyric",
+    params: { id: id }
+  });
+}
+/*______________________________________搜索__________________________________________*/
 // 获取热搜列表(简略)
 export function useSearchHot() {
   return http({
@@ -142,14 +154,7 @@ export function useSearchMultimatch(keywords) {
     params: { keywords: keywords }
   });
 }
-// 获取歌词
-export function useLyric(id) {
-  return http({
-    method: "get",
-    url: "/lyric",
-    params: { id: id }
-  });
-}
+/*______________________________________排行榜__________________________________________*/
 // 获取所有榜单
 export function useToplist() {
   return http({
@@ -164,6 +169,7 @@ export function useToplistDetail() {
     url: "/toplist/detail",
   });
 }
+/*______________________________________歌手__________________________________________*/
 // 获取歌手榜
 export function useToplistArtist() {
   return http({
@@ -222,6 +228,7 @@ export function useArtistDesc(id) {
     params: { id: id }
   });
 }
+/*______________________________________相似__________________________________________*/
 // 获取相似歌手
 export function useSimiArtist(id) {
   return http({
@@ -231,8 +238,30 @@ export function useSimiArtist(id) {
   });
 }
 // 获取相似歌单
-// 相似 mv
+export function useSimiPlaylist(id) {
+  return http({
+    method: "get",
+    url: "/simi/playlist",
+    params: { id: id }
+  });
+}
+// 获取相似 mv
+export function useSimiMv(mvid) {
+  return http({
+    method: "get",
+    url: "/simi/mv",
+    params: { mvid: mvid }
+  });
+}
 // 获取相似音乐
+export function useSimiSong(id) {
+  return http({
+    method: "get",
+    url: "/simi/song",
+    params: { id: id }
+  });
+}
+/*______________________________________专辑__________________________________________*/
 // 获取专辑评论,limit默认20
 export function useCommentAlbum(id) {
   return http({
@@ -247,5 +276,168 @@ export function useAlbum(id) {
     method: "get",
     url: "/album",
     params: { id: id }
+  });
+}
+/*______________________________________MV__________________________________________*/
+// 获取 mv 数据
+export function useMvDetail(mvid) {
+  return http({
+    method: "get",
+    url: "/mv/detail",
+    params: { mvid: mvid }
+  });
+}
+// 获取 mv 播放地址
+// 可选参数 : 
+// r: 分辨率
+export function useMvUrl(id) {
+  return http({
+    method: "get",
+    url: "/mv/url",
+    params: { id: id }
+  });
+}
+// 获取 mv 评论
+// 可选参数 : 
+// limit: 取出评论数量 , 默认为 20
+// offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+// before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+export function useCommentMv(id) {
+  return http({
+    method: "get",
+    url: "/comment/mv",
+    params: { id: id }
+  });
+}
+// 获取全部 mv
+// 可选参数 :
+// area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部 
+// type: 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
+// order: 排序,可选值为上升最快,最热,最新,不填则为上升最快
+// limit: 取出数量 , 默认为 30
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
+export function useMvAll(area = "全部", type = "全部", order = "上升最快") {
+  return http({
+    method: "get",
+    url: "/mv/all",
+    params: { area: area, type: type, order: order }
+  });
+}
+// 获取最新 mv
+// 可选参数 : 
+// area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+// limit: 取出数量 , 默认为 30
+export function useMvFirst(area = "全部") {
+  return http({
+    method: "get",
+    url: "/mv/first",
+    params: { area: area }
+  });
+}
+// 获取 mv 排行
+// 可选参数 : 
+// limit: 取出数量 , 默认为 30
+// area: 地区,可选值为内地,港台,欧美,日本,韩国,不填则为全部
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
+export function useTopMv() {
+  return http({
+    method: "get",
+    url: "/top/mv",
+  });
+}
+// 获取 mv 点赞转发评论数数据
+export function useMvDetailInfo(mvid) {
+  return http({
+    method: "get",
+    url: "/mv/detail/info",
+    params: { mvid: mvid }
+  });
+}
+// 获取网易出品 mv
+// 可选参数 : 
+// limit: 取出数量 , 默认为 30
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
+export function useMvExclusiveRcmd() {
+  return http({
+    method: "get",
+    url: "/mv/exclusive/rcmd",
+  });
+}
+/*______________________________________视频__________________________________________*/
+// 获取视频标签列表
+export function useVideoGroupList() {
+  return http({
+    method: "get",
+    url: "/video/group/list",
+  });
+}
+// 获取视频分类列表
+export function useVideoCategoryList() {
+  return http({
+    method: "get",
+    url: "/video/category/list",
+  });
+}
+// 获取视频标签/分类下的视频
+// 必选参数 : id: videoGroup 的 id
+export function useVideoGroup(id) {
+  return http({
+    method: "get",
+    url: "/video/group",
+    params: { id: id }
+  });
+}
+// 获取全部视频列表
+export function useVideoTimelineAll() {
+  return http({
+    method: "get",
+    url: "/video/timeline/all",
+  });
+}
+// 相关视频
+export function useRelatedAllvideo(id) {
+  return http({
+    method: "get",
+    url: "/related/allvideo",
+    params: { id: id }
+  });
+}
+// 视频详情
+export function useVideoDetail(id) {
+  return http({
+    method: "get",
+    url: "/video/detail",
+    params: { id: id }
+  });
+}
+// 获取视频点赞转发评论数数据
+export function useVideoDetailInfo(vid) {
+  return http({
+    method: "get",
+    url: "/video/detail/info",
+    params: { vid: vid }
+  });
+}
+// 获取视频播放地址
+export function useVideoUrl(id) {
+  return http({
+    method: "get",
+    url: "/video/url",
+    params: { id: id }
+  });
+}
+/*______________________________________电台__________________________________________*/
+// 电台 banner
+export function useDjBanner() {
+  return http({
+    method: "get",
+    url: "/dj/banner",
+  });
+}
+// 电台个性推荐
+export function useDjPersonalizeRecommend() {
+  return http({
+    method: "get",
+    url: "/dj/personalize/recommend",
   });
 }

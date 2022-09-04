@@ -12,11 +12,6 @@ const routes = [
     redirect: "/discover",
     children: [
       {
-        path: "home",
-        name: "home",
-        component: () => import("@/views/modules/home/index.vue")
-      },
-      {
         path: 'discover',
         name: 'discover',
         component: () => import("@/views/modules/discover/index.vue"),
@@ -40,7 +35,7 @@ const routes = [
         component: () => import("@/views/modules/artistDetail/index.vue"),
         meta: {
           menu: 'artistDetail',
-          keepAlive: true,
+          keepAlive: false,
         },
         // props: true
       },
@@ -50,17 +45,17 @@ const routes = [
         component: () => import("@/views/modules/albumDetail/index.vue"),
         meta: {
           menu: 'albumDetail',
-          keepAlive: true,
+          keepAlive: false,
         },
         // props: true
       },
       {
-        path: 'music',
-        name: 'music',
-        component: () => import("@/views/modules/music/index.vue"),
+        path: 'videoDetail/:id',
+        name: 'videoDetail',
+        component: () => import("@/views/modules/videoDetail/index.vue"),
         meta: {
-          menu: 'music',
-          keepAlive: true,
+          menu: 'videoDetail',
+          keepAlive: false,
         }
       },
       {
@@ -69,6 +64,15 @@ const routes = [
         component: () => import("@/views/modules/video/index.vue"),
         meta: {
           menu: 'video',
+          keepAlive: true,
+        }
+      },
+      {
+        path: 'music',
+        name: 'music',
+        component: () => import("@/views/modules/music/index.vue"),
+        meta: {
+          menu: 'music',
           keepAlive: true,
         }
       },

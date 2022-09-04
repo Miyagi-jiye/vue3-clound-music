@@ -2,7 +2,6 @@
   <div style="width:100%">
     <div class="header">
       <div class="left">
-        <!-- <MenuIcon /> -->
         <DirectionIcon />
         <SearchPopover />
       </div>
@@ -17,7 +16,6 @@
 <script setup>
 import DirectionIcon from "@/components/DirectionIcon.vue"//前进后退按钮
 import LoginDialog from "@/components/LoginDialog.vue"//登录头像组件
-import MenuIcon from "@/components/MenuIcon.vue"//菜单按钮弹框
 import HamburgerIcon from "@/components/HamburgerIcon.vue"//汉堡按钮弹框
 import SearchPopover from "@/components/SearchPopover.vue"//搜索组件
 </script>

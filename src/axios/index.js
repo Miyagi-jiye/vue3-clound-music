@@ -47,7 +47,7 @@ http.interceptors.response.use(
       message: '网络繁忙',//内容保底
       type: 'error',//消息类型
     })
-    console.log(error.response.data.message);
+    // console.log(error.response.data.message);
     return Promise.reject(error);
   }
 );
