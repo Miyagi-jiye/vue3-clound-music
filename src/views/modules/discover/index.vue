@@ -38,6 +38,7 @@ let mv = computed(() => Discover.mv)
   box-sizing: border-box;
   padding: 0 20px 20px 20px;
   background-color: var(--my-background-color);
+  min-height: 100vh;
 }
 
 .title {

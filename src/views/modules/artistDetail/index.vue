@@ -90,6 +90,7 @@ function emitToVideoDetail(e) {
   padding: 20px;
   background-color: #FFF;
   box-sizing: border-box;
+  min-height: 100vh;
 
   .info {
     margin-bottom: 20px;

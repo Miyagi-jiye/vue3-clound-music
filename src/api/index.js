@@ -371,7 +371,7 @@ export function useVideoGroupList() {
     url: "/video/group/list",
   });
 }
-// 获取视频分类列表
+// 获取视频分类列表(系统错误)
 export function useVideoCategoryList() {
   return http({
     method: "get",

@@ -17,6 +17,7 @@ const useDiscoverStore = defineStore("discover", {
         console.log("已保存游客cookie");
       } else {
         const res = await useRegisterAnonimous();
+        document.cookie = res.data.cookie
         window.localStorage.setItem("cookie", JSON.stringify(res.data.cookie))//存入cookie
         console.log("获取游客cookie", res.data);
       }

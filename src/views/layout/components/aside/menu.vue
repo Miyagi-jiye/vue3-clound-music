@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-top:20px">
+  <div>
     <div class="group" v-for="item in menuStore" :key="item.id">
       <p class="group-titlle">{{ item.groupName }}</p>
       <div class="group-item" :class="currentPath == item1.path ? 'active' : ''" v-for="item1 in item.children"

@@ -79,7 +79,8 @@ const scroll = () => {
 .videoDetail {
   padding: 20px;
   background-color: #FFF;
-  scroll-behavior: smooth; //滚动
+  scroll-behavior: smooth; //滚动过渡
+  min-height: 100vh;
 
   .mvs-title {
     margin-top: 20px;

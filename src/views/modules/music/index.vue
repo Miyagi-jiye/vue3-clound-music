@@ -1,5 +1,4 @@
 <template>
-
   <div class="music">
     <el-tabs class="tab" v-model="activeTab">
       <el-tab-pane lazy label="排行榜" name="toplist">
@@ -12,7 +11,6 @@
         <Artist :artistList="artistList" @clickEmit="emitArtists" @routerEmit="emitToArtistDetail" />
       </el-tab-pane>
     </el-tabs>
-
   </div>
 </template>
 
@@ -70,6 +68,7 @@ function emitToArtistDetail(id) {
   padding: 0 20px 20px 20px;
   background-color: var(--my-background-color);
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 .title {

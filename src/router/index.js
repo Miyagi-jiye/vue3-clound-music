@@ -35,7 +35,7 @@ const routes = [
         component: () => import("@/views/modules/artistDetail/index.vue"),
         meta: {
           menu: 'artistDetail',
-          keepAlive: false,
+          keepAlive: true,
         },
         // props: true
       },
@@ -45,7 +45,7 @@ const routes = [
         component: () => import("@/views/modules/albumDetail/index.vue"),
         meta: {
           menu: 'albumDetail',
-          keepAlive: false,
+          keepAlive: true,
         },
         // props: true
       },
@@ -55,7 +55,7 @@ const routes = [
         component: () => import("@/views/modules/videoDetail/index.vue"),
         meta: {
           menu: 'videoDetail',
-          keepAlive: false,
+          keepAlive: true,
         }
       },
       {

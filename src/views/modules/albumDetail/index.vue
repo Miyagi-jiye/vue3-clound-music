@@ -62,6 +62,7 @@ watch(() => route.params.id, () => {
   // padding: 20px;
   background-color: #FFF;
   box-sizing: border-box;
+  min-height: 100vh;
 
   .tab {
     padding: 0 20px;

@@ -24,32 +24,34 @@
               </div>
             </div>
             <!-- 输入框有值时显示 -->
-            <div v-else v-if="suggestData">
-              <div v-for="order in suggestData.order">
-                <div class="searchTitle">{{ getTitle(order) }}</div>
-                <!-- 单曲 -->
-                <div v-for="item in suggestData.songs" :key="item.id" v-show="order === 'songs'" class="searchItem "
-                  @click="playMusic(item.id)">
-                  <span style="color:#34d399" class="truncate">{{ item.name }}</span>
-                  <span style="margin-left:8px" class="truncate"> - {{ item.artists.at(0)?.name }}</span>
-                </div>
-                <!-- 专辑 -->
-                <div v-for="item in suggestData.albums" :key="item.id" v-show="order === 'albums'" class="searchItem "
-                  @click="routerPush('albumDetail', item.id)">
-                  <span style="color:#34d399" class="truncate">{{ item.name }}</span>
-                  <span style="margin-left:8px" class="truncate"> - {{ item.artist.name }}</span>
-                </div>
-                <!-- 歌手 -->
-                <div v-for="item in suggestData.artists" :key="item.id" v-show="order === 'artists'" class="searchItem "
-                  @click="routerPush('artistDetail', item.id)">
-                  <el-avatar size="small" :src="item.img1v1Url" class="truncate" />
-                  <span style="color:#34d399;margin-left:8px" class="truncate">{{ item.name }}</span>
-                </div>
-                <!-- 歌单 -->
-                <div v-for="item in suggestData.playlists" :key="item.id" v-show="order === 'playlists'"
-                  class="searchItem " @click="toPlayList(item.id)">
-                  <el-avatar size="small" :src="item.coverImgUrl" class="truncate" />
-                  <div style="color:#34d399;margin-left:8px;" class="truncate">{{ item.name }}</div>
+            <div v-else>
+              <div v-if="suggestData">
+                <div v-for="order in suggestData.order">
+                  <div class="searchTitle">{{ getTitle(order) }}</div>
+                  <!-- 单曲 -->
+                  <div v-for="item in suggestData.songs" :key="item.id" v-show="order === 'songs'" class="searchItem "
+                    @click="playMusic(item.id)">
+                    <span style="color:#34d399" class="truncate">{{ item.name }}</span>
+                    <span style="margin-left:8px" class="truncate"> - {{ item.artists.at(0)?.name }}</span>
+                  </div>
+                  <!-- 专辑 -->
+                  <div v-for="item in suggestData.albums" :key="item.id" v-show="order === 'albums'" class="searchItem "
+                    @click="routerPush('albumDetail', item.id)">
+                    <span style="color:#34d399" class="truncate">{{ item.name }}</span>
+                    <span style="margin-left:8px" class="truncate"> - {{ item.artist.name }}</span>
+                  </div>
+                  <!-- 歌手 -->
+                  <div v-for="item in suggestData.artists" :key="item.id" v-show="order === 'artists'"
+                    class="searchItem " @click="routerPush('artistDetail', item.id)">
+                    <el-avatar size="small" :src="item.img1v1Url" class="truncate" />
+                    <span style="color:#34d399;margin-left:8px" class="truncate">{{ item.name }}</span>
+                  </div>
+                  <!-- 歌单 -->
+                  <div v-for="item in suggestData.playlists" :key="item.id" v-show="order === 'playlists'"
+                    class="searchItem " @click="toPlayList(item.id)">
+                    <el-avatar size="small" :src="item.coverImgUrl" class="truncate" />
+                    <div style="color:#34d399;margin-left:8px;" class="truncate">{{ item.name }}</div>
+                  </div>
                 </div>
               </div>
             </div>
