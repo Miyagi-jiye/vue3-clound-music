@@ -10,28 +10,28 @@
 </template>
 
 <script setup>
-import Info from "@/views/modules/videoDetail/info.vue"// 详情组件
-import MV from "@/views/modules/discover/mv.vue"// MV组件(复用首页MV组件)
-import SongComments from "@/views/modules/playlist/songComments.vue"// 评论组件(复用歌单评论组件)
+import Info from "@/views/modules/videoDetail/info.vue"; // 详情组件
+import MV from "@/views/modules/discover/mv.vue"; // MV组件(复用首页MV组件)
+import SongComments from "@/views/modules/playlist/songComments.vue"; // 评论组件(复用歌单评论组件)
 
-import { useRouter, useRoute } from 'vue-router';
-import 'vue3-video-play/dist/style.css'// vue3-video-play插件样式文件
-import { videoPlay } from 'vue3-video-play'// vue3-video-play插件
-import { reactive, watch } from 'vue';
-import { useVideoDetailStore } from "@/pinia/module/videoDetail.js"
+import { useRouter, useRoute } from "vue-router";
+import "vue3-video-play/dist/style.css"; // vue3-video-play插件样式文件
+import { videoPlay } from "vue3-video-play"; // vue3-video-play插件
+import { reactive, watch } from "vue";
+import { useVideoDetailStore } from "@/pinia/module/videoDetail.js";
 import { storeToRefs } from "pinia";
 
-const router = useRouter()
-const route = useRoute()
-const { get_mvUrl, get_mvDetail, get_commentMv, get_simiMv } = useVideoDetailStore()
-const { videoUrl, videoDetail, commentMv, mvs } = storeToRefs(useVideoDetailStore())
+const router = useRouter();
+const route = useRoute();
+const { get_mvUrl, get_mvDetail, get_commentMv, get_simiMv, get_commentVideo } = useVideoDetailStore();
+const { videoUrl, videoDetail, commentMv, mvs } = storeToRefs(useVideoDetailStore());
 
 // 播放器配置
 const options = reactive({
-  width: '100%', //播放器高度
-  height: 'auto', //播放器高度
+  width: "100%", //播放器高度
+  height: "auto", //播放器高度
   color: "#409eff", //主题色
-  title: '', //视频名称
+  title: "", //视频名称
   // poster: "",//视频封面
   src: videoUrl, //视频源
   muted: false, //静音
@@ -40,45 +40,55 @@ const options = reactive({
   autoPlay: false, //自动播放
   loop: false, //循环播放
   mirror: false, //镜像画面
-  ligthOff: false,  //关灯模式
+  ligthOff: false, //关灯模式
   volume: 0.3, //默认音量大小
   control: true, //是否显示控制
-  controlBtns: ['audioTrack', 'quality', 'speedRate', 'volume', 'setting', 'fullScreen'] //显示所有按钮,
-})
+  controlBtns: [
+    "audioTrack",
+    "quality",
+    "speedRate",
+    "volume",
+    "setting",
+    "fullScreen",
+  ], //显示所有按钮,
+});
 
-get_mvUrl(route.params.id)
-get_mvDetail(route.params.id)
-get_commentMv(route.params.id)
-get_simiMv(route.params.id)
+get_mvUrl(route.params.id);
+get_mvDetail(route.params.id);
+get_commentMv(route.params.id);
+get_simiMv(route.params.id);
+get_commentVideo(route.params.id)
 
 // 监听路由id变化
-watch(() => route.params.id, () => {
-  // 只在当前页生效
-  if (route.name == 'videoDetail') {
-    get_mvUrl(route.params.id)
-    get_mvDetail(route.params.id)
-    get_commentMv(route.params.id)
-    get_simiMv(route.params.id)
+watch(
+  () => route.params.id,
+  () => {
+    // 只在当前页生效
+    if (route.name == "videoDetail") {
+      get_mvUrl(route.params.id);
+      get_mvDetail(route.params.id);
+      get_commentMv(route.params.id);
+      get_simiMv(route.params.id);
+    }
   }
-})
+);
 // 切换mv
 const emitRouterPush = (id) => {
-  router.push({ name: "videoDetail", params: { id: id } })
-}
+  router.push({ name: "videoDetail", params: { id: id } });
+};
 // 滚动到评论
 const scroll = () => {
-  let target = document.getElementById("comment")
+  let target = document.getElementById("comment");
   if (target) {
-    console.log("触发");
-    target.scrollIntoView({ behavior: "smooth" })
+    target.scrollIntoView({ behavior: "smooth" });
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
 .videoDetail {
   padding: 20px;
-  background-color: #FFF;
+  background-color: #fff;
   scroll-behavior: smooth; //滚动过渡
   min-height: 100vh;
 

@@ -58,6 +58,20 @@
   }
 }
 
+/* 屏幕宽度小于800px就隐藏元素 */
+@media (max-width: 800px) {
+  .hidden-less-800 {
+    display: none !important;
+  }
+}
+
+/* 屏幕宽度大于800px就隐藏元素 */
+@media (min-width: 800px) {
+  .hidden-more-800 {
+    display: none !important;
+  }
+}
+
 /* 屏幕宽度小于1000px就隐藏元素 */
 @media (max-width: 1000px) {
   .hidden-less-1000 {

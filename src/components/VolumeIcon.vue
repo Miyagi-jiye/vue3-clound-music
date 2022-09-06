@@ -41,20 +41,15 @@ onMounted(() => {
   const volumeHidden = document.querySelector(".hidden")
 
   let flag = ref(false)
-  let timer = ref(null)
   let timer1 = ref(null)
 
 
   // 音量条，鼠标移入移出
   volumeHidden.onmouseenter = () => {
-    flag.value = true
-    clearTimeout(timer)
+    clearTimeout(timer1)
   }
   volumeHidden.onmouseleave = () => {
-    timer = setTimeout(() => {
-      flag.value = false
-      volumeHidden.style.display = 'none'
-    }, 500)
+    volumeHidden.style.display = 'none'
   }
 
   // 音量图标，鼠标移入移出
@@ -64,11 +59,7 @@ onMounted(() => {
   }
   volumeIcon.onmouseleave = () => {
     timer1 = setTimeout(() => {
-      if (flag.value) {
-        return
-      } else {
-        volumeHidden.style.display = 'none'
-      }
+      volumeHidden.style.display = 'none'
     }, 500)
   }
 

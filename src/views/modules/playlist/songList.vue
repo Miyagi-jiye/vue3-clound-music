@@ -37,9 +37,9 @@
       </div>
     </div>
     <!-- 加载更多 -->
-    <div class="loadMore">
+    <!-- <div class="loadMore">
       <p>加载更多</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -206,7 +206,7 @@ const routerPush = (name, id) => {
   }
 
   .list {
-    font-size: 12px;
+    font-size: 14px;
 
     .item {
       display: grid;

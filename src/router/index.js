@@ -59,6 +59,15 @@ const routes = [
         }
       },
       {
+        path: 'searchDetail/:id',
+        name: 'searchDetail',
+        component: () => import("@/views/modules/searchDetail/index.vue"),
+        meta: {
+          menu: 'searchDetail',
+          keepAlive: true,
+        }
+      },
+      {
         path: 'video',
         name: 'video',
         component: () => import("@/views/modules/video/index.vue"),

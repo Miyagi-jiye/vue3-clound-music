@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useMvDetail, useMvUrl, useCommentMv, useSimiMv } from "@/api/index.js";
+import { useMvDetail, useMvUrl, useCommentMv, useSimiMv, useCommentVideo } from "@/api/index.js";
 
 export const useVideoDetailStore = defineStore("videoDetail", {
   state: () => ({
@@ -7,6 +7,13 @@ export const useVideoDetailStore = defineStore("videoDetail", {
     videoDetail: {},//视频详情
     commentMv: {},//mv评论
     mvs: [],//相似mv
+
+    commentVideo: {},//视频评论
+    commentVideoParams: {
+      id: 123,
+      limit: 20,
+      offset: 1
+    },//视频评论参数
   }
   ),
   getters: {},
@@ -35,5 +42,14 @@ export const useVideoDetailStore = defineStore("videoDetail", {
       this.mvs = res.data.mvs
       console.log("获取相似MV", res.data);
     },
+
+    // 获取视频评论
+    async get_commentVideo(id) {
+      this.commentVideoParams.id = id
+      const res = await useCommentVideo(this.commentVideoParams)
+      this.commentVideo = res.data
+      console.log("获取视频评论", res.data);
+    },
+
   }
 })

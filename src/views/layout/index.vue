@@ -37,11 +37,11 @@
 </template>
 
 <script setup>
-import Header from "@/views/layout/components/header/header.vue"
-import Menu from "@/views/layout/components/aside/menu.vue"
-import Footer from "@/views/layout/components/footer/footer.vue"
+import Header from "@/views/layout/components/header/header.vue";
+import Menu from "@/views/layout/components/aside/menu.vue";
+import Footer from "@/views/layout/components/footer/footer.vue";
 import { useRoute } from "vue-router";
-const route = useRoute()
+const route = useRoute();
 </script>
 
 <style lang="less" scoped>
@@ -70,7 +70,7 @@ const route = useRoute()
 }
 
 .el-aside {
-  background-color: #F9FAFB;
+  background-color: #f9fafb;
 
   @media screen and(max-width:800px) {
     display: none;

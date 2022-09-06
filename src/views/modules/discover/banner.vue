@@ -2,7 +2,9 @@
   <div class="banner">
     <Swiper slides-per-group-auto slides-per-view="auto" :navigation="true" :grab-cursor="true">
       <SwiperSlide v-for="item in myData" :key="item.imageUrl">
-        <img class="banner-image" v-img-lazy="item.imageUrl + '?param=1080y400'"
+        <img v-if="item.imageUrl" class="banner-image" v-img-lazy="item.imageUrl + '?param=1080y400'"
+          :alt="item.typeTitle + item.targetId" />
+        <img v-else class="banner-image" v-img-lazy="item.pic + '?param=1080y400'"
           :alt="item.typeTitle + item.targetId" />
       </SwiperSlide>
     </Swiper>
@@ -10,14 +12,14 @@
 </template>
 
 <script setup>
-import { Swiper, SwiperSlide } from 'swiper/vue';// 引入Swiper组件
-import 'swiper/css';// 引入Swiper样式
+import { Swiper, SwiperSlide } from "swiper/vue"; // 引入Swiper组件
+import "swiper/css"; // 引入Swiper样式
 defineProps({
   myData: {
     type: Array,
-    default: () => [{ imageUrl: '' }]
-  }
-})
+    default: () => [{ imageUrl: "", pic: "" }],
+  },
+});
 </script>
 
 <style lang="less" scoped>
@@ -25,7 +27,7 @@ defineProps({
   cursor: pointer;
   border-radius: var(--my-border-radius);
   object-fit: cover;
-  transition: all .15s cubic-bezier(.4, 0, .2, 1);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   max-width: 100%;
   height: auto;
 }

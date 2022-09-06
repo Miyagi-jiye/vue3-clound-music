@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%">
+  <div style="width: 100%">
     <div class="header">
       <div class="left">
         <DirectionIcon />
@@ -7,23 +7,25 @@
       </div>
       <div class="right">
         <LoginDialog />
-        <HamburgerIcon iconSize='28' />
+        <FullScreenIcon iconSize="20" />
+        <HamburgerIcon iconSize="28" class="hidden-more-800" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import DirectionIcon from "@/components/DirectionIcon.vue"//前进后退按钮
-import LoginDialog from "@/components/LoginDialog.vue"//登录头像组件
-import HamburgerIcon from "@/components/HamburgerIcon.vue"//汉堡按钮弹框
-import SearchPopover from "@/components/SearchPopover.vue"//搜索组件
+import FullScreenIcon from "@/components/FullScreenButton.vue"; //全屏图标
+import DirectionIcon from "@/components/DirectionIcon.vue"; //前进后退按钮
+import LoginDialog from "@/components/LoginDialog.vue"; //登录头像组件
+import HamburgerIcon from "@/components/HamburgerIcon.vue"; //汉堡按钮弹框
+import SearchPopover from "@/components/SearchPopover.vue"; //搜索组件
 </script>
 
 <style lang="less" scoped>
 :deep(.el-input__wrapper) {
   border-radius: 20px;
-  background-color: #F1F5F9;
+  background-color: #f1f5f9;
 }
 
 :deep(.el-input__wrapper.is-focus) {

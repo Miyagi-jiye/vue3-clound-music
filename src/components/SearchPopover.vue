@@ -4,7 +4,8 @@
       :width="200">
       <template #reference>
         <el-input v-model="searchKeyword" placeholder="搜索音乐、MV、歌单" :prefix-icon="Search" :clearable='true'
-          @focus="showSearchView = true" @focusout="showSearchView = false" @input="searchInput" />
+          @focus="showSearchView = true" @focusout="showSearchView = false" @input="searchInput"
+          @keyup.enter.native="routerPush('searchDetail',searchKeyword)" />
       </template>
       <template #default>
         <div style="height: 300px;">
@@ -119,7 +120,7 @@ const getTitle = (name) => {
 // 输入框输入触发事件
 const searchInput = debounce(() => {
   get_searchSuggest()
-}, 1000, false)//初始触发立即执行一次，后面每1000毫秒执行一次
+}, 1000,)//初始触发立即执行一次，后面每1000毫秒执行一次
 
 // 获取热门搜索详情
 onMounted(async () => {

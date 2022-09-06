@@ -138,6 +138,23 @@ export function useSearch(keywords) {
     params: { keywords: keywords }
   });
 }
+// 搜索(更全)
+// 可选参数 : 
+// limit : 返回数量 , 默认为 30 
+// offset : 偏移数量，用于分页 ,  如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+// type: 搜索类型；默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音(搜索声音返回字段格式会不一样)
+export function useCloudSearch(obj) {
+  return http({
+    method: "get",
+    url: "/cloudsearch",
+    params: {
+      keywords: obj.keywords,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+      type: obj.type
+    }
+  });
+}
 // 获取搜索建议
 export function useSearchSuggest(keywords) {
   return http({
@@ -312,15 +329,21 @@ export function useCommentMv(id) {
 // 获取全部 mv
 // 可选参数 :
 // area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部 
-// type: 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
+// type: 类型,可选值为全部,官方版,原声,现场版,网易出品,不填则为全部
 // order: 排序,可选值为上升最快,最热,最新,不填则为上升最快
 // limit: 取出数量 , 默认为 30
 // offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
-export function useMvAll(area = "全部", type = "全部", order = "上升最快") {
+export function useMvAll(obj) {
   return http({
     method: "get",
     url: "/mv/all",
-    params: { area: area, type: type, order: order }
+    params: {
+      area: obj.area,
+      type: obj.type,
+      order: obj.order,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit
+    }
   });
 }
 // 获取最新 mv
@@ -371,7 +394,7 @@ export function useVideoGroupList() {
     url: "/video/group/list",
   });
 }
-// 获取视频分类列表(系统错误)
+// 获取视频分类列表(系统错误302)
 export function useVideoCategoryList() {
   return http({
     method: "get",
@@ -426,6 +449,22 @@ export function useVideoUrl(id) {
     params: { id: id }
   });
 }
+// 获取视频评论
+// 可选参数 : 
+// limit: 取出评论数量 , 默认为 20
+// offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+// before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+export function useCommentVideo(obj) {
+  return http({
+    method: "get",
+    url: "/comment/video",
+    params: {
+      id: obj.id,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
+  });
+}
 /*______________________________________电台__________________________________________*/
 // 电台 banner
 export function useDjBanner() {
@@ -439,5 +478,29 @@ export function useDjPersonalizeRecommend() {
   return http({
     method: "get",
     url: "/dj/personalize/recommend",
+  });
+}
+// 推荐电台
+export function usePersonalizedDjprogram() {
+  return http({
+    method: "get",
+    url: "/personalized/djprogram",
+  });
+}
+// 推荐节目
+export function useProgramRecommend() {
+  return http({
+    method: "get",
+    url: "/program/recommend",
+  });
+}
+// 热门电台
+// 可选参数 :
+// limit : 返回数量 , 默认为 30
+// offset : 偏移数量，用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+export function useDjHot() {
+  return http({
+    method: "get",
+    url: "/dj/hot",
   });
 }
