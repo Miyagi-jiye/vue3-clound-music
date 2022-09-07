@@ -118,13 +118,14 @@ const addPlayList = (item) => {
     // grid-template-columns: repeat(4, 1fr);
     grid-template-columns: 3fr 3fr 1fr;
     gap: 20px;
-    font-size: 12px;
+    font-size: 14px;
     color: #7f848c;
+    padding: 10px;
 
   }
 
   .list {
-    font-size: 12px;
+    font-size: 14px;
 
     .item {
       display: grid;
@@ -134,6 +135,8 @@ const addPlayList = (item) => {
       margin: 10px 0;
       padding: 10px 0;
       color: #334155;
+      padding: 10px;
+
 
       &:hover {
         background-color: var(--my-hover-background-color);

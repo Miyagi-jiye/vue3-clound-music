@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useMvDetail, useMvUrl, useCommentMv, useSimiMv, useCommentVideo } from "@/api/index.js";
+import { useMvDetail, useMvUrl, useCommentMv, useSimiMv, useCommentVideo, useVideoUrl, useVideoDetail, useRelatedAllvideo } from "@/api/index.js";
 
 export const useVideoDetailStore = defineStore("videoDetail", {
   state: () => ({
@@ -7,49 +7,63 @@ export const useVideoDetailStore = defineStore("videoDetail", {
     videoDetail: {},//视频详情
     commentMv: {},//mv评论
     mvs: [],//相似mv
-
-    commentVideo: {},//视频评论
-    commentVideoParams: {
+    commentParams: {
       id: 123,
       limit: 20,
       offset: 1
-    },//视频评论参数
+    },//评论参数
   }
   ),
   getters: {},
   actions: {
-    // 获取MV播放地址
+    // 获取播放地址
     async get_mvUrl(id) {
-      const res = await useMvUrl(id)
-      this.videoUrl = res.data.data.url
-      console.log("获取MV播放地址", res.data);
+      if (id.length == 32) {
+        const res = await useVideoUrl(id)
+        this.videoUrl = res.data.urls[0].url
+        console.log("获取视频播放地址", res.data);
+      } else {
+        const res = await useMvUrl(id)
+        this.videoUrl = res.data.data.url
+        console.log("获取MV播放地址", res.data);
+      }
     },
-    // 获取MV详情
+    // 获取详情
     async get_mvDetail(id) {
-      const res = await useMvDetail(id)
-      this.videoDetail = res.data.data
-      console.log("获取MV详情", res.data);
+      if (id.length == 32) {
+        const res = await useVideoDetail(id)
+        this.videoDetail = res.data.data
+        console.log("获取视频详情", res.data);
+      } else {
+        const res = await useMvDetail(id)
+        this.videoDetail = res.data.data
+        console.log("获取MV详情", res.data);
+      }
     },
-    // 获取MV评论
+    // 获取评论
     async get_commentMv(id) {
-      const res = await useCommentMv(id)
-      this.commentMv = res.data
-      console.log("获取MV评论", res.data);
+      if (id.length == 32) {
+        this.commentParams.id = id
+        const res = await useCommentVideo(this.commentParams)
+        this.commentMv = res.data
+        console.log("获取视频评论", res.data);
+      } else {
+        const res = await useCommentMv(id)
+        this.commentMv = res.data
+        console.log("获取MV评论", res.data);
+      }
     },
-    // 获取相似MV
+    // 获取相似推荐
     async get_simiMv(id) {
-      const res = await useSimiMv(id)
-      this.mvs = res.data.mvs
-      console.log("获取相似MV", res.data);
+      if (id.length == 32) {
+        const res = await useRelatedAllvideo(id)
+        this.mvs = res.data.data
+        console.log("获取相关视频", res.data);
+      } else {
+        const res = await useSimiMv(id)
+        this.mvs = res.data.mvs
+        console.log("获取相似MV", res.data);
+      }
     },
-
-    // 获取视频评论
-    async get_commentVideo(id) {
-      this.commentVideoParams.id = id
-      const res = await useCommentVideo(this.commentVideoParams)
-      this.commentVideo = res.data
-      console.log("获取视频评论", res.data);
-    },
-
   }
 })

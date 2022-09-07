@@ -37,7 +37,7 @@ export const useSearchDetailStore = defineStore("searchDetail", {
   }
   ),
   getters: {
-    playlist: (state) => {
+    getterSongs: (state) => {
       return { tracks: state.songs }
     }
   },

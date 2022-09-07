@@ -23,7 +23,7 @@ import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const route = useRoute();
-const { get_mvUrl, get_mvDetail, get_commentMv, get_simiMv, get_commentVideo } = useVideoDetailStore();
+const { get_mvUrl, get_mvDetail, get_commentMv, get_simiMv, } = useVideoDetailStore();
 const { videoUrl, videoDetail, commentMv, mvs } = storeToRefs(useVideoDetailStore());
 
 // 播放器配置
@@ -57,7 +57,6 @@ get_mvUrl(route.params.id);
 get_mvDetail(route.params.id);
 get_commentMv(route.params.id);
 get_simiMv(route.params.id);
-get_commentVideo(route.params.id)
 
 // 监听路由id变化
 watch(

@@ -1,25 +1,14 @@
 <template>
   <div>
-    <el-tooltip
-      effect="dark"
-      :content="tooltipContent"
-      placement="bottom"
-      :enterable="false"
-    >
-      <div @click="fullScreen" class="icon-hover">
-        <icon-off-screen
-          theme="outline"
-          :size="iconSize"
-          v-if="fullScreenState"
-        />
-        <icon-full-screen theme="outline" :size="iconSize" v-else />
-      </div>
-    </el-tooltip>
+    <div @click="fullScreen" class="icon-hover">
+      <icon-off-screen theme="outline" :size="iconSize" v-if="fullScreenState" title="退出全屏" />
+      <icon-full-screen theme="outline" :size="iconSize" v-else title="点击全屏" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 defineProps({
   iconSize: {
@@ -40,9 +29,6 @@ const fullScreen = () => {
     fullScreenState.value = true; // 全屏状态为true
   }
 };
-const tooltipContent = computed(() =>
-  fullScreenState.value ? "退出全屏" : "点击全屏"
-); //用来显示tooltip上的文字
 </script>
 
 <style lang="less" scoped>

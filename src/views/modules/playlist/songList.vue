@@ -198,11 +198,11 @@ const routerPush = (name, id) => {
 
   .grid {
     display: grid;
-    grid-template-columns: 4fr 2fr 2fr 2fr;
+    grid-template-columns: 4fr 2fr 2fr minmax(40px, 1fr);
     gap: 20px;
     font-size: 14px;
     color: #7f848c;
-
+    padding: 10px;
   }
 
   .list {
@@ -210,10 +210,10 @@ const routerPush = (name, id) => {
 
     .item {
       display: grid;
-      grid-template-columns: 4fr 2fr 2fr 2fr;
+      grid-template-columns: 4fr 2fr 2fr minmax(40px, 1fr);
       gap: 20px;
       margin: 10px 0;
-      padding: 10px 0;
+      padding: 10px;
       color: #334155;
 
       &:hover {

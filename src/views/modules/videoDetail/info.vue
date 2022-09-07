@@ -1,32 +1,50 @@
 <template>
   <div class="videoDetail-info">
-    <div class="name">{{ videoDetail.name }}</div>
-    <div class="row">
+    <div class="name" v-if="videoDetail.name">{{ videoDetail.name }}</div>
+    <div class="name" v-else-if="videoDetail.title">{{ videoDetail.title }}</div>
+    <div class="description" v-if="videoDetail.desc">{{videoDetail.desc}}</div>
+    <div class="description" v-else-if="videoDetail.description">{{videoDetail.description}}</div>
+    <div class="row" v-if="videoDetail.artists">
       <div class="artists">
         <p class="title">演唱:</p>
         <div v-for="item in videoDetail.artists" class="artists-name" @click="routerPush('artistDetail', item.id)">
-          {{ item.name }}</div>
+          {{ item.name }}
+        </div>
       </div>
       <div class="playCount">{{ playCountFilter(videoDetail.playCount) }}次观看</div>
       <div class="publishTime">发布时间: {{ videoDetail.publishTime }}</div>
     </div>
+    <div class="row" v-else-if="videoDetail.creator">
+      <p class="title">发布用户 :</p>
+      <div class="artists-name" @click="routerPush('userDetail', videoDetail.creator.userId)">
+        {{ videoDetail.creator.nickname }}
+      </div>
+      <div class="playCount">{{ playCountFilter(videoDetail.praisedCount) }}次观看</div>
+      <div class="publishTime">发布时间 : {{ timestampToTime(videoDetail.publishTime) }}</div>
+    </div>
+    <div class="videoGroup" v-if="videoDetail.videoGroup.name">
+      <p v-for="item in videoDetail.videoGroup" :key="item.id">#{{item.name}}</p>
+    </div>
     <div class="btnGroup">
       <el-button round>
-        <icon-like theme="outline" size="16" fill="#ff5b5b" class="el-icon--left" />喜欢
+        <icon-like theme="outline" size="16" fill="#ff5b5b" class="el-icon--left" />
+        喜欢
       </el-button>
       <el-button round>
-        <icon-star theme="outline" size="16" fill="#ffc107" class="el-icon--left" />收藏 {{ videoDetail.subCount }}
+        <icon-star theme="outline" size="16" fill="#ffc107" class="el-icon--left" />
+        收藏 {{ videoDetail.subCount }}
       </el-button>
       <el-button round>
-        <icon-download theme="outline" size="16" class="el-icon--left" />下载
+        <icon-download theme="outline" size="16" class="el-icon--left" />
+        下载
       </el-button>
       <el-button round @click="emitClick">
-        <icon-comment theme="outline" size="16" class="el-icon--left" />评论 {{
-            videoDetail.commentCount
-        }}
+        <icon-comment theme="outline" size="16" class="el-icon--left" />
+        评论 {{videoDetail.commentCount }}
       </el-button>
       <el-button round>
-        <icon-share theme="outline" size="16" class="el-icon--left" />分享 {{ videoDetail.shareCount }}
+        <icon-share theme="outline" size="16" class="el-icon--left" />
+        分享 {{ videoDetail.shareCount }}
       </el-button>
     </div>
   </div>
@@ -34,8 +52,8 @@
 
 <script setup>
 import { useRouter } from "vue-router"
-import { playCountFilter } from '@/utils/playCountFilter'// 过滤播放量
-
+import { playCountFilter } from '@/utils/playCountFilter.js'// 过滤播放量
+import { timestampToTime } from "@/utils/timestamp.js"//时间戳转换
 const router = useRouter()
 const emit = defineEmits(['emitClick'])
 defineProps({
@@ -54,6 +72,11 @@ defineProps({
       publishTime: "2021-09-03",//发布时间
       brs: [],//清晰度
       artists: [],//演唱歌手
+      creator: { userId: 123456, nikename: "发布用户" },//视频数据
+      praisedCount: 1234,//视频播放量
+      title: "标题",//视频标题
+      description: "子标题",
+      videoGroup: [{ id: 1230, name: "tag标签" }]
     })
   }
 })
@@ -92,6 +115,11 @@ button.el-button.is-round {
     font-weight: bold;
   }
 
+  .description {
+    line-height: 1.2;
+    font-size: 16px;
+  }
+
   .row {
     display: flex;
     flex-direction: row;
@@ -125,6 +153,20 @@ button.el-button.is-round {
 
     .publishTime {
       color: #999;
+    }
+  }
+
+  .videoGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    flex-wrap: wrap;
+    color: #999;
+
+    p:hover {
+      cursor: pointer;
+      color: #34d399;
     }
   }
 

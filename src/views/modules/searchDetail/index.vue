@@ -2,18 +2,28 @@
   <div class="searchDetail">
     <el-tabs v-model="activeTab">
       <el-tab-pane lazy label="单曲" name="1">
-        <SongList :myData="playlist" class="songList" />
+        <SongList :myData="getterSongs" class="songList" />
         <Pagination :myData="searchParams" :mvTotal="songCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="专辑" name="10">
+        <AlbumList :albums="albums" class="albumList" />
+        <Pagination :myData="searchParams" :mvTotal="albumCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="歌手" name="100">
+        <ArtistList :artists="artists" @routerEmit="routerPush" class="artistList" />
+        <Pagination :myData="searchParams" :mvTotal="artistCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="歌单" name="1000">
+        <Recommend :myData='playlists' class="playList" />
+        <Pagination :myData="searchParams" :mvTotal="playlistCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="用户" name="1002">
+        <UserList :userprofiles="userprofiles" class="userList" />
+        <Pagination :myData="searchParams" :mvTotal="userprofileCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="MV" name="1004">
+        <Mv :myData="mvs" class="video" />
+        <Pagination :myData="searchParams" :mvTotal="mvCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="歌词" name="1006">
       </el-tab-pane>
@@ -28,21 +38,25 @@
 </template>
 
 <script setup>
+import UserList from "@/views/modules/searchDetail/userList.vue"
+import Recommend from '@/views/modules/discover/recommend.vue'//歌单推荐(复用)
+import ArtistList from "@/views/modules/searchDetail/artistList.vue";//歌手列表
+import AlbumList from "@/views/modules/searchDetail/albumList.vue"//专辑列表
 import SongList from '@/views/modules/playlist/songList.vue'// 歌单列表组件(复用)
 import Pagination from "@/views/modules/video/pagination.vue"; //分页组件(复用)
-import Mv from "@/views/modules/discover/mv.vue"//视频组件
+import Mv from "@/views/modules/discover/mv.vue"//视频组件(复用)
 
 import { useSearchDetailStore } from "@/pinia/module/searchDetail.js";
 import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from 'vue-router';
-import { ref, watch, computed } from "vue"
+import { ref, watch } from "vue"
 
 const router = useRouter()
 const route = useRoute()
 let activeTab = ref("1")//默认激活tab
 
 const { get_cloudSearch } = useSearchDetailStore();
-const { videos, videoCount, songs, songCount, playlist, searchParams } = storeToRefs(useSearchDetailStore());
+const { mvs, mvCount, userprofiles, userprofileCount, playlists, playlistCount, artists, artistCount, albums, albumCount, videos, videoCount, songCount, getterSongs, searchParams } = storeToRefs(useSearchDetailStore());
 
 // 初始化
 searchParams.value.keywords = route.params.id
@@ -59,14 +73,17 @@ watch(() => route.params.id, () => {
 })
 // 监听tab栏变化
 watch(activeTab, () => {
-  searchParams.value.type = Number(activeTab.value)
+  searchParams.value.type = Number(activeTab.value)//修改类型
   get_cloudSearch()
 })
 // 歌曲分页点击事件
 const emitPage = () => {
   get_cloudSearch()
 }
-
+// 路由跳转携带参数
+const routerPush = (name, id) => {
+  router.push({ name: name, params: { id: id } })
+}
 </script>
 
 <style lang="less" scoped>
@@ -116,6 +133,22 @@ const emitPage = () => {
   }
 
   .video {
+    margin-top: 20px;
+  }
+
+  .albumList {
+    margin-top: 20px;
+  }
+
+  .artistList {
+    margin-top: 20px;
+  }
+
+  .playList {
+    margin-top: 20px;
+  }
+
+  .userList {
     margin-top: 20px;
   }
 }

@@ -44,6 +44,7 @@ function emitToArtistDetail(id) {
 </script>
 
 <style lang="less" scoped>
+// tab栏样式
 :deep(.el-tabs__nav-wrap:after) {
   height: 0;
 }
@@ -55,6 +56,24 @@ function emitToArtistDetail(id) {
 :deep(.el-tabs__item.is-active) {
   font-size: 16px !important;
   font-weight: 600 !important;
+}
+
+// 固定tab栏头部
+:deep(.el-tabs) {
+  margin: 0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+
+// 固定tab栏头部
+:deep(.el-tabs__header) {
+  margin: 0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
 }
 
 .tab {

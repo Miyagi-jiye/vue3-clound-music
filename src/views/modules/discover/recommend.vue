@@ -2,17 +2,19 @@
   <div class="recommend">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="cardImg">
-        <img class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
-          @click="toPlaylist(item.id)">
+        <img v-if="item.picUrl" class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
+          :key="item.id" @click="toPlaylist(item.id)">
+        <img v-else-if="item.coverImgUrl" class="discoverImg" v-img-lazy="item.coverImgUrl + '?param=300y300'"
+          :alt="'歌单ID=' + item.id" @click="toPlaylist(item.id)">
         <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
           @click="playMusic(item.id)" />
         <div class="playCount">
           <icon-headset theme="filled" size="12" :strokeWidth="4" />
-          <text>{{  playCountFilter(item.playCount)  }}</text>
+          <text>{{ playCountFilter(item.playCount) }}</text>
         </div>
       </div>
       <div class="name">
-        {{  item.name  }}
+        {{ item.name }}
       </div>
     </div>
   </div>
@@ -30,7 +32,7 @@ const { Playlist } = useStore()
 defineProps({
   myData: {
     type: Array,
-    default: () => [{ id: 123456, picUrl: '', name: '默认简介', playCount: 999 }]
+    default: () => [{ id: 123456, picUrl: '', coverImgUrl: '', name: '默认简介', playCount: 999 }]
   }
 })
 

@@ -45,6 +45,7 @@ defineProps({
       cover: '',
       coverUrl: '',
       durationms: 123456,//总时长
+      creator: [{ userId: 123456, userName: "用户名" }]
     }]
   }
 })
