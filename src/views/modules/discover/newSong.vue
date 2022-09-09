@@ -1,19 +1,21 @@
 <template>
   <div class="newSong">
-    <div class="flex" v-for="item in myData">
+    <div class="flex" v-for="item in myData" :key="item.id">
       <span class="father">
         <img class="img" v-img-lazy="item.picUrl + '?param=100y100'" :alt="'新歌ID=' + item.id">
-        <icon-play-one class="playIcon" theme="filled" size="25" :strokeWidth="4" title='点击播放' />
+        <icon-play-one class="playIcon" theme="filled" size="25" :strokeWidth="4" title='点击播放' @click="play(item.id)" />
       </span>
       <div class="title">
-        <span>{{ item.song.artists[0].name }}</span>
-        <p>{{ item.name }}</p>
+        <span>{{ item.name }}</span>
+        <p>{{ item.song.artists[0].name }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+import { storeToRefs } from "pinia"
 
 defineProps({
   myData: {
@@ -21,6 +23,11 @@ defineProps({
     default: () => [{ id: 123456, picUrl: '', name: '默认简介', song: { artists: [{ name: '默认作者' }] } }]
   }
 })
+const { get_songDetail } = usePlaylistStore()
+
+const play = (id) => {
+  get_songDetail(id)
+}
 </script>
 
 <style lang="less" scoped>
@@ -81,11 +88,19 @@ defineProps({
 
       span {
         font-size: 16px;
+        // 溢出不换行省略号
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       p {
         font-size: 14px;
         color: #999;
+        // 溢出不换行省略号
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

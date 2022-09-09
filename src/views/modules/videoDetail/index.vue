@@ -3,7 +3,7 @@
     <videoPlay v-bind="options" />
     <Info :videoDetail="videoDetail" @emitClick="scroll" class="info" />
     <p class="mvs-title">相似推荐</p>
-    <MV :myData="mvs" @clickEmit="emitRouterPush" class="mv" />
+    <MV :myData="mvs" class="mv" />
     <p id="comment" class="comment-title">发表评论</p>
     <SongComments :comments="commentMv.comments" :hotComments="commentMv.hotComments" class="comment" />
   </div>
@@ -71,11 +71,7 @@ watch(
     }
   }
 );
-// 切换mv
-const emitRouterPush = (id) => {
-  router.push({ name: "videoDetail", params: { id: id } });
-};
-// 滚动到评论
+// 滚动到评论区
 const scroll = () => {
   let target = document.getElementById("comment");
   if (target) {

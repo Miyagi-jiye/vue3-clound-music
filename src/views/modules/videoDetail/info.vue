@@ -22,9 +22,6 @@
       <div class="playCount">{{ playCountFilter(videoDetail.praisedCount) }}次观看</div>
       <div class="publishTime">发布时间 : {{ timestampToTime(videoDetail.publishTime) }}</div>
     </div>
-    <div class="videoGroup" v-if="videoDetail.videoGroup.name">
-      <p v-for="item in videoDetail.videoGroup" :key="item.id">#{{item.name}}</p>
-    </div>
     <div class="btnGroup">
       <el-button round>
         <icon-like theme="outline" size="16" fill="#ff5b5b" class="el-icon--left" />
@@ -153,20 +150,6 @@ button.el-button.is-round {
 
     .publishTime {
       color: #999;
-    }
-  }
-
-  .videoGroup {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    flex-wrap: wrap;
-    color: #999;
-
-    p:hover {
-      cursor: pointer;
-      color: #34d399;
     }
   }
 

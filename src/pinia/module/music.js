@@ -76,7 +76,7 @@ export const useMusicStore = defineStore("music", {
         item.picUrl = item.imgurl
       });
       this.artistMV = res.data.mvs
-      console.log("获取歌手热门MV", res.data, this.artistMV);
+      console.log("获取歌手热门MV", res.data);
     },
   }
 })

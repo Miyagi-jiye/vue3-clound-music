@@ -107,7 +107,11 @@ const routes = [
 // 创建路由对象
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: routes
+  routes: routes,
+  // 始终滚动到顶部
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  }
 })
 
 // 页面路由刚开始切换的时候
@@ -125,7 +129,7 @@ router.beforeEach((to, from, next) => {
 });
 
 // 页面路由切换完毕的时候
-router.afterEach(() => {
+router.afterEach((to, from, next) => {
   // // 关闭进度条
   // NProgress.done();
 });

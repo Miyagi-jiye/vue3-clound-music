@@ -10,10 +10,10 @@
       <div class="detail">
         <!-- img歌词弹窗 -->
         <LyricDialog :lyric="Playlist.lyric" :currentTime="audio.currentTime" :duration="audio.duration"
-          :imgUrl="Playlist.currentPlayMusic.al.picUrl" />
+          :currentPlayMusic="Playlist.currentPlayMusic" />
         <!-- 播放歌曲详情 -->
         <div class="info">
-          <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
+          <p class="top">{{ Playlist.currentPlayMusic.al.name }}</p>
           <div class="bottom">
             <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{ item.name }}</a>
           </div>
@@ -44,10 +44,10 @@
       </div>
       <div class="list hidden-less-1000">
         <p>{{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}</p>
-        <icon-text-message theme="outline" size="18" :strokeWidth="3" title='歌曲评论' />
+        <icon-text-message theme="outline" size="22" :strokeWidth="3" title='歌曲评论' />
         <!-- 待播放歌曲列表 -->
         <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
-          @clearChild='clearEvent' iconSize='18' />
+          @clearChild='clearEvent' iconSize='24' />
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@
 import VolumeIcon from "@/components/VolumeIcon.vue"//音量组件
 import LyricDialog from '@/components/LyricDialog.vue';//歌词弹窗
 import MusicListIcon from '@/components/MusicListIcon.vue';//音乐播放列表
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed, reactive } from 'vue'
 import { ElMessage } from 'element-plus';
 import useStore from "@/pinia/index.js"
 const { Playlist } = useStore()

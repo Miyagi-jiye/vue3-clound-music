@@ -3,13 +3,15 @@
     <div v-for="item in albums" :key="item.id" class="vfor">
       <div class="img-box">
         <img :src="item.picUrl+'?param=60y60'" :alt="'专辑ID='+item.id" class="img">
-        <icon-play theme="outline" size="25" :strokeWidth="4" title='播放' class="icon-play" />
+        <icon-play theme="outline" size="25" :strokeWidth="4" title='播放' class="icon-play"
+          @click="routerPush('albumDetail',item.id)" />
       </div>
       <div class="play-box whiteSpace">
-        <p class="name whiteSpace">{{item.name}}</p>
+        <p class="name whiteSpace" @click="routerPush('albumDetail',item.id)">{{item.name}}</p>
       </div>
       <div class="artists whiteSpace">
-        <p v-for="item1 in item.artists" :key="item1.id" class="artists-name whiteSpace">{{item1.name}}</p>
+        <p v-for="artist in item.artists" :key="artist.id" class="artists-name whiteSpace"
+          @click="routerPush('artistDetail',artist.id)">{{artist.name}}</p>
       </div>
       <p class="publishTime whiteSpace">{{timestampToTime(item.publishTime)}}</p>
       <p class="size whiteSpace">{{item.size}}首</p>
@@ -33,6 +35,7 @@ defineProps({
     }]
   }
 })
+const emit = defineEmits(['routerEmit'])
 /* 时间戳转换为时间(只保留年月日) */
 function timestampToTime(timestamp) {
   timestamp = timestamp ? timestamp : null;
@@ -41,6 +44,10 @@ function timestampToTime(timestamp) {
   let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
   let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
   return Y + M + D
+}
+// 路由跳转
+const routerPush = (name, id) => {
+  emit("routerEmit", name, id)
 }
 </script>
 

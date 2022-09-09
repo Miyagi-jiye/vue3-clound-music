@@ -2,7 +2,7 @@
   <div>
     <el-badge :value="myData.length" :hidden="myData.length == 0 ? true : false">
       <!-- 播放列表图标 -->
-      <icon-music-list class="musicList" theme="filled" :size="iconSize" :strokeWidth="2" title='歌曲列表'
+      <icon-music-list class="musicList" theme="outline" :size="iconSize" :strokeWidth="3" title='歌曲列表'
         @click="drawer = true" />
     </el-badge>
     <!-- 弹出框 -->

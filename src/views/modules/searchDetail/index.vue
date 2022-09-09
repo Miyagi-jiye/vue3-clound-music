@@ -6,7 +6,7 @@
         <Pagination :myData="searchParams" :mvTotal="songCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="专辑" name="10">
-        <AlbumList :albums="albums" class="albumList" />
+        <AlbumList :albums="albums" @routerEmit="routerPush" class="albumList" />
         <Pagination :myData="searchParams" :mvTotal="albumCount" @emitClick="emitPage" class="pagination" />
       </el-tab-pane>
       <el-tab-pane lazy label="歌手" name="100">

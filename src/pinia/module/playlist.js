@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
-import { useSonglistDetail, useSonglistComment, useMusicUrl, useLyric } from "@/api/index.js";
+import { useSonglistDetail, useSonglistComment, useMusicUrl, useLyric, useSongDetail } from "@/api/index.js";
 import vue from "@/assets/img/vue.svg"//默认播放音乐的图片
 
-const usePlaylistStore = defineStore("playlist", {
+export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
     playlist: JSON.parse(localStorage.getItem('playlist')) || {},// 歌单列表是否有保存数据
     playlistCache: [],//缓存请求过的歌单数据
     comments: JSON.parse(localStorage.getItem('comments')) || {},// 歌单评论数据
-    currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 },// 当前播放的音乐
-    toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }],//歌单播放列表
+    currentPlayMusic: { id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 },// 当前播放的音乐
+    toPlayList: [{ id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
+    songs: {},//单首歌曲详情
   }),
   // 相当于 computed 计算属性
   getters: {
@@ -43,6 +44,14 @@ const usePlaylistStore = defineStore("playlist", {
     }
   },
   actions: {
+    // 获取单首歌曲详情,并播放
+    async get_songDetail(id) {
+      const res = await useSongDetail(id);
+      this.songs = res.data.songs[0]
+      console.log("获取单首歌曲详情", res.data);
+      this.change_playMusic(this.songs)//改变当前播放音乐
+      this.push_toPlayList(this.songs)//添加单首歌曲到播放列表
+    },
     // 获取歌单详情
     async get_songlistDetail(id) {
       // 判断是否已经缓存过
@@ -83,7 +92,7 @@ const usePlaylistStore = defineStore("playlist", {
     async change_playMusic(obj) {
       // 判断当前播放音乐是否是自己
       if (this.currentPlayMusic.id !== obj.id) {
-        await this.get_lyric(obj.id)
+        await this.get_lyric(obj.id)//获取歌词
         this.currentPlayMusic = obj
       } else {
         return false
@@ -101,8 +110,8 @@ const usePlaylistStore = defineStore("playlist", {
     // 清空播放列表
     clear_toPlayList() {
       // 恢复默认设置
-      this.toPlayList = [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }]
-      this.currentPlayMusic = { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ name: '尤雨溪' }], al: { picUrl: vue }, dt: 0 }
+      this.toPlayList = [{ id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 }]
+      this.currentPlayMusic = { id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 }
     },
     // 上一首音乐
     pre_music() {
@@ -138,34 +147,37 @@ const usePlaylistStore = defineStore("playlist", {
       let reg1 = /\[\d*:\d*\.\d*\]/g;
       // 2.定义正则表达式提取 [00
       let reg2 = /\[\d*/i;
-      // 3.定义正则表达式提取 :00
-      let reg3 = /\:\d*/i;
+      // 3.定义正则表达式提取 :00.000
+      let reg3 = /\:\d*\.\d*/i;
       // 4.定义数组保存处理好的歌词
       let lyricArray = [];
+      // 过滤空行歌词
+      lyrics.filter(v => !!v)
       // 5.遍历歌词数组
       lyrics.forEach(function (lyric) {
         // 1.提取时间 [00:00.000]
         let timeStr = lyric.match(reg1);
         if (!timeStr) { return }
         timeStr = timeStr[0];
-        // 2.提取分钟
+        // 2.提取分钟,删除[
         let minStr = timeStr.match(reg2)[0].substring(1);
-        // 3.提取秒钟
+        // 3.提取秒钟,删除:
         let secondStr = timeStr.match(reg3)[0].substring(1);
         // 4.合并时间, 将分钟和秒钟都合并为秒钟
-        let time = parseInt(minStr) * 60 + parseInt(secondStr);
+        let time = parseInt(minStr) * 60 + parseFloat(secondStr);
+        // console.log(minStr, "分", secondStr, "秒", Number(time).toFixed(3));
         // 5.处理歌词
         let text = lyric.replace(reg1, "").trim();
         // 6.保存数据
-        lyricArray.push({ time: time, lyric: text, pre: 0 })
+        lyricArray.push({ time: Number(time.toFixed(3)), lyric: text, next: 0 })
       });
       // 添加下一句歌词的时间
       lyricArray.forEach((item, index) => {
         // 如果是最后一句歌词
         if (index == lyricArray.length - 1) {
-          item.pre = item.time + 999
+          item.next = item.time + 999
         } else {
-          item.pre = lyricArray[index + 1].time
+          item.next = lyricArray[index + 1].time
         }
       })
       console.log("格式化后的歌词", lyricArray);

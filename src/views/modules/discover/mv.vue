@@ -19,7 +19,9 @@
       </div>
       <p v-if="item.name" class="name">{{ item.name }}</p>
       <p v-else-if="item.title" class="name">{{ item.title }}</p>
-      <p v-if="item.artistName" class="artistName">{{ item.artistName }}</p>
+      <p v-if="item.artistName" class="artistName" @click="routerPush('artistDetail',item.artistId)">
+        {{ item.artistName }}
+      </p>
       <div v-else-if="item.creator[0].userName" class="artistName">
         <p v-for="user in item.creator" :title="user.userId" class="userName">#{{ user.userName }}</p>
       </div>
@@ -38,6 +40,7 @@ defineProps({
     default: () => [{
       id: 123456,
       vid: 123466,
+      artistId: 123456,//歌手id
       artistName: '默认作者',
       name: '默认歌曲',
       playCount: '默认播放量',

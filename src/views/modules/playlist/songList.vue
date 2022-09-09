@@ -28,18 +28,16 @@
           </div>
         </span>
         <span class="overflow singer">
-          <p class="name" v-for="item1 in item.ar" :key="item1.id">{{ item1.name }}</p>
+          <p class="name" v-for="item1 in item.ar" :key="item1.id" @click="routerPush('artistDetail',item1.id)">
+            {{item1.name }}
+          </p>
         </span>
         <span class="overflow album">
-          <p class="name">{{ item.al.name }}</p>
+          <p class="name" @click="routerPush('albumDetail',item.al.id)">{{ item.al.name }}</p>
         </span>
         <span class="overflow duration">{{ format(item.dt) }}</span>
       </div>
     </div>
-    <!-- 加载更多 -->
-    <!-- <div class="loadMore">
-      <p>加载更多</p>
-    </div> -->
   </div>
 </template>
 
@@ -85,6 +83,15 @@ const routerPush = (name, id) => {
 </script>
 
 <style lang="less" scoped>
+// 溢出不换行省略号
+.whiteSpace {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
 // .song {
 //   min-width: 200px;
 // }
@@ -236,30 +243,18 @@ const routerPush = (name, id) => {
         gap: 5px;
         overflow: hidden;
 
+        p {
+          cursor: pointer;
 
+          &:hover {
+            color: #34d399;
+          }
+        }
 
         .block {
           margin-left: auto;
           display: none;
         }
-      }
-    }
-  }
-
-  .loadMore {
-    margin: 20px 0;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-    color: #34d399;
-    font-size: 14px;
-
-    p {
-      cursor: pointer;
-
-      &:hover {
-        color: rgba(8, 88, 59, 0.733);
       }
     }
   }
