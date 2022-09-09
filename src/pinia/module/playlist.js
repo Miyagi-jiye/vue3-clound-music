@@ -127,11 +127,15 @@ export const usePlaylistStore = defineStore("playlist", {
     },
     // 获取歌词
     async get_lyric(id) {
-      const res = await useLyric(id)
-      this.lyric = this.parse_lyric(res.data.lrc.lyric)//格式化歌词
-      console.log("获取歌词", res.data);
+      try {
+        const res = await useLyric(id)
+        this.lyric = this.parse_lyric(res.data.lrc.lyric)//格式化歌词
+        console.log("获取歌词", res.data);
+      } catch (error) {
+        console.log(error);
+      }
     },
-    // 处理歌词
+    // 处理歌词(未使用)
     handle_lyric(lyric) {
       let array = []
       // 截取 [00:01.02] 以及过滤为null或undefined的字符串，返回新数组

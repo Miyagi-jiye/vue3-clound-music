@@ -33,17 +33,17 @@
       </div>
       <!-- 播放器控件 -->
       <div class="media-controls">
-        <icon-play-once theme="outline" size="16" :strokeWidth="4" title='顺序播放' @click="iconClick('order')"
+        <icon-play-once theme="outline" size="18" :strokeWidth="4" title='顺序播放' @click="iconClick('order')"
           class="icon-hover" />
-        <icon-go-start theme="outline" size="28" :strokeWidth="4" title="上一首" @click="iconClick('pre')"
+        <icon-go-start theme="outline" size="34" :strokeWidth="4" title="上一首" @click="iconClick('pre')"
           class="icon-hover" />
-        <icon-play-one v-show="audioStatus === false" theme="filled" size="38" @click="iconClick('play')"
+        <icon-play-one v-show="audioStatus === false" theme="filled" size="44" @click="iconClick('play')"
           :strokeWidth="4" title="点击播放" class="icon-hover" />
-        <icon-pause v-show="audioStatus === true" theme="filled" size="38" :strokeWidth="4" @click="iconClick('pause')"
+        <icon-pause v-show="audioStatus === true" theme="filled" size="44" :strokeWidth="4" @click="iconClick('pause')"
           title="点击暂停" class="icon-hover" />
-        <icon-go-end theme="outline" size="28" :strokeWidth="4" title="下一首" @click="iconClick('next')"
+        <icon-go-end theme="outline" size="34" :strokeWidth="4" title="下一首" @click="iconClick('next')"
           class="icon-hover" />
-        <icon-play-cycle theme="outline" size="16" :strokeWidth="4" title='循环播放' @click="iconClick('cycle')"
+        <icon-play-cycle theme="outline" size="18" :strokeWidth="4" title='循环播放' @click="iconClick('cycle')"
           class="icon-hover" />
       </div>
     </div>

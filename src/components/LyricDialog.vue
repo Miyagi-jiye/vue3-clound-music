@@ -26,12 +26,12 @@
             </div>
           </div>
           <!-- 退出按钮 -->
-          <div class="close">
-            <icon-down theme="filled" size="40" @click="drawer = false" class="downIcon" />
+          <div class="close" @click="drawer = false">
+            <icon-down theme="filled" size="40" class="downIcon" />
           </div>
           <!-- 切换按钮 -->
-          <div class="switch">
-            <icon-app-switch theme="filled" size="25" @click="showView" class="switchIcon" />
+          <div class="switch" @click="showView">
+            <icon-app-switch theme="filled" size="25" class="switchIcon" />
           </div>
         </div>
       </slot>
@@ -49,7 +49,7 @@ let drawer = ref(false)
 let index = ref(0)//激活歌词索引
 let playerShow = ref(true)//播放器显示
 let lyricShow = ref(true)//歌词显示
-let i = 0;
+let i = 1;
 
 // 点击切换歌词显示界面
 const showView = () => {
@@ -67,6 +67,7 @@ const showView = () => {
     lyricShow.value = false
     i = 0
   }
+  console.log(i);
 }
 const prop = defineProps({
   currentPlayMusic: {
