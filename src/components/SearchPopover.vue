@@ -1,17 +1,17 @@
 <template>
   <div>
     <el-popover v-model:visible="showSearchView" placement="bottom" popper-style="max-width:auto;padding:0;"
-      :width="200">
+      width="300px">
       <template #reference>
         <el-input v-model="searchKeyword" placeholder="搜索音乐、MV、歌单" :prefix-icon="Search" :clearable='true'
           @focus="showSearchView = true" @focusout="showSearchView = false" @input="searchInput"
           @keyup.enter.native="routerPush('searchDetail',searchKeyword)" />
       </template>
       <template #default>
-        <div style="height: 300px;">
+        <div style="height: 400px;">
           <el-scrollbar>
             <!-- 输入框为空时显示 -->
-            <div v-if="showHot">
+            <div v-show="showHot==true">
               <div class="searchTitle">热门搜索</div>
               <div>
                 <div v-for="(item, index) in searchHot" :key="item.searchWord" class="hotItem"
@@ -25,7 +25,7 @@
               </div>
             </div>
             <!-- 输入框有值时显示 -->
-            <div v-else>
+            <div v-show="showHot==false">
               <div v-if="suggestData">
                 <div v-for="order in suggestData.order">
                   <div class="searchTitle">{{ getTitle(order) }}</div>
@@ -76,11 +76,12 @@ const { Playlist } = useStore()
 
 const router = useRouter()
 
-const { showSearchView, searchKeyword, showHot, searchHot, suggestData } = storeToRefs(useSearchStore())
+const { showSearchView, searchKeyword, showHot, showSuggest, searchHot, suggestData } = storeToRefs(useSearchStore())
 const { get_searchSuggest, get_searchHotDetail, get_songDetail } = useSearchStore()//获取搜索建议，热门搜索详情，函数或方法不会丢失响应式
 
-// 路由跳转到专辑页面
+// 路由跳转到详情页面
 const routerPush = (name, id) => {
+  showSearchView.value = false//关闭搜索建议
   router.push({ name: name, params: { id: id } })
 }
 // 路由跳转到歌单列表页
@@ -139,8 +140,12 @@ onMounted(async () => {
   justify-content: space-between;
   flex-wrap: nowrap;
   flex-direction: row;
-  font-size: 12px;
-  padding: 4px 8px;
+  font-size: 14px;
+  padding: 4px 12px;
+
+  &:hover {
+    background-color: rgba(153, 153, 153, 0.164);
+  }
 }
 
 .hover {
@@ -153,17 +158,21 @@ onMounted(async () => {
 }
 
 .searchTitle {
-  font-size: 14px;
-  padding: 8px;
+  font-size: 16px;
+  padding: 8px 12px;
   font-weight: 600;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background: #fff;
 }
 
 .searchItem {
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 12px;
-  padding: 4px 8px;
+  font-size: 14px;
+  padding: 4px 12px;
   cursor: pointer;
 
   &:hover {
@@ -171,6 +180,7 @@ onMounted(async () => {
   }
 }
 
+// 溢出隐藏不换行
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;

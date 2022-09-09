@@ -14,8 +14,12 @@
       <div class="right">
         <div class="content">
           <div class="songList" v-for="(tracks, index) in item.tracks" :key="index">
-            <p>{{ index + 1 }}</p>
+            <div>{{ index + 1 }}</div>
             <p class="nowrap">{{ tracks.first }} - {{ tracks.second }}</p>
+          </div>
+          <div @click="toPlaylist(item.id)" class="seeMore">
+            查看更多
+            <icon-right theme="outline" size="20" />
           </div>
         </div>
       </div>
@@ -152,7 +156,7 @@ const playMusic = async (id) => {
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         padding: 0px 20px;
 
         .songList {
@@ -165,13 +169,8 @@ const playMusic = async (id) => {
           padding: 10px;
           font-size: 18px;
           font-weight: bold;
-          cursor: pointer;
+          line-height: 1.2;
           transition: all 0.25s;
-
-          &:hover {
-            border-radius: 8px;
-            background: #FFF;
-          }
 
           .nowrap {
             overflow: hidden;
@@ -181,6 +180,23 @@ const playMusic = async (id) => {
             -webkit-box-orient: vertical;
           }
 
+        }
+
+        .seeMore {
+          padding: 10px;
+          margin-left: 20px;
+          font-size: 16px;
+          font-weight: bold;
+          line-height: 1.2;
+          box-sizing: border-box;
+          color: rgba(0, 0, 0, 0.644);
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }

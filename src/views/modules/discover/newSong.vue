@@ -23,6 +23,7 @@ defineProps({
     default: () => [{ id: 123456, picUrl: '', name: '默认简介', song: { artists: [{ name: '默认作者' }] } }]
   }
 })
+
 const { get_songDetail } = usePlaylistStore()
 
 const play = (id) => {
