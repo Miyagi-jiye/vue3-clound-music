@@ -25,7 +25,7 @@ const { get_videoGroupList, get_mvAll } = useVideoStore();
 const { mvAll, mvAllParams, mvTotal } = storeToRefs(useVideoStore());
 
 // get_videoGroupList()
-get_mvAll();
+get_mvAll();//初始化获取mv视频
 
 // 筛选点击事件
 const emitMvAll = (e) => {

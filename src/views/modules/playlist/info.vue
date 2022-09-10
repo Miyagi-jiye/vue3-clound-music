@@ -38,8 +38,9 @@
 <script setup>
 // import PlayAllButton from '@/components/PlayAllButton.vue';
 import MoreText from '@/views/modules/playlist/MoreText.vue'// 更多详情组件
-import useStore from "@/pinia/index.js"
-const { Playlist } = useStore()
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+
+const { push_musicToPlayList } = usePlaylistStore()
 
 defineProps({
   myData: {
@@ -60,7 +61,7 @@ defineProps({
 
 // 全部添加到播放列表
 const addPlayList = () => {
-  Playlist.push_musicToPlayList()
+  push_musicToPlayList()
 }
 </script>
 

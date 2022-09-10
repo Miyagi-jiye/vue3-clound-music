@@ -3,7 +3,7 @@
     <div class="vfor" v-for="item in oneToFour" :key="item.id">
       <div class="left">
         <img class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
-          @click="toPlaylist(item.id)">
+          @click="routerPush('playlist',item.id)">
         <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
           @click="playMusic(item.id)" />
         <div class="playCount">
@@ -17,7 +17,7 @@
             <div>{{ index + 1 }}</div>
             <p class="nowrap">{{ tracks.first }} - {{ tracks.second }}</p>
           </div>
-          <div @click="toPlaylist(item.id)" class="seeMore">
+          <div @click="routerPush('playlist',item.id)" class="seeMore">
             查看更多
             <icon-right theme="outline" size="20" />
           </div>
@@ -31,29 +31,29 @@
 <script setup>
 import { playCountFilter } from '@/utils/playCountFilter' // 过滤播放量
 import { useRouter } from 'vue-router';
-import useStore from "@/pinia/index.js";
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+
+const { get_songlistDetail, get_songlistComment, push_musicToPlayList } = usePlaylistStore()//pinia中的方法
+const router = useRouter()
 
 defineProps({
+  // 前四排行榜
   oneToFour: {
     type: Array,
-    default: () => [{}]
+    default: () => ([{}])
   }
 })
 
-const router = useRouter()
-const { Playlist } = useStore()
 
 // 跳转到歌单详情页
-const toPlaylist = async (id) => {
-  Playlist.get_songlistComment(id)
-  await Playlist.get_songlistDetail(id)
-  router.push({ name: 'playlist' })
+const routerPush = (name, id) => {
+  router.push({ name: name, query: { id: id } })
 }
 // 获取歌单所有歌曲
-const playMusic = async (id) => {
-  await Playlist.get_songlistDetail(id)
-  Playlist.push_musicToPlayList()
-  console.log("将歌单添加到播放列表");
+const playMusic = (id) => {
+  get_songlistDetail(id)
+  push_musicToPlayList()
+  console.log("将歌单所有歌曲添加到播放列表并播放");
 }
 </script>
 

@@ -13,7 +13,7 @@
           :currentPlayMusic="Playlist.currentPlayMusic" />
         <!-- 播放歌曲详情 -->
         <div class="info">
-          <p class="top">{{ Playlist.currentPlayMusic.al.name }}</p>
+          <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
           <div class="bottom">
             <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{ item.name }}</a>
           </div>

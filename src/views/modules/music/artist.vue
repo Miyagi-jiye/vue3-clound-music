@@ -1,36 +1,48 @@
 <template>
   <div class="artist">
+    <!-- 筛选按钮 -->
     <div class="top">
       <div class="area">
-        <el-button round size="small" class="type-item" :class="{ active: params.area == item.value }"
+        <el-button round size="small" class="type-item" :class="{ active: artistParams.area == item.value }"
           v-for="item in options.area" @click="areaClick(item.value)">
           {{ item.name }}
         </el-button>
       </div>
       <div class="type">
-        <el-button round size="small" class="type-item" :class="{ active: params.type == item.value }"
+        <el-button round size="small" class="type-item" :class="{ active: artistParams.type == item.value }"
           v-for="item in options.type" @click="typeClick(item.value)">
           {{ item.name }}
         </el-button>
       </div>
       <div class="initial">
-        <el-button round size="small" class="type-item" :class="{ active: params.initial == item.value }"
+        <el-button round size="small" class="type-item" :class="{ active: artistParams.initial == item.value }"
           v-for="item in options.initial" @click="initialClick(item.value)">
           {{ item.name }}
         </el-button>
       </div>
     </div>
+    <!-- 歌手图片 -->
     <div class="bottom">
-      <div class="artistList" v-for="item in artistList" @click="toArtistDetail(item.id)" :key="item.id">
+      <div class="artistList" v-for="item in artistList" @click="routerPush('artistDetail',item.id)" :key="item.id">
         <img class="img" v-img-lazy="item.picUrl + '?param=150y150'" :alt="'歌手ID=' + item.id" :key="item.id">
         <p class="name">{{ item.name }}</p>
       </div>
     </div>
+    <!-- 分页 -->
+    <Pagination :myData="artistParams" @emitClick="emitPage" class="pagination" />
   </div>
 </template>
 
 <script setup>
+import Pagination from "@/views/modules/video/pagination.vue"; //分页组件(复用)
 import { reactive } from "vue"
+import { useRouter } from "vue-router"
+import { useMusicStore } from '@/pinia/module/music.js';
+import { storeToRefs } from 'pinia';
+
+const { artistParams } = storeToRefs(useMusicStore())//响应式数据
+const { get_artistList } = useMusicStore()//方法
+const router = useRouter()//路由
 
 const prop = defineProps({
   artistList: {
@@ -38,14 +50,7 @@ const prop = defineProps({
     default: () => []
   }
 })
-const emit = defineEmits(['clickEmit', 'routerEmit'])
-
-const params = reactive({
-  type: -1,
-  area: -1,
-  initial: -1
-})
-
+// 配置
 const options = reactive({
   type: [
     { name: '全部', value: -1 },
@@ -95,22 +100,26 @@ const options = reactive({
 
 // 筛选男，女，乐队
 function typeClick(e) {
-  params.type = e
-  emit('clickEmit', params)
+  artistParams.value.type = e
+  get_artistList()
 }
 // 筛选语种
 function areaClick(e) {
-  params.area = e
-  emit('clickEmit', params)
+  artistParams.value.area = e
+  get_artistList()
 }
 // 筛选名称
 function initialClick(e) {
-  params.initial = e
-  emit('clickEmit', params)
+  artistParams.value.initial = e
+  get_artistList()
 }
 // 前往歌手详情页
-function toArtistDetail(id) {
-  emit("routerEmit", id)
+function routerPush(name, id) {
+  router.push({ name: name, params: { id: id } })
+}
+// 分页点击事件
+const emitPage = () => {
+  get_artistList()
 }
 </script>
 
@@ -195,6 +204,10 @@ function toArtistDetail(id) {
         }
       }
     }
+  }
+
+  .pagination {
+    margin-top: 20px;
   }
 }
 

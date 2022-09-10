@@ -16,7 +16,7 @@ const prop = defineProps({
   },
   mvTotal: {
     type: Number,
-    default: () => 100
+    default: () => 500
   }
 })
 
@@ -26,7 +26,7 @@ const background = ref(true);
 const small = ref(false);
 const layout = ref("total,sizes, prev, pager, next, jumper")
 
-// 屏幕宽度变化
+// 屏幕宽度变化,改变配置
 function resize() {
   if (window.innerWidth <= 800 && window.innerWidth >= 600) {
     small.value = false

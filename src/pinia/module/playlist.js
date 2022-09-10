@@ -4,11 +4,17 @@ import vue from "@/assets/img/vue.svg"//默认播放音乐的图片
 
 export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
-    playlist: JSON.parse(localStorage.getItem('playlist')) || {},// 歌单列表是否有保存数据
-    playlistCache: [],//缓存请求过的歌单数据
-    comments: JSON.parse(localStorage.getItem('comments')) || {},// 歌单评论数据
-    currentPlayMusic: { id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 },// 当前播放的音乐
-    toPlayList: [{ id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 }],//歌单播放列表
+    playlist: {
+      tracks: [],
+      creator: {}
+    },// 歌单列表数据
+    comments: {
+      comments: [],
+      hotComments: [],
+      total: 0
+    },// 歌单评论数据
+    currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 },// 当前播放的音乐
+    toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
     songs: {},//单首歌曲详情
   }),
@@ -22,7 +28,7 @@ export const usePlaylistStore = defineStore("playlist", {
     thisIndex(state) {
       return state.toPlayList.findIndex((item) => item.id === state.currentPlayMusic.id);
     },
-    // 下一首，返回的是对象{}
+    // 下一首，返回的是对象{obj}
     nextSong(state) {
       const { thisIndex, playListCount } = this
       if (thisIndex === playListCount - 1) {//如果是最后一个
@@ -32,7 +38,7 @@ export const usePlaylistStore = defineStore("playlist", {
         return state.toPlayList[nextIndex];//返回下一项
       }
     },
-    // 上一首，返回的是对象{}
+    // 上一首，返回的是对象{obj}
     prevSong(state) {
       const { thisIndex } = this
       if (thisIndex === 0) {//如果是第一个
@@ -54,18 +60,9 @@ export const usePlaylistStore = defineStore("playlist", {
     },
     // 获取歌单详情
     async get_songlistDetail(id) {
-      // 判断是否已经缓存过
-      if (this.playlistCache.some((item) => item.id === id) === true) {
-        console.log('缓存已存在直接使用');
-        // 找到缓存中的歌单数据返回
-        this.playlist = this.playlistCache.find((item) => item.id === id)
-      } else {
-        const res = await useSonglistDetail(id);//没有缓存发起请求
-        this.playlist = res.data.playlist;
-        console.log("没有缓存发起请求");
-        this.playlistCache.push(res.data.playlist)//存入缓存
-        console.log("获取歌单详情", res.data);
-      }
+      const res = await useSonglistDetail(id);
+      this.playlist = res.data.playlist;
+      console.log("获取歌单详情", res.data);
     },
     // 获取歌单评论
     async get_songlistComment(id) {
@@ -110,8 +107,8 @@ export const usePlaylistStore = defineStore("playlist", {
     // 清空播放列表
     clear_toPlayList() {
       // 恢复默认设置
-      this.toPlayList = [{ id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 }]
-      this.currentPlayMusic = { id: 1, name: '歌曲名带(备注)', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: 'Vue.js 渐进式JavaScript 框架', picUrl: vue }, dt: 0 }
+      this.toPlayList = [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }]
+      this.currentPlayMusic = { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }
     },
     // 上一首音乐
     pre_music() {

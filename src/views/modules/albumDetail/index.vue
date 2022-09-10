@@ -7,6 +7,8 @@
       </el-tab-pane>
       <el-tab-pane lazy :label="`评论 ${commentAlbum.total}`" name="comments">
         <SongComments :comments="commentAlbum.comments" :hotComments="commentAlbum.hotComments" class="comment" />
+        <LoadMore v-show="commentAlbum.total !== commentAlbum.comments.length" :limit="commentAlbumParams.limit"
+          :offset="commentAlbumParams.offset" @emitloadMore="loadeMore" class="loadMore" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -14,6 +16,7 @@
 
 <script setup>
 import Info from "@/views/modules/albumDetail/info.vue"//详情组件
+import LoadMore from "@/views/modules/albumDetail/loadMore.vue"//加载更多评论组件
 import SongComments from "@/views/modules/playlist/songComments.vue"// 歌单评论组件
 import SongList from '@/views/modules/artistDetail/songList.vue'// 热门歌曲列表组件
 
@@ -27,8 +30,8 @@ let activeTab = ref("tracks")//默认激活tab
 const router = useRouter()
 const route = useRoute()
 
-const { get_album, get_commentAlbum } = useAlbumDetailStore()
-const { commentAlbum, album } = storeToRefs(useAlbumDetailStore())
+const { get_album, get_commentAlbum, get_commentMore } = useAlbumDetailStore()
+const { commentAlbum, album, commentAlbumParams, commentMoreParams } = storeToRefs(useAlbumDetailStore())
 
 get_album(route.params.id)//获取专辑信息
 get_commentAlbum(route.params.id)//获取专辑评论
@@ -41,6 +44,12 @@ watch(() => route.params.id, () => {
     get_commentAlbum(route.params.id)
   }
 })
+
+// 专辑评论加载更多
+const loadeMore = (e) => {
+  commentMoreParams.value.offset = e
+  get_commentMore(route.params.id)
+}
 </script>
 
 <style lang="less" scoped>
@@ -75,6 +84,11 @@ watch(() => route.params.id, () => {
 
   .comment {
     margin-top: 20px;
+  }
+
+  .loadMore {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 </style>

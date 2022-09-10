@@ -11,13 +11,15 @@
       <div class="top-part">
         <div class="track-info">
           <div class="title">
-            <router-link :to="{ name: 'albumDetail', params: { id: songs.al.id } }">
-              {{ songs.al.name }}
-            </router-link>
+            {{ songs.name }}
           </div>
           <div class="subtitle">
             <router-link v-for="ar in songs.ar" :key="ar.id" :to="{ name: 'artistDetail', params: { id: ar.id } }">
               {{ ar.name }}
+            </router-link>
+            -
+            <router-link :to="{ name: 'albumDetail', params: { id: songs.al.id } }">
+              {{ songs.al.name }}
             </router-link>
           </div>
         </div>
@@ -57,7 +59,9 @@ const prop = defineProps({
   songs: {
     type: Object,
     default: () => ({
-      al: { id: 1234, name: "歌曲", picUrl: "图片链接", pic: "图片id" },
+      id: 1234,
+      name: "歌曲名",
+      al: { id: 1234, name: "专辑", picUrl: "图片链接", pic: "图片id" },
       ar: [{ id: 1234, name: "歌手" }],
     }),
   },

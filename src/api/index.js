@@ -149,9 +149,9 @@ export function useCloudSearch(obj) {
     url: "/cloudsearch",
     params: {
       keywords: obj.keywords,
+      type: obj.type,
       limit: obj.limit,
       offset: (obj.offset - 1) * obj.limit,
-      type: obj.type
     }
   });
 }
@@ -198,11 +198,19 @@ export function useToplistArtist() {
 // type: -1:全部 1:男歌手 2:女歌手 3:乐队
 // area: -1:全部 7华语 96欧美 8:日本 16韩国 0:其他
 // initial: 按字母排列,-1：热门,0：#
-export function useArtistList(type, area, initial) {
+// limit : 返回数量 , 默认为 30
+// offset : 偏移数量，用于分页 , 如 : 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+export function useArtistList(obj) {
   return http({
     method: "get",
     url: "/artist/list",
-    params: { type: type || -1, area: area || -1, initial: initial || -1 }
+    params: {
+      type: obj.type,
+      area: obj.area,
+      initial: obj.initial,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
   });
 }
 // 获取歌手详情
@@ -279,12 +287,21 @@ export function useSimiSong(id) {
   });
 }
 /*______________________________________专辑__________________________________________*/
-// 获取专辑评论,limit默认20
-export function useCommentAlbum(id) {
+// 获取专辑评论
+// 必选参数 : id: 专辑 id
+// 可选参数 : 
+// limit: 取出评论数量 , 默认为 20
+// offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+// before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+export function useCommentAlbum(id, obj) {
   return http({
     method: "get",
     url: "/comment/album",
-    params: { id: id }
+    params: {
+      id: id,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
   });
 }
 // 获取专辑内容

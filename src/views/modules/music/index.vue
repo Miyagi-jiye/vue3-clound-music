@@ -8,7 +8,7 @@
         <Recommend :myData="fiveToEnd" />
       </el-tab-pane>
       <el-tab-pane lazy label="歌手" name="artist">
-        <Artist :artistList="artistList" @clickEmit="emitArtists" @routerEmit="emitToArtistDetail" />
+        <Artist :artistList="artistList" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -21,26 +21,15 @@ import RankingList from "@/views/modules/music/rankingList.vue"//官方榜组件
 import { ref } from "vue"
 import { storeToRefs } from 'pinia';
 import { useMusicStore } from '@/pinia/module/music.js';
-import { useRouter } from "vue-router"
 
-const router = useRouter()
-
-let activeTab = ref("toplist")
+let activeTab = ref("toplist")//激活tab栏
 
 const { fiveToEnd, oneToFour, artistList } = storeToRefs(useMusicStore())
 const { get_toplist, get_artistList } = useMusicStore()
 
-get_toplist()//获取所有榜单详情摘要
-get_artistList(-1, -1, -1)//初始化获取热门歌手列表
+get_toplist()//初始化获取所有榜单详情摘要
+get_artistList()//初始化获取热门歌手列表
 
-// 歌手筛选
-function emitArtists(e) {
-  get_artistList(e.type, e.area, e.initial)
-}
-// 前往歌手详情页,传递歌手id参数
-function emitToArtistDetail(id) {
-  router.push({ name: "artistDetail", params: { id: id } })
-}
 </script>
 
 <style lang="less" scoped>

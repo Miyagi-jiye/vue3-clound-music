@@ -10,6 +10,13 @@ export const useMusicStore = defineStore("music", {
     artistDesc: {},//歌手更多详情
     artistAlbum: [],//歌手热门专辑
     artistMV: [],//歌手热门MV
+    artistParams: {
+      type: -1,
+      area: -1,
+      initial: -1,
+      limit: 30,
+      offset: 1,
+    }//歌手筛选参数
   }
   ),
   getters: {
@@ -34,8 +41,8 @@ export const useMusicStore = defineStore("music", {
       console.log("获取所有榜单详情摘要", res.data);
     },
     // 获取歌手分类列表
-    async get_artistList(type, area, initial) {
-      const res = await useArtistList(type, area, initial)
+    async get_artistList() {
+      const res = await useArtistList(this.artistParams)
       this.artistList = res.data.artists
       console.log("获取歌手分类列表", res.data);
     },
