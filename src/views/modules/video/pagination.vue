@@ -1,6 +1,6 @@
 <template>
   <div class="pagination">
-    <el-pagination v-model:currentPage="myData.offset" v-model:page-size="myData.limit" :page-sizes="[10, 20, 30, 40]"
+    <el-pagination v-model:currentPage="myData.offset" v-model:page-size="myData.limit" :page-sizes="[ 20, 30, 40, 50]"
       :small="small" :background="background" :layout=layout :total="mvTotal" @size-change="handleSizeChange"
       @current-change="handleCurrentChange" />
   </div>

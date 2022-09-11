@@ -4,7 +4,7 @@ import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
 import { ElMessage } from "element-plus"
 
 const http = axios.create({
-  withCredentials: true,// 跨域请求时是否需要使用凭证
+  // withCredentials: true,// 跨域请求时是否需要使用凭证
   baseURL: 'http://guowei.fun:3000', //默认请求路径 import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR || http://localhost:3000
 });
 

@@ -13,6 +13,14 @@ export const usePlaylistStore = defineStore("playlist", {
       hotComments: [],
       total: 0
     },// 歌单评论数据
+    commentParams: {
+      limit: 20,
+      offset: 1
+    },// 歌单评论参数
+    commentMoreParams: {
+      limit: 20,
+      offset: 1
+    },// 歌单更多评论参数
     currentPlayMusic: { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 },// 当前播放的音乐
     toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
@@ -66,9 +74,18 @@ export const usePlaylistStore = defineStore("playlist", {
     },
     // 获取歌单评论
     async get_songlistComment(id) {
-      const res = await useSonglistComment(id);
+      const res = await useSonglistComment(id, this.commentParams);
       this.comments = res.data
       console.log("获取歌单评论", res.data);
+    },
+    // 获取更多歌单评论
+    async get_songlistCommentMore(id) {
+      const res = await useSonglistComment(id, this.commentMoreParams);
+      // 1.循环数组添加(每一个都有proxy)
+      res.data.comments.forEach(item => {
+        this.comments.comments.push(item)
+      });
+      console.log("获取更多歌单评论", res.data);
     },
     // 获取歌曲url
     async get_musicUrl(id) {

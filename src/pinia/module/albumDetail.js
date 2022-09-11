@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useAlbum, useCommentAlbum } from "@/api/index.js";
-import { set } from "nprogress";
 
 export const useAlbumDetailStore = defineStore("albumDetail", {
   state: () => ({

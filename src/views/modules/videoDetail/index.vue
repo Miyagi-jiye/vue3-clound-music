@@ -6,14 +6,15 @@
     <MV :myData="mvs" class="mv" />
     <p id="comment" class="comment-title">发表评论</p>
     <SongComments :comments="commentMv.comments" :hotComments="commentMv.hotComments" class="comment" />
+    <Pagination :myData="commentParams" :mvTotal="commentMv.total" @emitClick="emitPage" class="pagination" />
   </div>
 </template>
 
 <script setup>
+import Pagination from "@/views/modules/video/pagination.vue"; //分页组件(复用)
 import Info from "@/views/modules/videoDetail/info.vue"; // 详情组件
 import MV from "@/views/modules/discover/mv.vue"; // MV组件(复用首页MV组件)
 import SongComments from "@/views/modules/playlist/songComments.vue"; // 评论组件(复用歌单评论组件)
-
 import { useRouter, useRoute } from "vue-router";
 import "vue3-video-play/dist/style.css"; // vue3-video-play插件样式文件
 import { videoPlay } from "vue3-video-play"; // vue3-video-play插件
@@ -24,7 +25,7 @@ import { storeToRefs } from "pinia";
 const router = useRouter();
 const route = useRoute();
 const { get_mvUrl, get_mvDetail, get_commentMv, get_simiMv, } = useVideoDetailStore();
-const { videoUrl, videoDetail, commentMv, mvs } = storeToRefs(useVideoDetailStore());
+const { videoUrl, videoDetail, commentMv, mvs, commentParams } = storeToRefs(useVideoDetailStore());
 
 // 播放器配置
 const options = reactive({
@@ -78,6 +79,10 @@ const scroll = () => {
     target.scrollIntoView({ behavior: "smooth" });
   }
 };
+// 加载更多评论
+const emitPage = () => {
+  get_commentMv(route.params.id);
+}
 </script>
 
 <style lang="less" scoped>
@@ -111,6 +116,11 @@ const scroll = () => {
 
   .comment {
     margin-top: 20px;
+  }
+
+  .pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 </style>

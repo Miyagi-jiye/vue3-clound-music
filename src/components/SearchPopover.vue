@@ -49,7 +49,7 @@
                   </div>
                   <!-- 歌单 -->
                   <div v-for="item in suggestData.playlists" :key="item.id" v-show="order === 'playlists'"
-                    class="searchItem " @click="toPlayList(item.id)">
+                    class="searchItem " @click="routerPush('playlist',item.id)">
                     <el-avatar size="small" :src="item.coverImgUrl" class="truncate" />
                     <div style="color:#34d399;margin-left:8px;" class="truncate">{{ item.name }}</div>
                   </div>
@@ -64,7 +64,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import { storeToRefs } from "pinia";//解决state数据解构丢失响应式的问题
 import { useSearchStore } from "@/pinia/module/search.js";//状态管理暴露出的store方法
 import { Search } from '@icon-park/vue-next'//字节跳动图标组件
@@ -79,17 +78,13 @@ const router = useRouter()
 const { showSearchView, searchKeyword, showHot, showSuggest, searchHot, suggestData } = storeToRefs(useSearchStore())
 const { get_searchSuggest, get_searchHotDetail, get_songDetail } = useSearchStore()//获取搜索建议，热门搜索详情，函数或方法不会丢失响应式
 
+// 初始化获取热门搜索详情
+get_searchHotDetail()
+
 // 路由跳转到详情页面
 const routerPush = (name, id) => {
   showSearchView.value = false//关闭搜索建议
-  router.push({ name: name, params: { id: id } })
-}
-// 路由跳转到歌单列表页
-const toPlayList = async (id) => {
-  await Playlist.get_songlistDetail(id)//歌单详情
-  await Playlist.get_songlistComment(id)//歌单评论
-  router.push({ name: 'playlist' })//跳转歌单详情页
-  showSearchView.value = false;//关闭热门搜索
+  router.push({ name: name, params: { id: id }, query: { id: id } })
 }
 // 播放点击音乐，拿到歌曲id，获取歌曲详情，添加到播放列表，改变播放对象
 const playMusic = async (id) => {
@@ -121,12 +116,9 @@ const getTitle = (name) => {
 // 输入框输入触发事件
 const searchInput = debounce(() => {
   get_searchSuggest()
-}, 1000,)//初始触发立即执行一次，后面每1000毫秒执行一次
+}, 1000, false)//初始触发立即执行一次，后面每1000毫秒执行一次
 
-// 获取热门搜索详情
-onMounted(async () => {
-  await get_searchHotDetail()
-})
+
 </script>
 
 <style lang="less" scoped>

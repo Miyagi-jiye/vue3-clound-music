@@ -5,7 +5,11 @@ export const useVideoDetailStore = defineStore("videoDetail", {
   state: () => ({
     videoUrl: "",//播放地址
     videoDetail: {},//视频详情
-    commentMv: {},//mv评论
+    commentMv: {
+      comments: [],
+      hotComments: [],
+      total: 0
+    },//mv评论
     mvs: [],//相似mv
     commentParams: {
       id: 123,
@@ -40,19 +44,6 @@ export const useVideoDetailStore = defineStore("videoDetail", {
         console.log("获取MV详情", res.data);
       }
     },
-    // 获取评论
-    async get_commentMv(id) {
-      if (id.length == 32) {
-        this.commentParams.id = id
-        const res = await useCommentVideo(this.commentParams)
-        this.commentMv = res.data
-        console.log("获取视频评论", res.data);
-      } else {
-        const res = await useCommentMv(id)
-        this.commentMv = res.data
-        console.log("获取MV评论", res.data);
-      }
-    },
     // 获取相似推荐
     async get_simiMv(id) {
       if (id.length == 32) {
@@ -63,6 +54,20 @@ export const useVideoDetailStore = defineStore("videoDetail", {
         const res = await useSimiMv(id)
         this.mvs = res.data.mvs
         console.log("获取相似MV", res.data);
+      }
+    },
+    // 获取评论
+    async get_commentMv(id) {
+      if (id.length == 32) {
+        this.commentParams.id = id
+        const res = await useCommentVideo(this.commentParams)
+        this.commentMv = res.data
+        console.log("获取视频评论", res.data);
+      } else {
+        this.commentParams.id = id
+        const res = await useCommentMv(this.commentParams)
+        this.commentMv = res.data
+        console.log("获取MV评论", res.data);
       }
     },
   }

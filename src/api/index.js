@@ -76,11 +76,19 @@ export function useSonglistDynamic(id) {
   });
 }
 // 获取歌单评论
-export function useSonglistComment(id) {
+// 可选参数 : 
+// limit: 取出评论数量 , 默认为 20
+// offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+// before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+export function useSonglistComment(id, obj) {
   return http({
     method: "get",
     url: "/comment/playlist",
-    params: { id: id }
+    params: {
+      id: id,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
   });
 }
 /*______________________________________歌曲__________________________________________*/
@@ -333,14 +341,18 @@ export function useMvUrl(id) {
 }
 // 获取 mv 评论
 // 可选参数 : 
-// limit: 取出评论数量 , 默认为 20
+// limit: 取出评论数量 , 默认为 20,最多一页100条
 // offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
 // before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
-export function useCommentMv(id) {
+export function useCommentMv(obj) {
   return http({
     method: "get",
     url: "/comment/mv",
-    params: { id: id }
+    params: {
+      id: obj.id,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
   });
 }
 // 获取全部 mv

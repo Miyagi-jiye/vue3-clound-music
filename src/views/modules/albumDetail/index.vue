@@ -7,7 +7,7 @@
       </el-tab-pane>
       <el-tab-pane lazy :label="`评论 ${commentAlbum.total}`" name="comments">
         <SongComments :comments="commentAlbum.comments" :hotComments="commentAlbum.hotComments" class="comment" />
-        <LoadMore v-show="commentAlbum.total !== commentAlbum.comments.length" :limit="commentAlbumParams.limit"
+        <LoadMore v-show="commentAlbum.total >  commentAlbum.comments.length" :limit="commentAlbumParams.limit"
           :offset="commentAlbumParams.offset" @emitloadMore="loadeMore" class="loadMore" />
       </el-tab-pane>
     </el-tabs>
@@ -20,7 +20,7 @@ import LoadMore from "@/views/modules/albumDetail/loadMore.vue"//加载更多评
 import SongComments from "@/views/modules/playlist/songComments.vue"// 歌单评论组件
 import SongList from '@/views/modules/artistDetail/songList.vue'// 热门歌曲列表组件
 
-import { ref, watch } from "vue"
+import { ref, watch, onUnmounted } from "vue"
 import { useRouter, useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAlbumDetailStore } from '@/pinia/module/albumDetail.js';
@@ -45,11 +45,16 @@ watch(() => route.params.id, () => {
   }
 })
 
-// 专辑评论加载更多
+// 加载更多专辑评论
 const loadeMore = (e) => {
   commentMoreParams.value.offset = e
   get_commentMore(route.params.id)
 }
+onUnmounted(() => {
+  // 离开页面还原评论页数
+  commentMoreParams.value.offset = 1
+  console.log("卸载");
+})
 </script>
 
 <style lang="less" scoped>

@@ -57,7 +57,7 @@
       </div>
     </div>
     <!-- 全部评论 -->
-    <div class="comment-all">
+    <div class="comment-all" v-if="comments.length!==0">
       <p class="title">全部评论</p>
       <div class="box" v-for="item in comments" :key="item.user">
         <div class="left">
@@ -88,10 +88,14 @@
         </div>
       </div>
     </div>
+    <div class="comment-nothing" v-else>
+      暂无评论，快来抢沙发吧！
+    </div>
   </div>
 </template>
 
 <script setup>
+
 const prop = defineProps({
   comments: {
     type: Array,
@@ -436,6 +440,12 @@ function timestampToTime(timestamp) {
       }
     }
 
+  }
+
+  .comment-nothing {
+    text-align: center;
+    margin: 40px 0;
+    font-size: 18px;
   }
 }
 </style>

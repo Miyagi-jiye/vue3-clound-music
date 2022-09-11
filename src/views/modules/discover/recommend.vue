@@ -3,9 +3,9 @@
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="cardImg">
         <img v-if="item.picUrl" class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
-          :key="item.id" @click="toPlaylist(item.id)">
+          :key="item.id" @click="routerPush('playlist',item.id)">
         <img v-else-if="item.coverImgUrl" class="discoverImg" v-img-lazy="item.coverImgUrl + '?param=300y300'"
-          :alt="'歌单ID=' + item.id" @click="toPlaylist(item.id)">
+          :alt="'歌单ID=' + item.id" @click="routerPush('playlist',item.id)">
         <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
           @click="playMusic(item.id)" />
         <div class="playCount">
@@ -22,12 +22,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import useStore from "@/pinia/index.js"
-// 过滤播放量
-import { playCountFilter } from '@/utils/playCountFilter'
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+import { playCountFilter } from '@/utils/playCountFilter'// 过滤播放量
 
 const router = useRouter()
-const { Playlist } = useStore()
+const { get_songlistDetail, push_musicToPlayList } = usePlaylistStore()
 
 defineProps({
   myData: {
@@ -37,15 +36,13 @@ defineProps({
 })
 
 // 跳转到歌单详情页
-const toPlaylist = async (id) => {
-  Playlist.get_songlistComment(id)
-  await Playlist.get_songlistDetail(id)
-  router.push({ name: 'playlist' })
+const routerPush = (name, id) => {
+  router.push({ name: name, query: { id: id } })
 }
 // 获取歌单所有歌曲
 const playMusic = async (id) => {
-  await Playlist.get_songlistDetail(id)
-  Playlist.push_musicToPlayList()
+  await get_songlistDetail(id)
+  push_musicToPlayList()
   console.log("将歌单添加到播放列表");
 }
 </script>

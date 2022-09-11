@@ -31,6 +31,11 @@ import { ref, reactive } from "vue"
 import { useRouter } from "vue-router"
 import { useLogin } from "@/api/index.js"
 import { ElMessage } from 'element-plus'
+
+import { useLoginStore } from "@/pinia/module/login.js"
+import { storeToRefs } from "pinia"
+
+const { get_login } = useLoginStore()
 // 路由
 const router = useRouter()
 // 登录弹框
@@ -73,14 +78,14 @@ const login = () => {
             ElMessage({
               showClose: true,//是否显示关闭按钮
               grouping: true,//是否将多条消息组合到一条消息中
-              message: res.data.msg || '登录失败',//内容保底
+              message: res.data.msg ? res.data.msg : '登录失败',//内容保底
               type: 'error',//消息类型
             })
           } else {
             ElMessage({
               showClose: true,//是否显示关闭按钮
               grouping: true,//是否将多条消息组合到一条消息中
-              message: res.data.msg || '登录成功',//内容保底
+              message: res.data.msg ? res.data.msg : '登录成功',//内容保底
               type: 'success',//消息类型
             })
             if (res.data.token) {
