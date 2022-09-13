@@ -23,7 +23,7 @@ const pinia = createPinia();//pinia第二步
 
 install(app);//字节跳动图标库安装到app实例上
 
-// console.log(".env文件", import.meta.env);
+console.log(".env文件", import.meta.env.MODE);
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
