@@ -25,6 +25,7 @@ const routes = [
         name: 'playlist',
         component: () => import("@/views/modules/playlist/index.vue"),
         meta: {
+          type: "query",
           menu: 'playlist',
           keepAlive: true,
         }
@@ -34,6 +35,7 @@ const routes = [
         name: 'artistDetail',
         component: () => import("@/views/modules/artistDetail/index.vue"),
         meta: {
+          type: "params",
           menu: 'artistDetail',
           keepAlive: true,
         },
@@ -44,6 +46,7 @@ const routes = [
         name: 'albumDetail',
         component: () => import("@/views/modules/albumDetail/index.vue"),
         meta: {
+          type: "params",
           menu: 'albumDetail',
           keepAlive: true,
         },
@@ -54,6 +57,7 @@ const routes = [
         name: 'videoDetail',
         component: () => import("@/views/modules/videoDetail/index.vue"),
         meta: {
+          type: "params",
           menu: 'videoDetail',
           keepAlive: true,
         }
@@ -63,7 +67,18 @@ const routes = [
         name: 'searchDetail',
         component: () => import("@/views/modules/searchDetail/index.vue"),
         meta: {
+          type: "params",
           menu: 'searchDetail',
+          keepAlive: true,
+        }
+      },
+      {
+        path: 'userDetail',
+        name: 'userDetail',
+        component: () => import("@/views/modules/userDetail/index.vue"),
+        meta: {
+          type: "query",
+          menu: 'userDetail',
           keepAlive: true,
         }
       },

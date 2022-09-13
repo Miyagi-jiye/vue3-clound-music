@@ -3,7 +3,7 @@
     <p class="title">推荐电台</p>
     <Banner :myData="djBanner" />
     <p class="title">猜你喜欢</p>
-    <Mv :myData="djPersonalizeRecommend" />
+    <!-- <Mv :myData="djPersonalizeRecommend" /> -->
   </div>
 </template>
 

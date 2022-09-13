@@ -6,9 +6,9 @@
         <SongList :tracks="album.songs" :options="1" class="songList" />
       </el-tab-pane>
       <el-tab-pane lazy :label="`评论 ${commentAlbum.total}`" name="comments">
-        <SongComments :comments="commentAlbum.comments" :hotComments="commentAlbum.hotComments" class="comment" />
-        <LoadMore v-show="commentAlbum.total >  commentAlbum.comments.length" :limit="commentAlbumParams.limit"
-          :offset="commentAlbumParams.offset" @emitloadMore="loadeMore" class="loadMore" />
+        <SongComments :comments="commentAlbum.comments" :hotComments="commentAlbum.hotComments" class="comment"
+          v-infinite-scroll="lodaMoreInfinite" />
+        <LoadMore v-show="commentAlbum.total >  commentAlbum.comments.length" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -31,7 +31,7 @@ const router = useRouter()
 const route = useRoute()
 
 const { get_album, get_commentAlbum, get_commentMore } = useAlbumDetailStore()
-const { commentAlbum, album, commentAlbumParams, commentMoreParams } = storeToRefs(useAlbumDetailStore())
+const { commentAlbum, album, commentMoreParams } = storeToRefs(useAlbumDetailStore())
 
 get_album(route.params.id)//获取专辑信息
 get_commentAlbum(route.params.id)//获取专辑评论
@@ -44,11 +44,11 @@ watch(() => route.params.id, () => {
     get_commentAlbum(route.params.id)
   }
 })
-
-// 加载更多专辑评论
-const loadeMore = (e) => {
-  commentMoreParams.value.offset = e
-  get_commentMore(route.params.id)
+// 无限加载(element-plus Infinite Scroll 无限滚动)
+const lodaMoreInfinite = () => {
+  commentMoreParams.value.offset++//页数累加
+  get_commentMore(route.params.id)///获取下一页评论数据
+  // console.log(commentMoreParams.value.offset);
 }
 onUnmounted(() => {
   // 离开页面还原评论页数

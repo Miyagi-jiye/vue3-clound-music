@@ -12,7 +12,7 @@ export const useAlbumDetailStore = defineStore("albumDetail", {
     commentAlbumParams: {
       limit: 20,
       offset: 1
-    },//专辑评论参数
+    },//初始专辑评论参数
     commentMoreParams: {
       limit: 20,
       offset: 1
@@ -38,7 +38,7 @@ export const useAlbumDetailStore = defineStore("albumDetail", {
       // this.commentAlbum.comments = ([...new Set(this.commentAlbum.comments)])
       // 2.解构数组合并(state中的解构有一层proxy,请求返回的没有)
       // this.commentAlbum.comments = [...this.commentAlbum.comments, ...res.data.comments]
-      console.log("获取更多专辑评论", this.commentAlbum.comments);
+      console.log("获取更多专辑评论", res.data);
     },
     // 获取专辑详情
     async get_album(id) {

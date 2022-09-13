@@ -6,7 +6,7 @@
         <img v-if="item.avatarDetail" :src="item.avatarDetail.identityIconUrl+'?param=10y10'" alt="音乐人图标"
           class="img-icon">
       </div>
-      <p class="nickname whiteSpace">{{item.nickname}}</p>
+      <p class="nickname whiteSpace" @click="routerPush('userDetail',item.userId)">{{item.nickname}}</p>
       <p class="gender whiteSpace">
         {{filterGender(item.gender)}}
         <icon-male v-if="item.gender==1" theme="outline" size="20" fill="#5e87d6" />
@@ -19,6 +19,10 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+
 defineProps({
   userprofiles: {
     type: Array,
@@ -57,6 +61,10 @@ function filterFollow(number) {
   } else {
     return number
   }
+}
+// 跳转到用户详情页
+const routerPush = (name, id) => {
+  router.push({ name: name, query: { id: id } })
 }
 </script>
 

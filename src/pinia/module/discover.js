@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { useBanner, useRecommend, useNewSong, useMv, useRegisterAnonimous } from "@/api/index.js";
+import { useBanner, useRecommend, useNewSong, useMv } from "@/api/index.js";
 
-const useDiscoverStore = defineStore("discover", {
+export const useDiscoverStore = defineStore("discover", {
   state: () => ({
     banner: [],
     recommend: [],
@@ -11,17 +11,6 @@ const useDiscoverStore = defineStore("discover", {
   }),
   getters: {},
   actions: {
-    // 获取游客cookie
-    async get_registerAnonimous() {
-      if (window.localStorage.getItem("cookie")) {
-        console.log("已保存游客cookie");
-      } else {
-        const res = await useRegisterAnonimous();
-        document.cookie = res.data.cookie
-        window.localStorage.setItem("cookie", JSON.stringify(res.data.cookie))//存入cookie
-        console.log("获取游客cookie", res.data);
-      }
-    },
     // 获取轮播图
     async get_banner() {
       if (this.cache.banner) {

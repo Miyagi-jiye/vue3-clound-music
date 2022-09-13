@@ -1,11 +1,14 @@
 import http from "@/axios/index.js";
 
 // 登录接口
-export function useLogin(phone, password) {
+export function useLogin(obj) {
   return http({
     method: "get",
     url: "/login/cellphone",
-    params: { phone: phone, password: password }
+    params: {
+      phone: obj.phone,
+      password: obj.password
+    }
   });
 }
 // 登录状态接口
@@ -531,5 +534,152 @@ export function useDjHot() {
   return http({
     method: "get",
     url: "/dj/hot",
+  });
+}
+/*______________________________________用户__________________________________________*/
+// 获取用户详情
+export function useUserDetail(uid) {
+  return http({
+    method: "get",
+    url: "/user/detail",
+    params: { uid: uid }
+  });
+}
+// 获取账号信息(登录后调用)
+export function useUserAccount() {
+  return http({
+    method: "get",
+    url: "/user/account",
+  });
+}
+// 获取用户信息, 歌单，收藏，mv, dj 数量(登录后调用)
+export function useUserSubcount() {
+  return http({
+    method: "get",
+    url: "/user/subcount",
+  });
+}
+// 获取用户等级信息(登录后调用)
+export function useUserLevel() {
+  return http({
+    method: "get",
+    url: "/user/level",
+  });
+}
+// 获取用户绑定信息(登录后调用)
+export function useUserBinding(uid) {
+  return http({
+    method: "get",
+    url: "/user/binding",
+    params: { uid: uid }
+  });
+}
+// 更改用户绑定手机(登录后调用)
+// 必选参数 :
+// phone : 手机号码
+// oldcaptcha: 原手机号码的验证码
+// captcha:新手机号码的验证码
+// 可选参数 :
+// countrycode: 国家地区代码,默认 86
+export function useUserReplacephone(obj) {
+  return http({
+    method: "get",
+    url: "/user/replacephone",
+    params: {
+      phone: obj.phone,
+      oldcaptcha: obj.oldcaptcha,
+      captcha: obj.captcha
+    }
+  });
+}
+// 更新用户信息(登录后调用)
+// 必选参数 :
+// gender: 性别 0:保密 1:男性 2:女性
+// birthday: 出生日期,时间戳 unix timestamp
+// nickname: 用户昵称
+// province: 省份id
+// city: 城市id
+// signature：用户签名
+export function useUserUpdate(obj) {
+  return http({
+    method: "get",
+    url: "/user/update",
+    params: {
+      gender: obj.gender,
+      birthday: obj.birthday,
+      nickname: obj.nickname,
+      province: obj.province,
+      city: obj.city,
+      signature: obj.signature
+    }
+  });
+}
+// 获取用户歌单(登录后调用)
+// 必选参数 : uid : 用户 id
+// 可选参数 :
+// limit : 返回数量 , 默认为 30
+// offset : 偏移数量，用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+export function useUserPlaylist(obj) {
+  return http({
+    method: "get",
+    url: "/user/playlist",
+    params: {
+      uid: obj.uid,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit
+    }
+  });
+}
+// 获取用户电台(登录后调用)
+export function useUserDj(uid) {
+  return http({
+    method: "get",
+    url: "/user/dj",
+    params: { uid: uid }
+  });
+}
+// 获取用户关注列表(登录后调用)
+// 必选参数 : uid : 用户 id
+// 可选参数 :
+// limit : 返回数量 , 默认为 30
+// offset : 偏移数量，用于分页 ,如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+export function useUserFollows(obj) {
+  return http({
+    method: "get",
+    url: "/user/follows",
+    params: {
+      uid: obj.uid,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit
+    }
+  });
+}
+// 获取用户粉丝列表(登录后调用)
+// 必选参数 : uid : 用户 id
+// 可选参数 :
+// limit : 返回数量 , 默认为 30
+// offset : 偏移数量，用于分页 ,如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+export function useUserFolloweds(obj) {
+  return http({
+    method: "get",
+    url: "/user/followeds",
+    params: {
+      uid: obj.uid,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit
+    }
+  });
+}
+// 获取用户播放记录(登录后调用)
+// 必选参数 : uid : 用户 id
+// 可选参数 : type : type=1 时只返回 weekData, type=0 时返回 allData
+export function useUserRecord(obj) {
+  return http({
+    method: "get",
+    url: "/user/record",
+    params: {
+      uid: obj.uid,
+      type: obj.type
+    }
   });
 }

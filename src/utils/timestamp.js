@@ -1,6 +1,6 @@
 // 时间戳：1637244864707
 /* 时间戳转换为时间 */
-export function timestampToTime(timestamp) {
+export function timestampToTime(timestamp, string) {
   timestamp = timestamp ? timestamp : null;
   let date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
   let Y = date.getFullYear() + '-';
@@ -9,5 +9,11 @@ export function timestampToTime(timestamp) {
   let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
   let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
   let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+  if (string == "年月日") {
+    return Y + M + D;
+  }
+  if (string == "时分秒") {
+    return h + m + s;
+  }
   return Y + M + D + h + m + s;
 }

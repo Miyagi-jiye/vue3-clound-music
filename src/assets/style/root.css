@@ -23,11 +23,12 @@
 }
 
 /* 溢出隐藏不换行 */
-.my-overflow-hidden {
+.my-overflow {
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
-  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 /* 屏幕宽度小于400px就隐藏元素 */

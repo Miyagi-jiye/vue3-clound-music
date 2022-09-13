@@ -38,11 +38,12 @@ export default defineConfig(({ command, mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: 'http://localhost:3000',
+          target: 'http://guowei.fun:3000',
           changeOrigin: true,
-          pathRewrite: {
-            '^/api': ''
-          }
+          // pathRewrite: {
+          //   '^/api': ''
+          // },
+          rewrite: (path) => path.replace(/^\/api/, ""), // 将路径/api替换为空
         }
       }
     },

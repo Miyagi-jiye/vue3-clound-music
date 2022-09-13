@@ -7,9 +7,9 @@
           <SongList :myData='playlist' />
         </el-tab-pane>
         <el-tab-pane lazy :label="`评论 ${comments.total} `" name="comments">
-          <SongComments :comments="comments.comments" :hotComments="comments.hotComments" />
-          <LoadMore v-show="comments.total > comments.comments.length" :limit="commentMoreParams.limit"
-            :offset="commentMoreParams.offset" @emitloadMore="loadeMore" />
+          <SongComments :comments="comments.comments" :hotComments="comments.hotComments"
+            v-infinite-scroll="lodaMoreInfinite" />
+          <LoadMore v-show="comments.total > comments.comments.length" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -35,10 +35,11 @@ get_songlistComment(route.query.id)// 获取歌单评论
 
 // 默认激活菜单
 const activeTab = ref("tracks")
-// 加载更多评论
-const loadeMore = (e) => {
-  commentMoreParams.value.offset = e//获取下一页评论数据
-  get_songlistCommentMore(route.query.id)
+// 无限加载(element-plus Infinite Scroll 无限滚动)
+const lodaMoreInfinite = () => {
+  commentMoreParams.value.offset++//页数累加
+  get_songlistCommentMore(route.query.id)///获取下一页评论数据
+  // console.log(commentMoreParams.value.offset);
 }
 onUnmounted(() => {
   // 离开页面还原评论页数
@@ -54,7 +55,6 @@ onUnmounted(() => {
 
 .playlist {
   width: 100%;
-  height: 100%;
   padding: 20px;
   box-sizing: border-box;
   background-color: var(--my-background-color);

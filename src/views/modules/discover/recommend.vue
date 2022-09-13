@@ -59,14 +59,16 @@ const playMusic = async (id) => {
 
     .cardImg {
       height: auto;
+      max-width: 300px; //请求图片的最大宽度
       width: 100%;
       overflow: hidden;
       border-radius: var(--my-border-radius);
       position: relative;
-      transition: all 1s ease;
-
+      transition: all 0.3s ease;
 
       &:hover {
+        cursor: pointer;
+        transform: translateY(-4px);
 
         .playCount {
           display: none;
@@ -83,8 +85,7 @@ const playMusic = async (id) => {
         }
 
         .discoverImg {
-          cursor: pointer;
-          transform: scale(1.3); //放大
+          // transform: scale(1.2);
           filter: brightness(0.5); //颜色变暗
         }
       }

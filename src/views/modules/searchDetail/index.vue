@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import UserList from "@/views/modules/searchDetail/userList.vue"
+import UserList from "@/views/modules/searchDetail/userList.vue"//用户列表组件
 import Recommend from '@/views/modules/discover/recommend.vue'//歌单推荐(复用)
 import ArtistList from "@/views/modules/searchDetail/artistList.vue";//歌手列表
 import AlbumList from "@/views/modules/searchDetail/albumList.vue"//专辑列表

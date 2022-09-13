@@ -10,24 +10,19 @@
         <el-header>
           <Header />
         </el-header>
-        <el-main>
-          <Transition name="slide-fade">
-            <!-- 非活跃的组件将会被缓存！ -->
-            <KeepAlive v-if="route.meta.keepAlive">
-              <el-scrollbar>
-                <router-view v-slot="{ Component }">
-                  <component :is="Component" />
-                </router-view>
-              </el-scrollbar>
-            </KeepAlive>
-            <!-- 不缓存 -->
-            <el-scrollbar v-else>
-              <router-view v-slot="{ Component }">
-                <component :is="Component" />
-              </router-view>
-            </el-scrollbar>
-          </Transition>
+        <el-main id="myMain">
+          <!-- <el-scrollbar> -->
+          <router-view v-slot="{ Component }">
+            <Transition name="slide-fade">
+              <!-- <KeepAlive> -->
+              <component :is="Component" />
+              <!-- </KeepAlive> -->
+            </Transition>
+          </router-view>
+          <!-- </el-scrollbar> -->
         </el-main>
+        <!-- 回到顶部 -->
+        <el-backtop :bottom="100" target="#myMain" />
         <el-footer>
           <Footer />
         </el-footer>
@@ -40,8 +35,6 @@
 import Header from "@/views/layout/components/header/header.vue";
 import Menu from "@/views/layout/components/aside/menu.vue";
 import Footer from "@/views/layout/components/footer/footer.vue";
-import { useRoute } from "vue-router";
-const route = useRoute();
 </script>
 
 <style lang="less" scoped>
@@ -51,11 +44,11 @@ const route = useRoute();
   持续时间和速度曲线。
 */
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
 .slide-fade-enter-from,
