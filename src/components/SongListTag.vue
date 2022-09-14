@@ -33,7 +33,7 @@ const routerPush = (name, id) => {
 .songListTag {
   display: flex;
   align-items: center;
-  gap: 4px;
+  // gap: 4px;
 
   // vip标签
   .icon-vip {
@@ -42,8 +42,9 @@ const routerPush = (name, id) => {
     color: #34d399;
     border: 2px solid #34d399;
     border-radius: 4px;
-    zoom: 0.5;
+    zoom: 0.5; //倍数缩放
     cursor: pointer;
+    margin-right: 8px;
   }
 
   // 高质量音频标签
@@ -56,6 +57,7 @@ const routerPush = (name, id) => {
     border-radius: 4px;
     zoom: 0.5;
     cursor: pointer;
+    margin-right: 8px;
   }
 
   // mv标签
@@ -67,6 +69,7 @@ const routerPush = (name, id) => {
     border-radius: 4px;
     zoom: 0.5;
     cursor: pointer;
+    margin-right: 8px;
   }
 }
 </style>

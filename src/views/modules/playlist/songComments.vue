@@ -25,7 +25,7 @@
         <div v-for="item in hotComments" :key="item.user" class="filter">
           <div class="box">
             <div class="left">
-              <img v-img-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
+              <img v-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
             </div>
             <div class="right">
               <div class="top">
@@ -61,7 +61,7 @@
       <p class="title">全部评论</p>
       <div class="box" v-for="item in comments" :key="item.user">
         <div class="left">
-          <img v-img-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
+          <img v-lazy="item.user.avatarUrl + '?param=50y50'" :alt="'用户ID=' + item.user.userId">
         </div>
         <div class="right">
           <div class="column">

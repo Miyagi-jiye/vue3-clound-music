@@ -14,11 +14,12 @@
             {{ songs.name }}
           </div>
           <div class="subtitle">
-            <router-link v-for="ar in songs.ar" :key="ar.id" :to="{ name: 'artistDetail', params: { id: ar.id } }">
+            <router-link v-for="ar in songs.ar" :key="ar.id" :to="{ name: 'artistDetail', params: { id: ar.id } }"
+              class="ar">
               {{ ar.name }}
             </router-link>
             -
-            <router-link :to="{ name: 'albumDetail', params: { id: songs.al.id } }">
+            <router-link :to="{ name: 'albumDetail', params: { id: songs.al.id } }" class="al">
               {{ songs.al.name }}
             </router-link>
           </div>
@@ -189,9 +190,14 @@ function formatTime(time) {
           -webkit-line-clamp: 1;
           overflow: hidden;
 
-          a {
+          .ar {
             margin-right: 8px;
           }
+
+          .al {
+            margin-left: 8px;
+          }
+
         }
       }
 

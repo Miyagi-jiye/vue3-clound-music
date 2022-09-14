@@ -1,15 +1,16 @@
 <template>
   <div class="userDetail-record">
-    <div v-for="(item,index) in myData" :key="index" class="vfor" @dblclick="play(item.song)">
+    <div v-for="(item,index) in myData" :key="index" class="vfor" @dblclick="play(item.song)"
+      :class="{activeSong:currentPlayMusic.id == item.song.id }">
       <div class="left">{{index+1}}</div>
-      <img v-img-lazy="item.song.al.picUrl+'?param=50y50'" :alt="'歌曲ID='+item.song.id" class="img hidden-less-400">
+      <img v-lazy="item.song.al.picUrl+'?param=50y50'" :alt="'歌曲ID='+item.song.id" class="img hidden-less-400">
       <div class="center">
         <div class="top">
           <p>{{item.song.name}}</p>
           <p v-if="item.song.alia[0]">（{{item.song.alia[0]}}）</p>
         </div>
         <div class="bottom">
-          <SongListTag :mySongData="item.song" style="margin-right: 4px;" />
+          <SongListTag :mySongData="item.song"/>
           <div class="artist">
             <p v-for="ar in item.song.ar" class="ar">{{ar.name}}</p>
           </div>
@@ -25,11 +26,14 @@
 </template>
 
 <script setup>
-import SongListTag from "@/components/SongListTag.vue";
+import SongListTag from "@/components/SongListTag.vue";//歌曲列表tag
 import { playCountFilter } from "@/utils/playCountFilter.js"//播放量过滤
 import { usePlaylistStore } from "@/pinia/module/playlist.js"
+import { storeToRefs } from "pinia";
 
+const { currentPlayMusic } = storeToRefs(usePlaylistStore())
 const { change_playMusic, push_toPlayList } = usePlaylistStore()//改变当前播放对象,添加到播放列表
+
 
 defineProps({
   myData: {
@@ -50,13 +54,21 @@ defineProps({
 })
 
 // 播放音乐
-const play = (obj) => {
-  change_playMusic(obj)
-  push_toPlayList(obj)
+const play = async (obj) => {
+  await change_playMusic(obj)
+  await push_toPlayList(obj)
+  console.log(currentPlayMusic.value);
 }
 </script>
 
 <style lang="less" scoped>
+// 激活歌曲
+.activeSong {
+  color: #16da92 !important;
+  border-radius: 4px !important;
+  background-color: var(--my-hover-background-color) !important;
+}
+
 .userDetail-record {
   display: flex;
   flex-direction: column;
@@ -84,6 +96,7 @@ const play = (obj) => {
       margin-right: 10px;
       margin-left: 10px;
       border-radius: 4px;
+      box-shadow: 0px 2px 2px 0px rgb(0 0 0 / 15%);
     }
 
     .center {
@@ -124,7 +137,7 @@ const play = (obj) => {
           font-size: 12px;
           color: #6a6a6a;
           //英文字母显示不全
-          padding: 2px 0;
+          line-height: 16px;
           // 不换行
           white-space: nowrap;
 
@@ -146,7 +159,7 @@ const play = (obj) => {
           font-size: 12px;
           color: #6a6a6a;
           //英文字母显示不全
-          padding: 2px 0;
+          line-height: 16px;
           // 溢出省略号 
           overflow: hidden;
           text-overflow: ellipsis;

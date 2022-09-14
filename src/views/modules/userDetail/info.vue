@@ -3,17 +3,8 @@
     <div class="box">
       <div class="left">
         <div class="avatar">
-          <img :src="userDetail.profile.avatarUrl+'?param=160y160'" :alt="'用户ID='+userDetail.profile.userId">
+          <img :src="userDetail.profile.avatarUrl+'?param=300y300'" :alt="'用户ID='+userDetail.profile.userId">
         </div>
-        <!-- 昵称 -->
-        <!-- <div class="nickname">{{userDetail.profile.nickname}}</div> -->
-        <!-- 等级，性别，vip -->
-        <!-- <div class="iconGroup">
-          <icon-male v-if="userDetail.profile.gender==1" theme="outline" size="20" fill="#002bff" />
-          <icon-female v-else-if="userDetail.profile.gender==2" theme="outline" size="20" fill="#ff00f7" />
-          <div class="level">LV{{userDetail.level}}</div>
-          <icon-vip-one v-show="userDetail.profile.vipType !== 0" theme="outline" size="20" fill="#34d399" />
-        </div> -->
       </div>
       <div class="right">
         <div style="display:flex;gap:10px">
@@ -66,7 +57,7 @@
 
 <script setup>
 import city from "@/utils/city.js"//城市代码
-import { timestampToTime } from "@/utils/timestamp.js"
+import { timestampToTime } from "@/utils/timestamp.js"//时间戳转换
 
 defineProps({
   userDetail: {
@@ -188,6 +179,8 @@ const createDayFilter = (day) => {
 
         img {
           border-radius: 50%;
+          width: 100%;
+          object-fit: cover;
         }
       }
     }

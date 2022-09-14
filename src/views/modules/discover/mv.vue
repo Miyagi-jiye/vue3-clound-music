@@ -2,11 +2,11 @@
   <div class="MV">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="mv">
-        <img v-if="item.picUrl" class="img" v-img-lazy="item.picUrl + '?param=200y100'" :alt="'MVID=' + item.id"
+        <img v-if="item.picUrl" class="img" v-lazy="item.picUrl + '?param=200y100'" :alt="'MVID=' + item.id"
           :key="item.id">
-        <img v-else-if="item.cover" class="img" v-img-lazy="item.cover + '?param=400y200'" :alt="'MVID=' + item.id">
-        <img v-else-if="item.coverUrl" class="img" v-img-lazy="item.coverUrl + '?param=400y200'"
-          :alt="'MVID=' + item.vid" :key="item.vid">
+        <img v-else-if="item.cover" class="img" v-lazy="item.cover + '?param=400y200'" :alt="'MVID=' + item.id">
+        <img v-else-if="item.coverUrl" class="img" v-lazy="item.coverUrl + '?param=400y200'" :alt="'MVID=' + item.vid"
+          :key="item.vid">
         <div class="playCount">
           <icon-play theme="outline" size="12" :strokeWidth="4" title='播放量/播放时长' />
           <p v-if="item.playCount">{{ playCountFilter(item.playCount) }}</p>

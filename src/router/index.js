@@ -107,7 +107,16 @@ const routes = [
         meta: {
           menu: 'dj',
           keepAlive: true,
-        }
+        },
+      },
+      {
+        path: 'test',
+        name: 'test',
+        component: () => import("@/views/modules/test/index.vue"),
+        meta: {
+          menu: 'test',
+          keepAlive: true,
+        },
       }
     ]
   },

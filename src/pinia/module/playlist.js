@@ -25,9 +25,14 @@ export const usePlaylistStore = defineStore("playlist", {
     toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
     songs: {},//单首歌曲详情
+    audioStatus: false,//播放状态
   }),
   // 相当于 computed 计算属性
   getters: {
+    // 返回当前播放的歌曲id
+    currentPlayID(state) {
+      return state.currentPlayMusic.id
+    },
     // 返回播放列表长度
     playListCount(state) {
       return state.toPlayList.length;
@@ -81,6 +86,7 @@ export const usePlaylistStore = defineStore("playlist", {
     // 获取更多歌单评论
     async get_songlistCommentMore(id) {
       const res = await useSonglistComment(id, this.commentMoreParams);
+      if (res.data.more == false) return //是否还有剩余评论
       // 1.循环数组添加(每一个都有proxy)
       res.data.comments.forEach(item => {
         this.comments.comments.push(item)

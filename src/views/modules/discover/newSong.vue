@@ -2,7 +2,7 @@
   <div class="newSong">
     <div class="flex" v-for="item in myData" :key="item.id">
       <span class="father">
-        <img class="img" v-img-lazy="item.picUrl + '?param=100y100'" :alt="'新歌ID=' + item.id">
+        <img class="img" v-lazy="item.picUrl + '?param=100y100'" :alt="'新歌ID=' + item.id">
         <icon-play-one class="playIcon" theme="filled" size="25" :strokeWidth="4" title='点击播放' @click="play(item.id)" />
       </span>
       <div class="title">

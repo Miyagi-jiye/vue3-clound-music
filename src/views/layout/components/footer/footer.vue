@@ -9,13 +9,13 @@
     <div class="group">
       <div class="detail">
         <!-- img歌词弹窗 -->
-        <LyricDialog :lyric="Playlist.lyric" :currentTime="audio.currentTime" :duration="audio.duration"
-          :currentPlayMusic="Playlist.currentPlayMusic" />
+        <LyricDialog :lyric="lyric" :currentTime="audio.currentTime" :duration="audio.duration"
+          :currentPlayMusic="currentPlayMusic" />
         <!-- 播放歌曲详情 -->
         <div class="info">
-          <p class="top">{{ Playlist.currentPlayMusic.name }}</p>
+          <p class="top">{{ currentPlayMusic.name }}</p>
           <div class="bottom">
-            <a v-for="item in Playlist.currentPlayMusic.ar" :key="item.name">{{ item.name }}</a>
+            <a v-for="item in currentPlayMusic.ar" :key="item.name">{{ item.name }}</a>
           </div>
         </div>
       </div>
@@ -26,7 +26,7 @@
           title='循环播放' @click="playCycle" />
 
         <icon-go-start class="hidden-less-600" theme="outline" size="28" :strokeWidth="4" title='上一首'
-          @click="preMusic" />
+          @click="pre_music()" />
 
         <icon-play style="color: #34d399;" v-show="audioStatus === false" theme="filled" size="38" :strokeWidth="2"
           title='点击播放' @click="playIconClick" />
@@ -34,7 +34,7 @@
           title='点击暂停' @click="pauseIconClick" />
 
         <icon-go-end class="hidden-less-600" theme="outline" size="28" :strokeWidth="4" title='下一首'
-          @click='nextMusic' />
+          @click="next_music()" />
 
         <!-- 动态音量图标组件 -->
         <VolumeIcon @volumeEmit="volumeChange" />
@@ -57,29 +57,30 @@
 import VolumeIcon from "@/components/VolumeIcon.vue"//音量组件
 import LyricDialog from '@/components/LyricDialog.vue';//歌词弹窗
 import MusicListIcon from '@/components/MusicListIcon.vue';//音乐播放列表
-import { ref, onMounted, watch, computed, reactive } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { ElMessage } from 'element-plus';
-import useStore from "@/pinia/index.js"
-const { Playlist } = useStore()
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+import { storeToRefs } from "pinia";
+
+const { currentPlayMusic, toPlayList, lyric, audioStatus } = storeToRefs(usePlaylistStore())
+const { change_playMusic, clear_toPlayList, pre_music, next_music } = usePlaylistStore()
 
 // 接收子组件的值
 function dblclickEvent(e) {
   // 改变播放对象
-  Playlist.change_playMusic(e)
+  change_playMusic(e)
 }
 // 子组件点击清空按钮
 function clearEvent() {
   // 暂停播放
   pauseIconClick()
   // 清空播放列表
-  Playlist.clear_toPlayList()
+  clear_toPlayList()
 }
 
-const songID = computed(() => Playlist.currentPlayMusic.id)
-const toPlayList = computed(() => Playlist.toPlayList)
-const currentPlayMusic = computed(() => Playlist.currentPlayMusic)
+const songID = computed(() => currentPlayMusic.value.id)
 
-// 监听歌曲id的变化
+// 监听歌曲id的变化 
 watch(songID, () => {
   console.log("歌曲id发生变化", songID.value);
   playIconClick()//播放
@@ -93,8 +94,6 @@ const progressBar = ref('')
 let audioCurrentTime = ref(0)
 // 歌曲总时长
 let audioDuration = ref(0)
-// 播放状态
-let audioStatus = ref(false)
 // 进度条
 let progressStatus = ref(0)//默认0-100
 // 循环播放
@@ -112,6 +111,7 @@ function playCycle() {
   orderPlay.value = true
   cyclePlay.value = false
 }
+
 // 播放
 function playIconClick() {
   audioStatus.value = true//显示播放按钮
@@ -136,14 +136,6 @@ function playIconClick() {
 function pauseIconClick() {
   audioStatus.value = false
   audio.value.pause()
-}
-// 上一首
-function preMusic() {
-  Playlist.pre_music()
-}
-// 下一首
-function nextMusic() {
-  Playlist.next_music()
 }
 // 子组件音量条改变
 function volumeChange(e) {
@@ -191,12 +183,12 @@ onMounted(() => {
     audioStatus.value = false // 显示暂停图标
     console.log("播放结束");
     // 如果是单曲循环，继续播放
-    if (Playlist.toPlayList.length !== 0 && cyclePlay.value == true) {
+    if (toPlayList.value.length !== 0 && cyclePlay.value == true) {
       playIconClick()
     }
     // 如果是顺序播放，继续播放
-    if (Playlist.toPlayList.length - 1 !== 0 && orderPlay.value == true) {
-      nextMusic()
+    if (toPlayList.value.length - 1 !== 0 && orderPlay.value == true) {
+      next_music()
     }
   };
 

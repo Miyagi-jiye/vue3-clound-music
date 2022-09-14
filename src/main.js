@@ -16,6 +16,9 @@ import '@icon-park/vue-next/styles/index.css';//字节跳动图标库样式
 
 import { useIntersectionObserver } from '@vueuse/core';//引入vueuse中的判断方法:该元素是否在视口中
 
+import VueLazyLoad from 'vue3-lazyload'//图片懒加载加载动画等
+import loading from "@/assets/img/loading.gif"
+import viteSvg from "@/assets/img/vite.svg"
 
 const app = createApp(App)
 
@@ -23,7 +26,7 @@ const pinia = createPinia();//pinia第二步
 
 install(app);//字节跳动图标库安装到app实例上
 
-console.log(".env文件", import.meta.env.MODE);
+// console.log(".env文件", import.meta.env.MODE);//运行环境
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
@@ -46,5 +49,25 @@ app.directive("img-lazy", {
     });
   }
 });
+
+app.use(VueLazyLoad, {
+  loading: loading,//加载图片
+  error: viteSvg,//错误图片
+  lifecycle: {
+    // 加载中
+    // loading: (el) => {
+    //   console.log('loading', el)
+    // },
+    // 加载失败
+    error: (el) => {
+      console.log('error', el)
+    },
+    // 加载完毕
+    // loaded: (el) => {
+    //   console.log('loaded', el)
+    // }
+  },
+  delay: 500//手动延时
+})
 
 app.mount('#app')

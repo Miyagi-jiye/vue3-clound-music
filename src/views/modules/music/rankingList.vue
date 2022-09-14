@@ -2,7 +2,7 @@
   <div class="rankingList">
     <div class="vfor" v-for="item in oneToFour" :key="item.id">
       <div class="left">
-        <img class="discoverImg" v-img-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
+        <img class="discoverImg" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
           @click="routerPush('playlist',item.id)">
         <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
           @click="playMusic(item.id)" />

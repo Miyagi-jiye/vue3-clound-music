@@ -2,10 +2,10 @@
   <div class="banner">
     <Swiper slides-per-group-auto slides-per-view="auto" :navigation="true" :grab-cursor="true">
       <SwiperSlide v-for="item in myData" :key="item.imageUrl">
-        <img v-if="item.imageUrl" class="banner-image" v-img-lazy="item.imageUrl + '?param=1080y400'"
-          :alt="item.typeTitle + item.targetId" />
-        <img v-else class="banner-image" v-img-lazy="item.pic + '?param=1080y400'"
-          :alt="item.typeTitle + item.targetId" />
+        <img v-if="item.imageUrl" v-img-lazy="item.imageUrl + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
+          class="banner-image"/>
+        <img v-else-if="item.pic" v-img-lazy="item.pic + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
+          class="banner-image" />
       </SwiperSlide>
     </Swiper>
   </div>
@@ -14,6 +14,7 @@
 <script setup>
 import { Swiper, SwiperSlide } from "swiper/vue"; // 引入Swiper组件
 import "swiper/css"; // 引入Swiper样式
+
 defineProps({
   myData: {
     type: Array,

@@ -37,9 +37,11 @@ get_songlistComment(route.query.id)// 获取歌单评论
 const activeTab = ref("tracks")
 // 无限加载(element-plus Infinite Scroll 无限滚动)
 const lodaMoreInfinite = () => {
-  commentMoreParams.value.offset++//页数累加
-  get_songlistCommentMore(route.query.id)///获取下一页评论数据
-  // console.log(commentMoreParams.value.offset);
+  // 激活tab判断
+  if (activeTab.value == 'comments') {
+    commentMoreParams.value.offset++//页数累加
+    get_songlistCommentMore(route.query.id)///获取下一页评论数据
+  }
 }
 onUnmounted(() => {
   // 离开页面还原评论页数

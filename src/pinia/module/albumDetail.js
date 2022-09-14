@@ -30,12 +30,11 @@ export const useAlbumDetailStore = defineStore("albumDetail", {
     // 获取更多专辑评论
     async get_commentMore(id) {
       const res = await useCommentAlbum(id, this.commentMoreParams)
+      if (res.data.more == false) return //是否还有剩余评论
       // 1.循环数组添加(每一个都有proxy)
       res.data.comments.forEach(item => {
         this.commentAlbum.comments.push(item)
       });
-      // 去重
-      // this.commentAlbum.comments = ([...new Set(this.commentAlbum.comments)])
       // 2.解构数组合并(state中的解构有一层proxy,请求返回的没有)
       // this.commentAlbum.comments = [...this.commentAlbum.comments, ...res.data.comments]
       console.log("获取更多专辑评论", res.data);
