@@ -1,7 +1,7 @@
 <template>
-  <div class="loginDialog" v-show="isLogin==false">
+  <div class="loginDialog" v-if="isLogin==false">
     <div class="avatar hidden-less-800" @click="loginShow">
-      <el-avatar :size="32" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+      <el-avatar :size="30" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
       <a>点击登录</a>
     </div>
     <!-- 登陆弹框 -->
@@ -24,15 +24,27 @@
       </template>
     </el-dialog>
   </div>
+  <div class="loginDialog" v-else-if="isLogin==true">
+    <div class="avatar" title="查看详情" @click="routerPush('userDetail',loginData.profile.userId)">
+      <img :src="loginData.profile.avatarUrl+'?param=50y50'" :alt="'用户ID='+loginData.profile.userId">
+      <p>{{loginData.profile.nickname}}</p>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, reactive } from "vue"
 import { useLoginStore } from "@/pinia/module/login.js"
 import { storeToRefs } from "pinia"
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const { get_login } = useLoginStore()
-const { loginParams, isLogin } = storeToRefs(useLoginStore())
+const { loginParams, isLogin, loginData } = storeToRefs(useLoginStore())
+
+const routerPush = (name, id) => {
+  router.push({ name: name, query: { id: id } })
+}
 
 // 登录弹框
 let dialogVisible = ref(false)
@@ -97,6 +109,14 @@ const login = () => {
 
   &:hover {
     color: #34d399;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
   }
 }
 

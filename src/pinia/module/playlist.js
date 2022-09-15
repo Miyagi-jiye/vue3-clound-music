@@ -26,6 +26,12 @@ export const usePlaylistStore = defineStore("playlist", {
     lyric: [],//歌词
     songs: {},//单首歌曲详情
     audioStatus: false,//播放状态
+    audioCurrentTime: 0,// 当前播放时间
+    audioDuration: 0,// 歌曲总时长
+    progressStatus: 0,//默认0-100 // 进度条
+    playMode: 'playOnce',// 播放模式
+    playSpeed: 1,  // 播放速度
+    volume: 50,//音量
   }),
   // 相当于 computed 计算属性
   getters: {
@@ -93,7 +99,7 @@ export const usePlaylistStore = defineStore("playlist", {
       });
       console.log("获取更多歌单评论", res.data);
     },
-    // 获取歌曲url
+    // 获取歌曲url(未使用)
     async get_musicUrl(id) {
       const res = await useMusicUrl(id);
       console.log("获取歌曲url", res.data);
@@ -132,6 +138,11 @@ export const usePlaylistStore = defineStore("playlist", {
       // 恢复默认设置
       this.toPlayList = [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }]
       this.currentPlayMusic = { id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }
+    },
+    // 删除播放列表中的歌曲
+    delete_toPlayList(id) {
+      // 从 findIndex 找到的索引的位置开始删除 1 个元素
+      this.toPlayList.splice(this.toPlayList.findIndex((item) => item.id == id), 1)
     },
     // 上一首音乐
     pre_music() {

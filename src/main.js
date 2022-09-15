@@ -10,19 +10,21 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue"; //element-plus�
 
 import router from "@/router/index.js"// 路由配置
 import { createPinia } from "pinia";//pinia第一步
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'//pinia数据持久化插件
 
 import { install } from '@icon-park/vue-next/es/all';//引入字节跳动图标库
 import '@icon-park/vue-next/styles/index.css';//字节跳动图标库样式
 
 import { useIntersectionObserver } from '@vueuse/core';//引入vueuse中的判断方法:该元素是否在视口中
 
-import VueLazyLoad from 'vue3-lazyload'//图片懒加载加载动画等
-import loading from "@/assets/img/loading.gif"
-import viteSvg from "@/assets/img/vite.svg"
+import VueLazyLoad from 'vue3-lazyload'//图片懒加载插件
+import loading from "@/assets/img/loading.gif"//加载图
+import viteSvg from "@/assets/img/vite.svg"//失败图
 
 const app = createApp(App)
 
 const pinia = createPinia();//pinia第二步
+pinia.use(piniaPluginPersistedstate)//挂载持久化插件
 
 install(app);//字节跳动图标库安装到app实例上
 
@@ -67,7 +69,7 @@ app.use(VueLazyLoad, {
     //   console.log('loaded', el)
     // }
   },
-  delay: 500//手动延时
+  // delay: 500//手动延时
 })
 
 app.mount('#app')

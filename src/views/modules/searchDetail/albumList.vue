@@ -3,7 +3,7 @@
     <div v-for="item in albums" :key="item.id" class="vfor">
       <div class="img-box">
         <img :src="item.picUrl+'?param=60y60'" :alt="'专辑ID='+item.id" class="img">
-        <icon-play theme="outline" size="25" :strokeWidth="4" title='播放' class="icon-play"
+        <icon-eyes theme="outline" size="25" :strokeWidth="4" title='查看详情' class="icon-play"
           @click="routerPush('albumDetail',item.id)" />
       </div>
       <div class="play-box whiteSpace">

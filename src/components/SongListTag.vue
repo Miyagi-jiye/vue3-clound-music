@@ -23,6 +23,7 @@ defineProps({
 })
 
 const router = useRouter()
+
 const routerPush = (name, id) => {
   router.push({ name: name, params: { id: id } })
 }
@@ -50,7 +51,6 @@ const routerPush = (name, id) => {
   // 高质量音频标签
   .icon-sq {
     font-size: 20px;
-    font-weight: bold;
     padding: 2px;
     color: #d37334;
     border: 2px solid #d37334;

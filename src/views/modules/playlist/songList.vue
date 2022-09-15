@@ -11,12 +11,10 @@
     <div class="list">
       <div class="item" v-for="item in myData.tracks" :key="item.id"
         :class="{ active: Playlist.currentPlayMusic.id == item.id }" @dblclick="play(item)">
-        <span class="overflow song">
+        <span class="overflow">
           <icon-play theme="outline" size="16" :strokeWidth="4" title='播放' @click="play(item)" class="icon-play" />
           <p class="name">{{ item.name }}</p>
-          <div class="icon-vip" v-if="item.fee == 1">VIP</div>
-          <div class="icon-sq" v-if="item.sq">SQ</div>
-          <div class="icon-mv" v-if="item.mv !== 0" @click="routerPush('videoDetail', item.mv)">MV</div>
+          <SongListTagVue :mySongData="item" />
           <!-- hover操作栏 -->
           <div class="block hidden-less-400">
             <div class="iconList">
@@ -27,21 +25,22 @@
             </div>
           </div>
         </span>
-        <span class="overflow singer">
+        <span class="overflow ">
           <p class="name" v-for="item1 in item.ar" :key="item1.id" @click="routerPush('artistDetail',item1.id)">
             {{item1.name }}
           </p>
         </span>
-        <span class="overflow album">
+        <span class="overflow">
           <p class="name" @click="routerPush('albumDetail',item.al.id)">{{ item.al.name }}</p>
         </span>
-        <span class="overflow duration">{{ format(item.dt) }}</span>
+        <span class="overflow">{{ format(item.dt) }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import SongListTagVue from "@/components/SongListTag.vue";//歌曲列表tag
 import useStore from "@/pinia/index.js"
 import { useRouter } from "vue-router"
 const { Playlist } = useStore()
@@ -92,21 +91,13 @@ const routerPush = (name, id) => {
   -webkit-box-orient: vertical;
 }
 
-// .song {
-//   min-width: 200px;
-// }
 
-// .singer {
-//   min-width: 200px;
-// }
+.singer:not(:last-child)::after {
+  content: '';
+  display: inline-block;
+  margin: 0 2px;
+}
 
-// .album {
-//   min-width: 100px;
-// }
-
-// .duration {
-//   min-width: 80px;
-// }
 
 // 不换行文本溢出显示省略号
 .name {
@@ -115,50 +106,6 @@ const routerPush = (name, id) => {
   white-space: nowrap;
 }
 
-// vip标签
-.icon-vip {
-  font-size: 20px;
-  padding: 2px;
-  color: #34d399;
-  border: 1px solid #34d399;
-  border-radius: 4px;
-  zoom: 0.5;
-  cursor: pointer;
-
-  &:hover {
-    font-weight: bold;
-  }
-}
-
-// 高质量音频标签
-.icon-sq {
-  font-size: 20px;
-  padding: 2px;
-  color: #d37334;
-  border: 1px solid #d37334;
-  border-radius: 4px;
-  zoom: 0.5;
-  cursor: pointer;
-
-  &:hover {
-    font-weight: bold;
-  }
-}
-
-// mv标签
-.icon-mv {
-  font-size: 20px;
-  padding: 2px;
-  color: #34d399;
-  border: 1px solid #34d399;
-  border-radius: 4px;
-  zoom: 0.5;
-  cursor: pointer;
-
-  &:hover {
-    font-weight: bold;
-  }
-}
 
 // 喜欢图标
 .icon-like {
@@ -242,6 +189,8 @@ const routerPush = (name, id) => {
         align-items: center;
         gap: 5px;
         overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
 
         p {
           cursor: pointer;

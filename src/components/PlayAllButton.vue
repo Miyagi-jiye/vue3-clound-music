@@ -1,6 +1,6 @@
 <template>
   <div class="playAllButton">
-    <button class="btn1" @click="addPlayList">
+    <button class="btn1" @click="playAll">
       <icon-play-one class="playIcon" theme="outline" size="22" :strokeWidth="4" title='点击播放' />
       <span>播放全部</span>
     </button>
@@ -15,13 +15,17 @@
 </template>
 
 <script setup>
-import useStore from "@/pinia/index.js"
-const { Playlist } = useStore()
+import { usePlaylistStore } from "@/pinia/module/playlist.js"//播放列表
+import { useAlbumDetailStore } from "@/pinia/module/albumDetail.js"//专辑详情
+import { storeToRefs } from "pinia";
 
-const addPlayList = () => {
-  Playlist.change_playMusic(obj)// 改变播放对象
-  Playlist.push_musicToPlayList()// 添加歌单全部歌曲到播放列表
-  Playlist.push_toPlayList(obj)// 添加单首歌曲到播放列表
+const { album } = storeToRefs(useAlbumDetailStore())//专辑数据
+const { toPlayList, currentPlayMusic } = storeToRefs(usePlaylistStore())//播放列表数据
+
+// 全部播放
+const playAll = () => {
+  toPlayList.value = album.value.songs
+  currentPlayMusic.value = album.value.songs[0]
 }
 </script>
 

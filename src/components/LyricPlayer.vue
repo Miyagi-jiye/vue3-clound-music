@@ -36,25 +36,30 @@
       </div>
       <!-- 播放器控件 -->
       <div class="media-controls">
-        <icon-play-once theme="outline" size="18" :strokeWidth="4" title='顺序播放' @click="iconClick('order')"
-          class="icon-hover" />
-        <icon-go-start theme="outline" size="34" :strokeWidth="4" title="上一首" @click="iconClick('pre')"
+        <div title='播放速度' @click="iconClick('speed')" class="icon-hover play-speed"
+          :class="{activeMode:playSpeed !== 1}">{{playSpeed}}x</div>
+        <icon-go-start theme="outline" size="34" :strokeWidth="5" title="上一首" @click="iconClick('pre')"
           class="icon-hover" />
         <icon-play-one v-show="audioStatus === false" theme="filled" size="44" @click="iconClick('play')"
-          :strokeWidth="4" title="点击播放" class="icon-hover" />
-        <icon-pause v-show="audioStatus === true" theme="filled" size="44" :strokeWidth="4" @click="iconClick('pause')"
+          :strokeWidth="5" title="点击播放" class="icon-hover" />
+        <icon-pause v-show="audioStatus === true" theme="filled" size="44" :strokeWidth="5" @click="iconClick('pause')"
           title="点击暂停" class="icon-hover" />
-        <icon-go-end theme="outline" size="34" :strokeWidth="4" title="下一首" @click="iconClick('next')"
+        <icon-go-end theme="outline" size="34" :strokeWidth="5" title="下一首" @click="iconClick('next')"
           class="icon-hover" />
-        <icon-play-cycle theme="outline" size="18" :strokeWidth="4" title='循环播放' @click="iconClick('cycle')"
-          class="icon-hover" />
+        <icon-play-once theme="outline" size="18" :strokeWidth="5" title='播完暂停' class="icon-hover"
+          v-show="playMode=='playOnce'" @click="iconClick('playCycle')" />
+        <icon-loop-once theme="outline" size="18" :strokeWidth="5" title='单曲循环' class="icon-hover"
+          :class="{activeMode:playMode=='loopOnce'}" v-show="playMode=='loopOnce'" @click="iconClick('playOnce')" />
+        <icon-play-cycle theme="outline" size="18" :strokeWidth="5" title='歌单循环' class="icon-hover"
+          :class="{activeMode:playMode=='playCycle'}" v-show="playMode=='playCycle'" @click="iconClick('loopOnce')" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, inject } from "vue";
+import { formatTime } from "@/utils/formatPlayMusicTime.js"//格式化播放时间
 
 const prop = defineProps({
   songs: {
@@ -75,33 +80,49 @@ const prop = defineProps({
     default: () => 0,
   },
 });
-const emit = defineEmits(["emitPlayer"]);
 
-let audioStatus = ref(false); //播放状态
+// 接收爷爷组件传递的响应式值和方法
+let audioStatus = inject('audioStatus')//播放状态
+let playMode = inject('playMode')//播放模式
+let playSpeed = inject('playSpeed')//播放速度
+const playClick = inject('playClick')
+const pauseClick = inject('pauseClick')
+const preClick = inject('preClick')
+const nextClick = inject('nextClick')
+const playSpeedClick = inject('playSpeedClick')
 
 // 图标点击事件
-const iconClick = (iconName) => {
-  if (iconName == "pause") {
-    audioStatus.value = false;
+const iconClick = (name) => {
+  if (name == "pause") {
+    pauseClick()
   }
-  if (iconName == "play") {
-    audioStatus.value = true;
+  if (name == "play") {
+    playClick()
   }
-  if (iconName == "pre") {
-    emit("emitPlayer")
+  if (name == "pre") {
+    preClick()
   }
-  if (iconName == "next") {
-    emit("emitPlayer")
+  if (name == "next") {
+    nextClick()
   }
-  if (iconName == "order") {
-    emit("emitPlayer")
+  if (name == "playOnce") {
+    playMode.value = name
+    console.log("播完暂停");
   }
-  if (iconName == "cycle") {
-    emit("emitPlayer")
+  if (name == "loopOnce") {
+    playMode.value = name
+    console.log("单曲循环");
+  }
+  if (name == "playCycle") {
+    playMode.value = name
+    console.log("歌单循环");
+  }
+  if (name == 'speed') {
+    playSpeedClick()
   }
 };
-
-const step = ref(0); // 进度条
+// 进度条
+let step = ref(0);
 // 监听时间变化改变进度条进度
 watch(
   () => prop.currentTime,
@@ -112,17 +133,6 @@ watch(
   }
 );
 
-// 格式化时间
-function formatTime(time) {
-  // 如果时间 等于0 或者 等于NaN 先显示00：00
-  if (time == 0 || window.isNaN(time)) {
-    return "00:00";
-  }
-  let sec = Math.floor(time % 60);
-  let min = Math.floor(time / 60);
-  // 返回格式 00：00 不足两位的补零
-  return `${min < 10 ? "0" + min : min}:${sec < 10 ? "0" + sec : sec}`;
-}
 </script>
 
 <style lang="less" scoped>
@@ -159,7 +169,7 @@ function formatTime(time) {
 
   // 控制器
   .controls {
-    max-width: 54vh;
+    max-width: 50vh;
     margin-top: 24px;
     color: #fff;
 
@@ -243,7 +253,8 @@ function formatTime(time) {
     .media-controls {
       margin: 18px 0;
       display: flex;
-      justify-content: center;
+      // justify-content: center;
+      justify-content: space-between;
       align-items: center;
       gap: 15px;
     }
@@ -263,5 +274,16 @@ function formatTime(time) {
     background-color: rgba(255, 255, 255, 0.08);
     opacity: 0.88;
   }
+}
+
+// 速率样式
+.play-speed {
+  max-width: 16px;
+}
+
+// 播放模式图标激活样式
+.activeMode {
+  color: #fff;
+  opacity: 0.88;
 }
 </style>

@@ -16,6 +16,8 @@
         <!-- 默认插槽 -->
         <slot name="default">
           <div class="content">
+            <!-- 登录用户 -->
+            <UserInfo />
             <!-- 菜单 -->
             <Menu />
           </div>
@@ -29,6 +31,7 @@
 <script setup>
 import { ref } from "vue"
 import Menu from "@/views/layout/components/aside/menu.vue"
+import UserInfo from "@/components/UserInfo.vue"
 
 defineProps({
   myData: {
@@ -38,7 +41,7 @@ defineProps({
   // 弹出框大小
   size: {
     type: String,
-    default: () => "50%"
+    default: () => "350px"
   },
   // 图标显示大小
   iconSize: {
@@ -74,6 +77,7 @@ let drawer = ref(false)
   position: sticky;
   top: 0;
   background-color: white;
+  z-index: 2;
   // border-bottom: 1px solid black;
 
   .title {

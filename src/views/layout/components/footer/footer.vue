@@ -1,7 +1,7 @@
 <template>
   <div class="palyer">
     <!-- 原生播放器 -->
-    <audio type="file" ref="audio" :src="`https://music.163.com/song/media/outer/url?id=${songID}.mp3`"
+    <audio type="file" ref="audio" :src="`https://music.163.com/song/media/outer/url?id=${currentPlayMusic.id}.mp3`"
       preload="metadata">您的浏览器不支持audio标签,您还是换个浏览器吧</audio>
     <!-- 进度条 -->
     <el-slider ref="progressBar" v-model="progressStatus" @input="progressBarClick" :show-tooltip="false" />
@@ -20,98 +20,79 @@
         </div>
       </div>
       <div class="button">
-        <icon-play-once v-show="orderPlay === true" class="hidden-less-600" theme="outline" size="22" :strokeWidth="2"
-          title='顺序播放' @click="playOnce" />
-        <icon-play-cycle v-show="cyclePlay === true" class="hidden-less-600" theme="outline" size="22" :strokeWidth="2"
-          title='循环播放' @click="playCycle" />
-
-        <icon-go-start class="hidden-less-600" theme="outline" size="28" :strokeWidth="4" title='上一首'
-          @click="pre_music()" />
-
-        <icon-play style="color: #34d399;" v-show="audioStatus === false" theme="filled" size="38" :strokeWidth="2"
-          title='点击播放' @click="playIconClick" />
-        <icon-pause-one style="color: #34d399;" v-show="audioStatus === true" theme="filled" size="38" :strokeWidth="2"
-          title='点击暂停' @click="pauseIconClick" />
-
-        <icon-go-end class="hidden-less-600" theme="outline" size="28" :strokeWidth="4" title='下一首'
-          @click="next_music()" />
-
-        <!-- 动态音量图标组件 -->
-        <VolumeIcon @volumeEmit="volumeChange" />
-        <!-- 待播放歌曲列表 -->
-        <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
-          @clearChild='clearEvent' class="hidden-more-600" />
+        <!-- 播放模式：小于1000隐藏 -->
+        <PlayModeIcon class="hidden-less-1000" />
+        <!-- 上一首：小于1000隐藏 -->
+        <icon-go-start class="item hidden-less-1000" theme="outline" size="28" :strokeWidth="4" title='上一首'
+          @click="preClick()" />
+        <!-- 播放按钮：永不隐藏 -->
+        <PlayIcon />
+        <!-- 下一首：小于1000隐藏 -->
+        <icon-go-end class="item hidden-less-1000" theme="outline" size="28" :strokeWidth="4" title='下一首'
+          @click="nextClick()" />
+        <!-- 音量图标：小于1000隐藏 -->
+        <VolumeIcon class="hidden-less-1000" />
+        <!-- 待播放歌曲列表:小于1000才显示 -->
+        <MusicListIcon class="hidden-more-1000" />
       </div>
       <div class="list hidden-less-1000">
         <p>{{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}</p>
         <icon-text-message theme="outline" size="22" :strokeWidth="3" title='歌曲评论' />
         <!-- 待播放歌曲列表 -->
-        <MusicListIcon :myData="toPlayList" :currentPlayMusic='currentPlayMusic' @dblclickChild="dblclickEvent"
-          @clearChild='clearEvent' iconSize='24' />
+        <MusicListIcon iconSize='24' />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import PlayIcon from "@/components/PlayIcon.vue";//播放按钮组件
+import PlayModeIcon from "@/components/PlayModeIcon.vue";//播放模式切换按钮组件
 import VolumeIcon from "@/components/VolumeIcon.vue"//音量组件
 import LyricDialog from '@/components/LyricDialog.vue';//歌词弹窗
 import MusicListIcon from '@/components/MusicListIcon.vue';//音乐播放列表
-import { ref, onMounted, watch, computed } from 'vue'
+import { formatTime } from "@/utils/formatPlayMusicTime.js"//格式化播放时间
+import { ref, onMounted, watch, provide } from 'vue'
 import { ElMessage } from 'element-plus';
 import { usePlaylistStore } from "@/pinia/module/playlist.js"
 import { storeToRefs } from "pinia";
 
-const { currentPlayMusic, toPlayList, lyric, audioStatus } = storeToRefs(usePlaylistStore())
-const { change_playMusic, clear_toPlayList, pre_music, next_music } = usePlaylistStore()
-
-// 接收子组件的值
-function dblclickEvent(e) {
-  // 改变播放对象
-  change_playMusic(e)
-}
-// 子组件点击清空按钮
-function clearEvent() {
-  // 暂停播放
-  pauseIconClick()
-  // 清空播放列表
-  clear_toPlayList()
-}
-
-const songID = computed(() => currentPlayMusic.value.id)
-
-// 监听歌曲id的变化 
-watch(songID, () => {
-  console.log("歌曲id发生变化", songID.value);
-  playIconClick()//播放
-})
+const {
+  currentPlayMusic,
+  toPlayList,
+  lyric,
+  audioStatus,
+  audioCurrentTime,
+  audioDuration,
+  progressStatus,
+  playMode,
+  playSpeed,
+  volume
+} = storeToRefs(usePlaylistStore())
+const { pre_music, next_music } = usePlaylistStore()
 
 // 定义虚拟dom对象
 const audio = ref('')
 const progressBar = ref('')
 
-// 当前播放时间
-let audioCurrentTime = ref(0)
-// 歌曲总时长
-let audioDuration = ref(0)
-// 进度条
-let progressStatus = ref(0)//默认0-100
-// 循环播放
-let cyclePlay = ref(false)
-// 顺序播放
-let orderPlay = ref(true)//默认
-
-// 显示顺序播放
-function playOnce() {
-  orderPlay.value = false
-  cyclePlay.value = true
+// 设置音量
+function volumeSetting() {
+  audio.value.volume = volume.value / 100
 }
-// 显示循环播放
-function playCycle() {
-  orderPlay.value = true
-  cyclePlay.value = false
+// 播放速度切换
+function playSpeedClick(speed) {
+  // 如果有传递参数
+  if (speed) {
+    audio.value.playbackRate = speed
+  } else {
+    playSpeed.value += 0.5
+    // 大于2倍速还原到0.5倍速
+    if (playSpeed.value > 2) {
+      playSpeed.value = 0.5
+    }
+    audio.value.playbackRate = playSpeed.value//修改播放速率
+  }
 }
-
 // 播放
 function playIconClick() {
   audioStatus.value = true//显示播放按钮
@@ -120,6 +101,9 @@ function playIconClick() {
     audio.value.play().then(() => {
       console.log('播放成功')
       audioStatus.value = true//显示播放按钮
+      if (playSpeed.value !== 1) {
+        audio.value.playbackRate = playSpeed.value//记住播放速度
+      }
     }).catch((err) => {
       console.log("播放出错", err);
       audioStatus.value = false//显示暂停按钮
@@ -137,24 +121,17 @@ function pauseIconClick() {
   audioStatus.value = false
   audio.value.pause()
 }
-// 子组件音量条改变
-function volumeChange(e) {
-  audio.value.volume = e / 100//拿到子组件改变后的音量，重新赋值给播放器
+// 上一首
+function preClick() {
+  pre_music()
+}
+// 下一首
+function nextClick() {
+  next_music()
 }
 // 点击进度条/拖动进度条
 function progressBarClick() {
   audio.value.currentTime = Number(progressStatus.value * audio.value.duration / 100)//修改当前时间
-}
-// 格式化时间
-function formatTime(time) {
-  // 如果时间 等于0 或者 等于NaN 先显示00：00
-  if (time == 0 || window.isNaN(time)) {
-    return '00:00'
-  }
-  let sec = Math.floor(time % 60);
-  let min = Math.floor(time / 60);
-  // 返回格式 00：00 不足两位的补零
-  return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 }
 // 播放器初始化设置
 function init() {
@@ -167,8 +144,20 @@ function init() {
   audio.value.volume = 0.5 // 音乐音量 [0, 1]  最小值 0  最大值 1
   // audio.value.pause // 音乐是否暂停播放 true--暂停 false--播放
   // audio.value.ended // 音乐是否结束播放 true--结束 false--没有结束 设置了loop 音频重复循环播放 不会结束
-  // audio.value.playbackRate = 1// 播放速度 
+  audio.value.playbackRate = 1// 播放速度 
 }
+
+// 传值和方法给各个儿孙组件
+provide('audioStatus', audioStatus)
+provide('playMode', playMode)
+provide('playSpeed', playSpeed)
+provide('volume', volume)
+provide('playClick', playIconClick)
+provide('pauseClick', pauseIconClick)
+provide('preClick', preClick)
+provide('nextClick', nextClick)
+provide('playSpeedClick', playSpeedClick)
+provide('volumeSetting', volumeSetting)
 
 onMounted(() => {
   init()
@@ -181,14 +170,20 @@ onMounted(() => {
   // 监听音频结束播放事件
   audio.value.onended = function () {
     audioStatus.value = false // 显示暂停图标
-    console.log("播放结束");
-    // 如果是单曲循环，继续播放
-    if (toPlayList.value.length !== 0 && cyclePlay.value == true) {
-      playIconClick()
+    // 播完暂停
+    if (playMode.value == 'playOnce') {
+      pauseIconClick()
+      console.log("播放结束,播完暂停");
     }
-    // 如果是顺序播放，继续播放
-    if (toPlayList.value.length - 1 !== 0 && orderPlay.value == true) {
+    // 单曲循环，重新播放
+    if (toPlayList.value.length !== 0 && playMode.value == 'loopOnce') {
+      playIconClick()
+      console.log("播放结束,单曲循环");
+    }
+    // 歌单循环，继续播放
+    if (toPlayList.value.length - 1 !== 0 && playMode.value == 'playCycle') {
       next_music()
+      console.log("播放结束,歌单循环");
     }
   };
 
@@ -202,6 +197,13 @@ onMounted(() => {
   // };
 })
 
+// 监听歌曲id的变化 
+watch(
+  () => currentPlayMusic.value.id,
+  () => {
+    console.log("歌曲id发生变化", currentPlayMusic.value.id);
+    playIconClick()//播放
+  })
 </script>
 
 <style lang="less" scoped>
@@ -329,7 +331,7 @@ onMounted(() => {
     // 音量控制
     position: relative;
 
-    span:hover {
+    .item:hover {
       color: #34d399;
       cursor: pointer;
     }

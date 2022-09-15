@@ -10,7 +10,24 @@ export const useLoginStore = defineStore("login", {
     },
     loginData: {
       account: {},
-      profile: {},
+      profile: {
+        userId: 0,//用户id
+        nickname: "用户名",
+        signature: "个性签名",
+        gender: 1,//性别
+        avatarUrl: "用户头像",
+        backgroundUrl: "背景图片",
+        birthday: 0,//生日
+        city: 0,//城市代码
+        province: 0,//省份代码
+        vipType: 0,//vip
+        playlistCount: 0,//创建的歌单数量
+        followeds: 0,//粉丝数量
+        follows: 0,//关注数量
+        eventCount: 0,//动态数量
+        followed: false,//是否已经关注
+        followMe: false,//是否已经关注
+      },//用户详情
       bindings: [],
       token: '',
       cookie: ''
@@ -42,7 +59,8 @@ export const useLoginStore = defineStore("login", {
             type: 'success',//消息类型
           })
           this.loginData = res.data
-          this.loginData.token = "bearer" + this.loginData.token//格式化token
+          this.isLogin = true
+          // this.loginData.token = "bearer" + this.loginData.token//格式化token
           console.log("登录成功", res.data);
         }
       } catch (error) {
@@ -57,6 +75,18 @@ export const useLoginStore = defineStore("login", {
       console.log("获取游客cookie", res.data);
     },
   },
+  // 开启数据持久化
+  persist: true,
+
+  // // 持久化存储插件更多配置
+  // persist: {
+  //   // 修改存储中使用的键名称，默认为当前 Store的 id
+  //   key: 'storekey',
+  //   // 修改为 sessionStorage，默认为 localStorage
+  //   storage: window.sessionStorage,
+  //   // 部分持久化状态的点符号路径数组，[]意味着没有状态被持久化(默认为undefined，持久化整个状态)
+  //   paths: ['nested.data'],//选择你要存储的数据
+  // },
 })
 
 // 导出并重命名

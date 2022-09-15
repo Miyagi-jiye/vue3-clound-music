@@ -56,7 +56,23 @@ const route = useRoute()
 let activeTab = ref("1")//默认激活tab
 
 const { get_cloudSearch } = useSearchDetailStore();
-const { mvs, mvCount, userprofiles, userprofileCount, playlists, playlistCount, artists, artistCount, albums, albumCount, videos, videoCount, songCount, getterSongs, searchParams } = storeToRefs(useSearchDetailStore());
+const {
+  mvs,
+  mvCount,
+  userprofiles,
+  userprofileCount,
+  playlists,
+  playlistCount,
+  artists,
+  artistCount,
+  albums,
+  albumCount,
+  videos,
+  videoCount,
+  songCount,
+  getterSongs,
+  searchParams
+} = storeToRefs(useSearchDetailStore());
 
 // 初始化
 searchParams.value.keywords = route.params.id

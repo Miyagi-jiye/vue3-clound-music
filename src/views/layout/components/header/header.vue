@@ -6,7 +6,7 @@
         <SearchPopover />
       </div>
       <div class="right">
-        <LoginDialog />
+        <LoginDialog class="hidden-less-800" />
         <FullScreenIcon iconSize="20" />
         <HamburgerIcon iconSize="28" class="hidden-more-800" />
       </div>

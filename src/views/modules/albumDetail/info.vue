@@ -14,26 +14,14 @@
         <!-- 改动部分 -->
         <div class="box">
           <p>发布时间：{{ timestampToTime(album.publishTime) }}</p>
-          <p>音源：{{ album.subType }}</p>
-          <p>版权：{{ album.company }}</p>
+          <p v-if="album.subType">音源：{{ album.subType }}</p>
+          <p v-if="album.company">版权：{{ album.company }}</p>
         </div>
         <div class="description">
           <MoreText :text="album.description" :end="90" v-if="album.description" />
         </div>
-        <!-- 需要抽离 -->
-        <!-- <div class="btnGroup">
-          <button class="btn1" @click="addPlayList">
-            <icon-play-one class="playIcon" theme="outline" size="22" :strokeWidth="4" title='点击播放' />
-            <span>播放全部</span>
-          </button>
-          <button class="btn2">
-            <icon-like class="playIcon" theme="outline" size="18" :strokeWidth="4" title='点击收藏' />
-            <span>收藏</span>
-          </button>
-          <button class="btn3">
-            <icon-more class="playIcon" theme="outline" size="18" :strokeWidth="4" title='更多' />
-          </button>
-        </div> -->
+        <!-- 全部播放 -->
+        <PlayAllButton />
       </div>
     </div>
   </div>
@@ -41,11 +29,13 @@
 
 <script setup>
 import MoreText from '@/views/modules/playlist/MoreText.vue'// 更多详情组件
+import PlayAllButton from "@/components/PlayAllButton.vue"//全部播放，收藏，更多
 
 defineProps({
   album: {
     type: Object,
     default: () => ({
+      id: 0,//专辑id
       // description: '描述',
       name: '专辑名',
       picUrl: '',
@@ -131,12 +121,18 @@ function timestampToTime(timestamp) {
       .alias {
         display: flex;
         align-items: center;
-        gap: 10px;
         padding-top: 12px;
-        font-size: 14px;
-        font-weight: bold;
+        font-size: 16px;
         flex-direction: row;
         flex-wrap: wrap;
+        color: #34d399;
+
+        p:not(:last-child)::after {
+          content: '/';
+          display: inline-block;
+          margin: 0 5px;
+          color: black;
+        }
       }
 
       .box {

@@ -2,11 +2,14 @@
   <div class="userList">
     <div v-for="item in userprofiles" class="vfor">
       <div class="img-box">
-        <img :src="item.avatarUrl+'?param=50y50'" :alt="'用户ID='+item.userId" class="img">
+        <img :src="item.avatarUrl+'?param=100y100'" :alt="'用户ID='+item.userId" class="img">
         <img v-if="item.avatarDetail" :src="item.avatarDetail.identityIconUrl+'?param=10y10'" alt="音乐人图标"
           class="img-icon">
       </div>
-      <p class="nickname whiteSpace" @click="routerPush('userDetail',item.userId)">{{item.nickname}}</p>
+      <p class="nickname whiteSpace" @click="routerPush('userDetail',item.userId)">
+        {{item.nickname}}
+        <icon-vip-one v-if="item.vipType !== 0" theme="outline" size="20" fill="#34d399" style="margin:0 8px;" />
+      </p>
       <p class="gender whiteSpace">
         {{filterGender(item.gender)}}
         <icon-male v-if="item.gender==1" theme="outline" size="20" fill="#5e87d6" />
@@ -103,6 +106,7 @@ const routerPush = (name, id) => {
         border-radius: 50%;
         width: 50px;
         height: 50px;
+        box-shadow: 0 6px 8px -2px rgb(0 0 0 / 16%);
       }
 
       .img-icon {
@@ -117,6 +121,9 @@ const routerPush = (name, id) => {
 
     .nickname {
       flex: 2;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
 
       &:hover {
         cursor: pointer;

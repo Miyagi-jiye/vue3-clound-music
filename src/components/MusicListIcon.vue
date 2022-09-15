@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-badge :value="myData.length" :hidden="myData.length == 0 ? true : false">
+    <el-badge :value="toPlayList.length" :hidden="toPlayList.length == 0 ? true : false">
       <!-- 播放列表图标 -->
       <icon-music-list class="musicList" theme="outline" :size="iconSize" :strokeWidth="3" title='歌曲列表'
         @click="drawer = true" />
@@ -12,8 +12,8 @@
         <div class="title">
           <div class="large-title">播放列表</div>
           <div class="small-title">
-            <span>共{{ myData.length }}首歌曲</span>
-            <div class="icon" @click="clearPlayList">
+            <span>共{{ toPlayList.length }}首歌曲</span>
+            <div class="icon" @click="clear_toPlayList()">
               <icon-delete theme="outline" size="14" :strokeWidth="4" title='清空' />
               <span>清空</span>
             </div>
@@ -22,10 +22,10 @@
       </slot>
       <!-- 默认插槽 -->
       <slot name="default">
-        <div @dblclick="switchPlayMiusic(item)" class="card" :class="currentPlayMusic.id == item.id ? 'active' : ''"
-          v-for="item in myData" :key="item.id">
+        <div @dblclick="change_playMusic(item)" class="card" :class="currentPlayMusic.id == item.id ? 'active' : ''"
+          v-for="item in toPlayList" :key="item.id">
           <div class="img">
-            <img v-img-lazy="item.al.picUrl + '?param=40y40'" alt="加载中...">
+            <img v-lazy="item.al.picUrl + '?param=40y40'" alt="加载中...">
           </div>
           <div class="detail">
             <span>{{ item.name }}</span>
@@ -33,7 +33,10 @@
               <span v-for="ar in item.ar" :key="ar.id">{{ ar.name }}</span>
             </div>
           </div>
-          <div class="duration">{{ format(item.dt) }}</div>
+          <div class="delete">
+            <a class="deleteIcon" @click="delete_toPlayList(item.id)">移除</a>
+            <div class="duration">{{ format(item.dt) }}</div>
+          </div>
         </div>
       </slot>
     </el-drawer>
@@ -42,14 +45,13 @@
 
 <script setup>
 import { ref } from 'vue';
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+import { storeToRefs } from "pinia";
 
-const emit = defineEmits(['dblclickChild', 'clearChild'])
+const { currentPlayMusic, toPlayList } = storeToRefs(usePlaylistStore())
+const { delete_toPlayList, change_playMusic, clear_toPlayList } = usePlaylistStore()
 
 defineProps({
-  myData: {
-    type: Array,
-    default: () => []
-  },
   // 弹出框大小
   size: {
     type: Number,
@@ -60,14 +62,11 @@ defineProps({
     type: String,
     default: () => '38'
   },
-  // 当前播放的音乐
-  currentPlayMusic: {
-    type: Object,
-    default: () => { }
-  }
 })
+
 // 弹框显示
 let drawer = ref(false)
+
 // 格式化毫秒
 function format(times) {
   // 秒
@@ -76,14 +75,6 @@ function format(times) {
   let min = Math.floor(times / 1000 / 60);
   // 返回格式 00：00 不足两位的补零
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
-}
-// 切换歌曲
-function switchPlayMiusic(item) {
-  emit('dblclickChild', item)
-}
-// 清空播放列表
-function clearPlayList() {
-  emit('clearChild')
 }
 </script>
 
@@ -153,6 +144,16 @@ function clearPlayList() {
   &:hover {
     cursor: pointer;
     background-color: rgb(245 245 244 1);
+
+    .delete {
+      .deleteIcon {
+        display: block;
+      }
+
+      .duration {
+        display: none;
+      }
+    }
   }
 
   .img {
@@ -196,13 +197,25 @@ function clearPlayList() {
     }
   }
 
-  .duration {
+  .delete {
     width: 40px;
-    height: 40px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; //左对齐
+
+    .deleteIcon {
+      color: #ee5959;
+      width: 100%;
+      text-align: center;
+      display: none;
+    }
+
+    .duration {
+      display: block;
+    }
   }
+
 }
 
 // 卡片激活样式

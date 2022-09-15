@@ -146,8 +146,6 @@ const createDayFilter = (day) => {
   align-items: center;
   justify-content: flex-start; //左对齐
 
-
-
   .box {
     width: 100%;
     padding: 20px;

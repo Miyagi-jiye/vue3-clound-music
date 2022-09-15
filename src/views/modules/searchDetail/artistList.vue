@@ -2,7 +2,7 @@
   <div class="artistlist">
     <div class="bottom">
       <div class="artistList" v-for="item in artists" @click="routerPush('artistDetail',item.id)" :key="item.id">
-        <img class="img" v-lazy="item.picUrl + '?param=150y150'" :alt="'歌手ID=' + item.id" :key="item.id">
+        <img class="img" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌手ID=' + item.id" :key="item.id">
         <p class="name">{{ item.name }}</p>
       </div>
     </div>
