@@ -6,13 +6,17 @@ import { useLoginStore } from "@/pinia/module/login.js"
 import { storeToRefs } from "pinia"
 
 if (import.meta.env.MODE == "development") {
-  axios.defaults.baseURL = '/api';
+  // axios.defaults.baseURL = '/api';
+  axios.defaults.baseURL = 'http://guowei.fun:3000';
 } else if (import.meta.env.MODE == 'production') {
+  //跨域代理地址：http://124.223.49.16:9999/wyy 
+  //服务器地址：http://guowei.fun:3000
   axios.defaults.baseURL = 'http://guowei.fun:3000';
 }
+// axios.defaults.withCredentials = true;//Cookie跨域
 
 const http = axios.create({
-  withCredentials: true,// 跨域请求时是否需要使用凭证
+  // withCredentials: true,// 跨域请求时是否需要使用凭证
   // baseURL: '/api', //默认请求路径 import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR
 });
 
@@ -22,21 +26,12 @@ http.interceptors.request.use(
     // 开启进度条
     NProgress.start();
     // 添加 token 验证的 Authorization 字段
-    const { loginData, visitorCookie } = storeToRefs(useLoginStore())
-    // token
-    if (loginData.value.token !== "") {
-      config.headers['token'] = loginData.value.token
-    } else {
-      // 游客cookie
-      if (visitorCookie.value !== "") {
-        config.headers['cookie'] = visitorCookie.value
-        console.log("游客cookie", config.headers);
-      }
-    }
-    // 登录后的cookie
-    // if (loginData.value.cookie !== "") {
-    //   config.headers['cookie'] = loginData.value.cookie
-    //   console.log("用户cookie", config.headers);
+    const { loginData } = storeToRefs(useLoginStore())
+    // token存在
+    // if (loginData.value.token !== "") {
+    // config.headers['token'] = loginData.value.token
+    // config.headers.common['token'] = loginData.value.token
+    // config.headers.accessToken = loginData.value.token
     // }
     // console.log("请求拦截器触发：", config);
     // 在发送请求之前做些什么

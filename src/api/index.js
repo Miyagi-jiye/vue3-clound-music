@@ -1,17 +1,26 @@
 import http from "@/axios/index.js";
+let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"//????????
 
 // 登录接口
 export function useLogin(obj) {
   return http({
-    method: "get",
+    method: "post",
     url: "/login/cellphone",
-    params: {
+    data: {
+      cookie: cookie,
       phone: obj.phone,
       password: obj.password
     }
   });
 }
-// 登录状态接口
+// 退出登录
+export function useLogout() {
+  return http({
+    method: "get",
+    url: "/logout"
+  });
+}
+// 登录状态
 export function useLoginStatus() {
   return http({
     method: "get",

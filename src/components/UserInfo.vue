@@ -17,8 +17,7 @@
         <div class="signature">{{loginData.profile.signature}}</div>
       </div>
       <div class="right" @click="routerPush('userDetail',loginData.profile.userId)">
-        详情
-        <icon-right theme="outline" size="18" />
+        详情<icon-right theme="outline" size="18" />
       </div>
     </div>
     <!-- 动态，关注，粉丝 -->
@@ -37,9 +36,13 @@
       </div>
     </div>
   </div>
+  <div class="userInfo" v-else-if="isLogin==false">
+    <LoginDialog />
+  </div>
 </template>
 
 <script setup>
+import LoginDialog from "@/components/LoginDialog.vue"
 import { useLoginStore } from "@/pinia/module/login.js"
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
@@ -86,6 +89,7 @@ const routerPush = (name, id) => {
         border-radius: 50%;
         cursor: pointer;
         border: 2px solid #fff;
+        box-sizing: border-box;
         image-rendering: -webkit-optimize-contrast;
       }
     }

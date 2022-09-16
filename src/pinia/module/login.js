@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useLogin, useLoginStatus, useRegisterAnonimous } from "@/api/index.js"
+import { useLogin, useLoginStatus, useLogout, useRegisterAnonimous } from "@/api/index.js"
 import { ElMessage } from 'element-plus'
 
 export const useLoginStore = defineStore("login", {
@@ -59,18 +59,29 @@ export const useLoginStore = defineStore("login", {
             type: 'success',//消息类型
           })
           this.loginData = res.data
-          this.isLogin = true
+          this.isLogin = true//登录状态
           // this.loginData.token = "bearer" + this.loginData.token//格式化token
           console.log("登录成功", res.data);
+          const res1 = await useLoginStatus()
+          console.log("登录状态", res1.data);
         }
       } catch (error) {
         console.log("登录捕获错误", error);
       }
     },
+    // 退出登录
+    async get_logout() {
+      const res = await useLogout()
+      if (res.data.code == 200) {
+        this.isLogin = false//登录状态
+        this.loginData = {}//清空数据
+        this.loginParams = {}
+      }
+      console.log("退出登录", res.data);
+    },
     // 获取游客cookie
     async get_registerAnonimous() {
       const res = await useRegisterAnonimous();
-      document.cookie = res.data.cookie
       this.visitorCookie = res.data.cookie
       console.log("获取游客cookie", res.data);
     },

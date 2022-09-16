@@ -16,7 +16,7 @@
         <!-- 默认插槽 -->
         <slot name="default">
           <div class="content">
-            <!-- 登录用户 -->
+            <!-- 登录用户信息卡片 -->
             <UserInfo />
             <!-- 菜单 -->
             <Menu />

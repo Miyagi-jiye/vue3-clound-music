@@ -6,7 +6,7 @@
         <SearchPopover />
       </div>
       <div class="right">
-        <LoginDialog class="hidden-less-800" />
+        <LoginDialog />
         <FullScreenIcon iconSize="20" />
         <HamburgerIcon iconSize="28" class="hidden-more-800" />
       </div>
@@ -51,11 +51,13 @@ import SearchPopover from "@/components/SearchPopover.vue"; //搜索组件
   }
 
   .right {
-    // min-width: 100px;
+    position: absolute;
+    right: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
+    z-index: 99;
   }
 }
 </style>
