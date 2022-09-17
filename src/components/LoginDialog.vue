@@ -18,7 +18,7 @@
           <p class="nickname">{{loginData.profile.nickname}}</p>
           <!-- 动态，关注，粉丝 -->
           <div class="followGroup">
-            <div class="item">
+            <div class="item" @click="routerPush('userDetail',loginData.profile.userId,'dynamic')">
               <span>{{loginData.profile.eventCount}}</span>
               <p>动态</p>
             </div>
@@ -70,8 +70,8 @@ const router = useRouter()
 const { get_logout } = useLoginStore()
 const { isLogin, loginData, dialogVisible } = storeToRefs(useLoginStore())
 
-const routerPush = (name, id) => {
-  router.push({ name: name, query: { id: id } })
+const routerPush = (name, id, activeTab) => {
+  router.push({ name: name, query: { id: id, activeTab: activeTab } })
 }
 
 // 控制card显隐

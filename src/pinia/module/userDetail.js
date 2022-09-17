@@ -41,7 +41,27 @@ export const useUserDetailStore = defineStore("userDetail", {
       uid: 0,
       type: 0,//0:最近一周，1：所有时间
     },//请求参数
-    userEvent: [],//用户动态
+    userEvents: {
+      events: [
+        {
+          user: {},
+          info: {
+            likedCount: 0,//点赞
+            commentCount: 0,//评论数 
+            shareCount: 0,//分享数
+          },
+          json: {
+            msg: '',//动态内容
+          },
+          type: 0,//18 分享单曲,19 分享专辑,17、28 分享电台节目,22 转发,39 发布视频,35、13 分享歌单,24 分享专栏文章,41、21 分享视频
+          showTime: 0,
+          eventTime: 0,
+        }
+      ],
+      lasttime: 0,
+      more: false,
+      size: 2
+    },//用户动态
     userEventParams: {
       uid: 0,
       limit: 30,
@@ -79,8 +99,16 @@ export const useUserDetailStore = defineStore("userDetail", {
     async get_userEvent(uid) {
       this.userEventParams.uid = uid//设置uid
       const res = await useUserEvent(this.userEventParams)
-      this.userEvent = res.data
-      console.log("获取用户动态", res.data);
+      // 格式化json数据
+      res.data.events.map(item => item.json = JSON.parse(item.json));
+      // 如果还有转发内容的也转换一下
+      res.data.events.forEach(item1 => {
+        if (item1.json.event) {
+          item1.json.event.json = JSON.parse(item1.json.event.json)
+        }
+      });
+      this.userEvents = res.data
+      console.log("获取用户动态", this.userEvents);
     },
     // 获取动态评论
     async get_commentEvent() {

@@ -53,25 +53,49 @@ const {
 
 get_userDetail(route.query.id)//用户详情
 
+
 // 如果有携带激活tab栏参数，设置激活tab栏
 // 没有携带就看store中设置的默认选中项，请求数据
-if (route.query.activeTab) {
-  activeTab.value = route.query.activeTab
-  if (route.query.activeTab == 'create' || route.query.activeTab == 'collect') {
-    get_userPlaylist(route.query.id)//获取用户歌单
+const init = () => {
+  if (route.query.activeTab) {
+    activeTab.value = route.query.activeTab//改变激活项
+    if (route.query.activeTab == 'create') {
+      get_userPlaylist(route.query.id)//获取用户歌单
+    }
+    if (route.query.activeTab == 'collect') {
+      get_userPlaylist(route.query.id)//获取用户歌单
+    }
+    if (route.query.activeTab == 'dynamic') {
+      get_userEvent(route.query.id)//获取用户动态
+    }
+    if (route.query.activeTab == 'record') {
+      get_userRecord(route.query.id)//获取用户播放记录
+    }
+  } else {
+    if (activeTab.value == 'create') {
+      get_userPlaylist(route.query.id)//获取用户歌单
+    }
+    if (activeTab.value == 'collect') {
+      get_userPlaylist(route.query.id)//获取用户歌单
+    }
+    if (activeTab.value == 'record') {
+      get_userRecord(route.query.id)//用户播放记录
+    }
+    if (activeTab.value == 'dynamic') {
+      get_userEvent(route.query.id)//获取用户动态
+    }
   }
-  if (route.query.activeTab == 'dynamic') {
-    get_userEvent(route.query.id)//获取用户动态
-  }
-  if (route.query.activeTab == 'record') {
-    get_userRecord(route.query.id)//获取用户播放记录
-  }
-} else { }
+}
+// 初始化的时候执行一次
+init()
 
 console.log(route.query);
 // 监听激活tab变化
 watch(activeTab, () => {
-  if (activeTab.value == 'create' || activeTab.value == 'collect') {
+  if (activeTab.value == 'create') {
+    get_userPlaylist(route.query.id)//获取用户歌单
+  }
+  if (activeTab.value == 'collect') {
     get_userPlaylist(route.query.id)//获取用户歌单
   }
   if (activeTab.value == 'record') {
@@ -80,9 +104,12 @@ watch(activeTab, () => {
   if (activeTab.value == 'dynamic') {
     get_userEvent(route.query.id)//获取用户动态
   }
-  console.log("tab栏变化");
 })
-
+// 监听路由参数的变化
+watch(() => route.query, () => {
+  console.log("路由参数改变");
+  init()
+})
 </script>
 
 <style lang="less" scoped>
