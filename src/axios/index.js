@@ -27,7 +27,7 @@ http.interceptors.request.use(
     NProgress.start();
     // 添加 token 验证的 Authorization 字段
     const { loginData } = storeToRefs(useLoginStore())
-    // token存在
+    // 如果token存在
     // if (loginData.value.token !== "") {
     // config.headers['token'] = loginData.value.token
     // config.headers.common['token'] = loginData.value.token

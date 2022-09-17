@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
-import { useSonglistDetail, useSonglistComment, useMusicUrl, useLyric, useSongDetail } from "@/api/index.js";
+import { useSonglistDetail, useSonglistComment, useMusicUrl, useLyric, useSongDetail, useSongDetailAll } from "@/api/index.js";
 import vue from "@/assets/img/vue.svg"//默认播放音乐的图片
 
 export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
     playlist: {
-      tracks: [],
+      trackIds: [],//全部歌曲id
+      tracks: [],//20首歌曲
       creator: {}
     },// 歌单列表数据
     comments: {
@@ -25,6 +26,7 @@ export const usePlaylistStore = defineStore("playlist", {
     toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
     songs: {},//单首歌曲详情
+    songsAll: [],//全部歌曲详情
     audioStatus: false,//播放状态
     audioCurrentTime: 0,// 当前播放时间
     audioDuration: 0,// 歌曲总时长
@@ -77,10 +79,19 @@ export const usePlaylistStore = defineStore("playlist", {
       this.change_playMusic(this.songs)//改变当前播放音乐
       this.push_toPlayList(this.songs)//添加单首歌曲到播放列表
     },
+    // 获取全部歌曲详情
+    async get_songDetailAll(ids) {
+      const res = await useSongDetailAll(this.playlist.trackIds.join(','));
+      this.songsAll = res.data.songs
+      this.playlist.tracks = this.songsAll//重新渲染列表（建议分页或使用虚拟化列表，不然容易卡顿）
+      console.log("获取全部歌曲详情", res.data);
+    },
     // 获取歌单详情
     async get_songlistDetail(id) {
       const res = await useSonglistDetail(id);
       this.playlist = res.data.playlist;
+      // 设置全部歌曲id数组
+      this.playlist.trackIds = res.data.playlist.trackIds.map(item => { return Number(item.id) })
       console.log("获取歌单详情", res.data);
     },
     // 获取歌单评论

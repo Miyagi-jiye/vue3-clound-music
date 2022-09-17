@@ -9,8 +9,8 @@
     </div>
     <!-- 歌曲详情栏 -->
     <div class="list">
-      <div class="item" v-for="item in myData.tracks" :key="item.id"
-        :class="{ active: Playlist.currentPlayMusic.id == item.id }" @dblclick="play(item)">
+      <div class="item" v-for="item in myData.tracks" :key="item.id" :class="{ active: currentPlayMusic.id == item.id }"
+        @dblclick="play(item)">
         <span class="overflow">
           <icon-play theme="outline" size="16" :strokeWidth="4" title='播放' @click="play(item)" class="icon-play" />
           <p class="name">{{ item.name }}</p>
@@ -19,7 +19,7 @@
           <div class="block hidden-less-400">
             <div class="iconList">
               <icon-like theme="outline" size="16" :strokeWidth="4" title='喜欢' class="icon-like" />
-              <icon-add theme="outline" size="16" :strokeWidth="4" title='添加到播放列表' @click="addPlayList(item)" />
+              <icon-add theme="outline" size="16" :strokeWidth="4" title='添加到播放列表' @click="push_toPlayList(item)" />
               <icon-down-two theme="outline" size="16" :strokeWidth="4" title='下载' />
               <icon-more-two theme="outline" size="16" :strokeWidth="4" title='更多操作' />
             </div>
@@ -36,14 +36,22 @@
         <span class="overflow">{{ format(item.dt) }}</span>
       </div>
     </div>
+    <!-- 加载全部歌曲 -->
+    <div class="loadAll" v-show="playlist.tracks.length !== playlist.trackIds.length">
+      <p @click="get_songDetailAll()">加载全部</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import SongListTagVue from "@/components/SongListTag.vue";//歌曲列表tag
-import useStore from "@/pinia/index.js"
 import { useRouter } from "vue-router"
-const { Playlist } = useStore()
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+import { storeToRefs } from "pinia";
+
+const { currentPlayMusic, playlist } = storeToRefs(usePlaylistStore())
+const { push_toPlayList, change_playMusic, get_songDetailAll } = usePlaylistStore()
+
 const router = useRouter()
 
 defineProps({
@@ -67,13 +75,8 @@ function format(times) {
 // 添加到播放列表，并改变当前播放的对象
 const play = (item) => {
   console.log('播放', item)
-  Playlist.push_toPlayList(item)
-  Playlist.change_playMusic(item)
-}
-// 添加到播放列表
-const addPlayList = (item) => {
-  console.log('添加到播放列表', item)
-  Playlist.push_toPlayList(item)
+  push_toPlayList(item)
+  change_playMusic(item)
 }
 // 跳转到视频详情页
 const routerPush = (name, id) => {
@@ -146,6 +149,19 @@ const routerPush = (name, id) => {
   }
 }
 
+
+
+// 激活歌曲
+.active {
+  color: #16da92 !important;
+  border-radius: 4px !important;
+}
+
+// 激活图标
+.activeIcon {
+  color: #ff5b5b !important;
+}
+
 .songList {
   display: flex;
   flex-direction: column;
@@ -207,16 +223,18 @@ const routerPush = (name, id) => {
       }
     }
   }
-}
 
-// 激活歌曲
-.active {
-  color: #16da92 !important;
-  border-radius: 4px !important;
-}
+  .loadAll {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #34d399;
 
-// 激活图标
-.activeIcon {
-  color: #ff5b5b !important;
+    p:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useUserDetail, useUserPlaylist, useUserRecord } from "@/api/index.js";
+import { useUserDetail, useUserPlaylist, useUserRecord, useUserEvent, useCommentEvent, useUserFollows } from "@/api/index.js";
 
 export const useUserDetailStore = defineStore("userDetail", {
   state: () => ({
@@ -29,18 +29,25 @@ export const useUserDetailStore = defineStore("userDetail", {
       }
     },//用户详情
     userPlaylist: [],//用户所有歌单
-    userCreatedPlaylist: [],//用户创建歌单
-    userCollectPlaylist: [],//用户收藏歌单
     userPlaylistParams: {
       uid: 0,
       limit: 100,
       offset: 1
-    },
+    },//请求参数
+    userCreatedPlaylist: [],//用户创建歌单
+    userCollectPlaylist: [],//用户收藏歌单
     userRecord: [],//播放记录
     userRecordParams: {
       uid: 0,
       type: 0,//0:最近一周，1：所有时间
-    }
+    },//请求参数
+    userEvent: [],//用户动态
+    userEventParams: {
+      uid: 0,
+      limit: 30,
+      lasttime: -1,
+    },//请求参数
+    activeTab: 'create'//默认激活tab
   }),
   getters: {},
   actions: {
@@ -67,6 +74,23 @@ export const useUserDetailStore = defineStore("userDetail", {
       const res = await useUserRecord(this.userRecordParams)
       this.userRecord = res.data.allData
       console.log("获取用户歌曲播放记录", res.data);
+    },
+    // 获取用户动态
+    async get_userEvent(uid) {
+      this.userEventParams.uid = uid//设置uid
+      const res = await useUserEvent(this.userEventParams)
+      this.userEvent = res.data
+      console.log("获取用户动态", res.data);
+    },
+    // 获取动态评论
+    async get_commentEvent() {
+      const res = await useCommentEvent()
+      console.log("获取动态评论", res.data);
+    },
+    // 获取用户关注列表
+    async get_userFollows() {
+      const res = await useUserFollows()
+      console.log("获取动态评论", res.data);
     },
   }
 })

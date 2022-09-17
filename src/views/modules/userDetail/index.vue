@@ -1,7 +1,7 @@
 <template>
   <div class="userDetail">
     <Info :userDetail="userDetail" class="info" />
-    <el-tabs v-model="activeTab" class="tab" @tab-change="tabHandle">
+    <el-tabs v-model="activeTab" class="tab">
       <el-tab-pane lazy label="创建的歌单" name="create">
         <Recommend :myData="userCreatedPlaylist" class='Recommend' />
       </el-tab-pane>
@@ -11,35 +11,78 @@
       <el-tab-pane lazy label="听歌排行" name="record">
         <Record :myData="userRecord" class='Record' />
       </el-tab-pane>
+      <el-tab-pane lazy label="动态" name="dynamic">
+        <DynamicVue class='Dynamic' />
+      </el-tab-pane>
+      <el-tab-pane lazy label="关注" name="follow">
+        <Record :myData="userRecord" class='Record' />
+      </el-tab-pane>
+      <el-tab-pane lazy label="粉丝" name="fans">
+        <Record :myData="userRecord" class='Record' />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script setup>
+import DynamicVue from "@/views/modules/userDetail/dynamic.vue"
 import Record from "@/views/modules/userDetail/record.vue"
 import Recommend from '@/views/modules/discover/recommend.vue'//歌单组件(复用)
 import Info from "@/views/modules/userDetail/info.vue"//用户信息组件
-import { ref } from "vue"
+import { watch } from "vue"
 import { useUserDetailStore } from "@/pinia/module/userDetail.js"
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router"
 
-const activeTab = ref("create")
 const route = useRoute()
 
-const { userDetail, userCreatedPlaylist, userCollectPlaylist, userRecord } = storeToRefs(useUserDetailStore())//数据
-const { get_userDetail, get_userPlaylist, get_userRecord } = useUserDetailStore()//方法
+const {
+  userDetail,
+  userCreatedPlaylist,
+  userCollectPlaylist,
+  userRecord,
+  activeTab
+} = storeToRefs(useUserDetailStore())//数据
+const {
+  get_userDetail,
+  get_userPlaylist,
+  get_userRecord,
+  get_userEvent,
+  get_userFollows
+} = useUserDetailStore()//方法
 
 get_userDetail(route.query.id)//用户详情
-get_userPlaylist(route.query.id)//用户歌单
-// get_userRecord(route.query.id)//用户播放记录
-// 点击tab栏触发
-const tabHandle = (name) => {
-  if (name == "record") {
-    get_userRecord(route.query.id)
-    console.log("点击听歌排行");
+
+// 如果有携带激活tab栏参数，设置激活tab栏
+// 没有携带就看store中设置的默认选中项，请求数据
+if (route.query.activeTab) {
+  activeTab.value = route.query.activeTab
+  if (route.query.activeTab == 'create' || route.query.activeTab == 'collect') {
+    get_userPlaylist(route.query.id)//获取用户歌单
   }
-}
+  if (route.query.activeTab == 'dynamic') {
+    get_userEvent(route.query.id)//获取用户动态
+  }
+  if (route.query.activeTab == 'record') {
+    get_userRecord(route.query.id)//获取用户播放记录
+  }
+} else { }
+
+console.log(route.query);
+// 监听激活tab变化
+watch(activeTab, () => {
+  if (activeTab.value == 'create' || activeTab.value == 'collect') {
+    get_userPlaylist(route.query.id)//获取用户歌单
+  }
+  if (activeTab.value == 'record') {
+    get_userRecord(route.query.id)//用户播放记录
+  }
+  if (activeTab.value == 'dynamic') {
+    get_userEvent(route.query.id)//获取用户动态
+  }
+  console.log("tab栏变化");
+})
+
 </script>
 
 <style lang="less" scoped>
@@ -81,12 +124,9 @@ const tabHandle = (name) => {
   .tab {
     padding: 0 20px;
 
-    .Recommend {
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-
-    .Record {
+    .Recommend,
+    .Record,
+    .Dynamic {
       margin-top: 20px;
       margin-bottom: 20px;
     }

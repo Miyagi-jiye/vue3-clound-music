@@ -3,7 +3,7 @@
     <div class="flex">
       <Info :myData='playlist' />
       <el-tabs class="tab" v-model="activeTab">
-        <el-tab-pane lazy :label="`歌曲 ${playlist.tracks.length} `" name="tracks">
+        <el-tab-pane lazy :label="`歌曲 ${playlist.trackIds.length} `" name="tracks">
           <SongList :myData='playlist' />
         </el-tab-pane>
         <el-tab-pane lazy :label="`评论 ${comments.total} `" name="comments">

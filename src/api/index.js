@@ -1,6 +1,7 @@
 import http from "@/axios/index.js";
 let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"//????????
 
+/*______________________________________登录__________________________________________*/
 // 登录接口
 export function useLogin(obj) {
   return http({
@@ -110,6 +111,30 @@ export function useSongDetail(id) {
     method: "get",
     url: "/song/detail",
     params: { ids: id }
+  });
+}
+// 获取歌单所有歌曲
+// ids:歌曲id数组，用逗号分隔
+export function useSongDetailAll(ids) {
+  return http({
+    method: "get",
+    url: "/song/detail",
+    params: { ids: ids }
+  });
+}
+// 获取歌单所有歌曲
+// 必选参数 : id : 歌单 id
+// 可选参数 : limit : 限制获取歌曲的数量，默认值为当前歌单的歌曲数量
+// 可选参数 : offset : 默认值为0
+export function usePlaylistTrackAll(obj) {
+  return http({
+    method: "get",
+    url: "/playlist/track/all",
+    params: {
+      id: obj.id,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit
+    }
   });
 }
 // 获取音乐 url
@@ -645,6 +670,32 @@ export function useUserDj(uid) {
     method: "get",
     url: "/user/dj",
     params: { uid: uid }
+  });
+}
+// 获取用户动态
+// 必选参数 : 
+// uid : 用户 id
+// 可选参数 : 
+// limit : 返回数量 , 默认为 30
+// lasttime : 返回数据的 lasttime ,默认-1,传入上一次返回结果的 lasttime,将会返回下一页的数据
+export function useUserEvent(obj) {
+  return http({
+    method: "get",
+    url: "/user/event",
+    params: {
+      uid: obj.uid,
+      limit: obj.limit,
+      lasttime: obj.lasttime
+    }
+  });
+}
+// 获取动态评论
+// 必选参数 : threadId : 动态 id，可通过 /event，/user/event 接口获取
+export function useCommentEvent(threadId) {
+  return http({
+    method: "get",
+    url: "/comment/event",
+    params: { threadId: threadId }
   });
 }
 // 获取用户关注列表(登录后调用)

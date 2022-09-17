@@ -33,7 +33,8 @@ export const useLoginStore = defineStore("login", {
       cookie: ''
     },
     isLogin: false,
-    visitorCookie: ''
+    visitorCookie: '',//游客cookie
+    dialogVisible: false,//登录弹出框
   }),
   getters: {},
   actions: {
@@ -60,6 +61,7 @@ export const useLoginStore = defineStore("login", {
           })
           this.loginData = res.data
           this.isLogin = true//登录状态
+          this.dialogVisible = false
           // this.loginData.token = "bearer" + this.loginData.token//格式化token
           console.log("登录成功", res.data);
           const res1 = await useLoginStatus()
@@ -76,6 +78,7 @@ export const useLoginStore = defineStore("login", {
         this.isLogin = false//登录状态
         this.loginData = {}//清空数据
         this.loginParams = {}
+        ElMessage.success({ message: '退出成功' })
       }
       console.log("退出登录", res.data);
     },

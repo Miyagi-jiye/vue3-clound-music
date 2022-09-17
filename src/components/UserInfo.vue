@@ -1,6 +1,8 @@
 <template>
+  <!-- 已登录 -->
   <div class="userInfo" v-if="isLogin==true"
     :style="{backgroundImage:'url('+loginData.profile.backgroundUrl+'?param=400y400)'}">
+    <!-- 卡片 -->
     <div class="box">
       <div class="left" @click="routerPush('userDetail',loginData.profile.userId)">
         <img :src="loginData.profile.avatarUrl+'?param=100y100'" :alt="'用户ID='+loginData.profile.userId">
@@ -14,15 +16,17 @@
           <icon-vip-one v-show="loginData.profile.vipType !== 0" theme="outline" size="20" fill="#34d399"
             class="icon" />
         </div>
+        <!-- 个性签名 -->
         <div class="signature">{{loginData.profile.signature}}</div>
       </div>
-      <div class="right" @click="routerPush('userDetail',loginData.profile.userId)">
-        详情<icon-right theme="outline" size="18" />
+      <div class="right" @click="get_logout()">
+        注销
+        <icon-right theme="outline" size="14" />
       </div>
     </div>
     <!-- 动态，关注，粉丝 -->
     <div class="followGroup">
-      <div class="item">
+      <div class="item" @click="routerPush('userDetail',loginData.profile.userId,'dynamic')">
         <span>{{loginData.profile.eventCount}}</span>
         <p>动态</p>
       </div>
@@ -36,21 +40,56 @@
       </div>
     </div>
   </div>
-  <div class="userInfo" v-else-if="isLogin==false">
+  <!-- 未登录 -->
+  <div class="userInfo" v-else-if="isLogin==false" style="background-color: dimgray;">
+    <!-- 卡片 -->
+    <div class="box">
+      <div class="left">
+        <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" alt="游客头像">
+      </div>
+      <div class="center">
+        <div class="nickname">游客</div>
+        <div class="signature">更多功能请登录体验</div>
+      </div>
+      <div class="right" @click="dialogVisible = true">
+        登录
+        <icon-right theme="outline" size="14" />
+      </div>
+    </div>
+    <!-- 动态，关注，粉丝 -->
+    <div class="followGroup">
+      <div class="item">
+        <span>-</span>
+        <p>动态</p>
+      </div>
+      <div class="item">
+        <span>-</span>
+        <p>关注</p>
+      </div>
+      <div class="item">
+        <span>-</span>
+        <p>粉丝</p>
+      </div>
+    </div>
+    <!-- 登录弹框 -->
     <LoginDialog />
   </div>
 </template>
 
 <script setup>
-import LoginDialog from "@/components/LoginDialog.vue"
-import { useLoginStore } from "@/pinia/module/login.js"
+import LoginDialog from "@/components/Dialog.vue"//登录弹出框
+import { useLoginStore } from "@/pinia/module/login.js"//登录
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 
-const { loginData, isLogin } = storeToRefs(useLoginStore())
+const { loginData, isLogin, dialogVisible } = storeToRefs(useLoginStore())//数据
+const { get_logout } = useLoginStore()//方法
+
 const router = useRouter()
-const routerPush = (name, id) => {
-  router.push({ name: name, query: { id: id } })
+
+// name:跳转页面，id:参数，activeTab：激活tab
+const routerPush = (name, id, activeTab) => {
+  router.push({ name: name, query: { id: id, activeTab: activeTab } })
 }
 </script>
 
@@ -60,7 +99,6 @@ const routerPush = (name, id) => {
 }
 
 .userInfo {
-
   margin: 20px;
   padding: 10px;
   border-radius: 8px;
@@ -98,6 +136,9 @@ const routerPush = (name, id) => {
       flex: 1;
       margin: 0 10px;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
 
       .nickname {
         display: flex;
@@ -122,6 +163,7 @@ const routerPush = (name, id) => {
       margin: auto;
       cursor: pointer;
       overflow: hidden;
+      font-size: 14px;
 
       &:hover {
         color: #34d399;
@@ -139,24 +181,24 @@ const routerPush = (name, id) => {
 
 
     .item {
-
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
+      // transition: .2s;
 
       span {
         font-size: 18px;
         font-weight: bold;
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-        }
       }
 
       p {
         font-size: 14px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        color: #34d399;
       }
     }
 
