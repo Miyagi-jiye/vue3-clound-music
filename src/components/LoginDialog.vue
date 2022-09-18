@@ -81,7 +81,7 @@ let timer;
 const imgMouseEnter = () => {
   if (timer) clearTimeout(timer)
   showCard.value = true
-  console.log("1", showCard.value);
+  // console.log("1", showCard.value);
 }
 // 头像鼠标移出
 const imgMouseLeave = () => {
@@ -89,18 +89,18 @@ const imgMouseLeave = () => {
   timer = setTimeout(() => {
     showCard.value = false
   }, 300);
-  console.log("2", showCard.value);
+  // console.log("2", showCard.value);
 }
 // 卡片鼠标移入
 const cardMouseEnter = () => {
   if (timer) clearTimeout(timer)
   showCard.value = true
-  console.log("3", showCard.value);
+  // console.log("3", showCard.value);
 }
 // 卡片鼠标移出
 const cardMouseLeave = () => {
   showCard.value = false
-  console.log("4", showCard.value);
+  // console.log("4", showCard.value);
 }
 </script>
 

@@ -1,9 +1,9 @@
 <template>
-  <div class="userDetail-dynamic">
-    <div v-for="item in events" :key="item.showTime" class="vfor">
+  <div class="userDetail-dynamic" v-if="events">
+    <div v-for="(item,index) in events" :key="item.showTime" class="vfor">
       <div class="left">
         <!-- 头像 -->
-        <img :src="item.user.avatarUrl" alt="" class="img">
+        <img :src="item.user.avatarUrl+'?param=100y100'" alt="" class="img">
       </div>
       <div class="right">
         <!-- 昵称 -->
@@ -33,7 +33,7 @@
             <p v-show="item.info.likedCount!==0">({{item.info.likedCount}})</p>
             <p v-show="item.info.likedCount==0">点赞</p>
           </div>
-          <div class="item">
+          <div class="item" @click="commentClick(item.info.threadId,index)">
             <icon-comment theme="outline" :strokeWidth="2" size="16" />
             <p v-show="item.info.commentCount!==0">({{item.info.commentCount}})</p>
             <p v-show="item.info.commentCount==0">评论</p>
@@ -44,20 +44,28 @@
             <p v-show="item.info.shareCount==0">分享</p>
           </div>
         </div>
+        <!-- 评论 -->
+        <Comment v-show="index==showIndex && flag==true" />
+        <!-- 回复评论 -->
+        <div class="inputComment" v-show="index==showIndex && flag==true">
+          <el-input v-model="input" placeholder="回复评论" type="textarea" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { timestampToTime } from "@/utils/timestamp.js"
-import { computed } from "vue";
+import Comment from "@/views/modules/userDetail/comment.vue";//评论组件
+import { timestampToTime } from "@/utils/timestamp.js"//时间戳转换
+import { ref, computed } from "vue";
 import { useUserDetailStore } from "@/pinia/module/userDetail.js"
 import { storeToRefs } from "pinia";
 
 const { userEvents } = storeToRefs(useUserDetailStore())//数据
-const events = computed(() => userEvents.value.events)
+const { get_commentEvent } = useUserDetailStore()//方法
 
+const events = computed(() => userEvents.value.events)
 //18 分享单曲,19 分享专辑,17、28 分享电台节目,22 转发,39 发布视频,35、13 分享歌单,24 分享专栏文章,41、21 分享视频
 const typeFilter = (type) => {
   switch (type) {
@@ -77,9 +85,24 @@ const typeFilter = (type) => {
       return "分享专栏文章";
     case 41 || 21:
       return "分享视频";
+    case 57:
+      return "分享歌曲";
     default:
       return type;
   }
+}
+let showIndex = ref(null)//显示评论的索引
+let flag = ref(false)//是否显示评论
+const input = ref('')//评论内容
+//点击评论
+const commentClick = async (threadId, index) => {
+  await get_commentEvent(threadId)
+  flag.value = !flag.value
+  if (index !== showIndex.value) {
+    flag.value = true//点击不同的评论，显示另一个评论
+  }
+  showIndex.value = index//记录点击的索引
+  // console.log(index, flag.value);
 }
 </script>
 
@@ -134,6 +157,10 @@ const typeFilter = (type) => {
         }
       }
 
+      .inputComment {
+        margin-top: 20px;
+      }
+
       .child {
         background-color: #e3e5e7;
         border-radius: 8px;
@@ -167,13 +194,9 @@ const typeFilter = (type) => {
 }
 
 .content {
-  margin: 10px 0;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  // 文本换行
+  word-break: break-all;
 }
-
-// .split-line {
-//   margin: 8px 0;
-//   width: 100%;
-//   height: 1px;
-//   background: #e3e5e7;
-// }
 </style>

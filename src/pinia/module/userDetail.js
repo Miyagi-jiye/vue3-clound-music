@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
-import { useUserDetail, useUserPlaylist, useUserRecord, useUserEvent, useCommentEvent, useUserFollows } from "@/api/index.js";
+import { useUserDetail, useUserPlaylist, useUserRecord, useUserEvent, useCommentEvent, useUserFollows, useUserFolloweds } from "@/api/index.js";
 
 export const useUserDetailStore = defineStore("userDetail", {
   state: () => ({
+    /** 用户详情 */
     userDetail: {
       bindings: [],//绑定信息
       createDays: 0,//创建天数
@@ -27,20 +28,23 @@ export const useUserDetailStore = defineStore("userDetail", {
         followed: false,//是否已经关注
         followMe: false,//是否已经关注
       }
-    },//用户详情
+    },
+    /** 用户歌单数据 */
     userPlaylist: [],//用户所有歌单
     userPlaylistParams: {
       uid: 0,
       limit: 100,
       offset: 1
-    },//请求参数
+    },
     userCreatedPlaylist: [],//用户创建歌单
     userCollectPlaylist: [],//用户收藏歌单
-    userRecord: [],//播放记录
+    /** 听歌排行数据 */
+    userRecord: [],
     userRecordParams: {
       uid: 0,
       type: 0,//0:最近一周，1：所有时间
-    },//请求参数
+    },
+    /** 用户动态数据 */
     userEvents: {
       events: [
         {
@@ -49,6 +53,7 @@ export const useUserDetailStore = defineStore("userDetail", {
             likedCount: 0,//点赞
             commentCount: 0,//评论数 
             shareCount: 0,//分享数
+            threadId: "A_EV_2_6559519865_32953014",//动态id
           },
           json: {
             msg: '',//动态内容
@@ -61,13 +66,60 @@ export const useUserDetailStore = defineStore("userDetail", {
       lasttime: 0,
       more: false,
       size: 2
-    },//用户动态
+    },
     userEventParams: {
       uid: 0,
       limit: 30,
       lasttime: -1,
-    },//请求参数
-    activeTab: 'create'//默认激活tab
+    },
+    /** 用户动态评论数据*/
+    userComment: {
+      oldThreadId: "A_EV_2_6559519865_32953014",//接收的动态id
+      comments: [
+        {
+          user: {
+            avatarUrl: '',//头像
+            nickname: '',//昵称
+            userId: 0,//用户id
+          },
+          commentId: 0,
+          content: "回复内容",
+          time: 1663413438203,//时间戳
+          timeStr: "昨天19:17"
+        }
+      ],
+      more: false,
+      total: 0,
+      userId: 0,
+    },
+    /** 用户关注数据 */
+    userFollows: {
+      follow: [],
+      more: false,
+    },
+    userFollowsParams: {
+      uid: 0,
+      limit: 30,
+      offset: 1,
+    },
+    /** 用户粉丝数据 */
+    userFolloweds: {
+      followeds: [{
+        avatarDetail: {
+          identityIconUrl: '',//vip图标
+        },
+        vipRights: {}
+      }],
+      more: false,
+      size: 0,
+    },
+    userFollowedsParams: {
+      uid: 0,
+      limit: 30,
+      offset: 1,
+    },
+    /** 默认激活tab */
+    activeTab: 'create'
   }),
   getters: {},
   actions: {
@@ -110,15 +162,35 @@ export const useUserDetailStore = defineStore("userDetail", {
       this.userEvents = res.data
       console.log("获取用户动态", this.userEvents);
     },
-    // 获取动态评论
-    async get_commentEvent() {
-      const res = await useCommentEvent()
+    // 获取动态评论,需要获取用户动态的threadId
+    async get_commentEvent(threadId) {
+      // 如果threadId没有更新就不请求
+      if (this.userComment.oldThreadId == threadId) return
+      const res = await useCommentEvent(threadId)
+      this.userComment = res.data//更新数据
+      this.userComment.oldThreadId = threadId//更新threadId
       console.log("获取动态评论", res.data);
     },
     // 获取用户关注列表
-    async get_userFollows() {
-      const res = await useUserFollows()
-      console.log("获取动态评论", res.data);
+    async get_userFollows(uid) {
+      this.userFollowsParams.uid = uid
+      const res = await useUserFollows(this.userFollowsParams)
+      if (res.data.more == false) {
+        this.userFollows = res.data
+      }
+      else {
+        this.userFollows.more = res.data.more
+        // 合并旧数据
+        this.userFollows.follow = [...this.userFollows.follow, ...res.data.follow]
+      }
+      console.log("获取用户关注列表", res.data);
+    },
+    // 获取用户粉丝列表
+    async get_userFolloweds(uid) {
+      this.userFollowedsParams.uid = uid
+      const res = await useUserFolloweds(this.userFollowedsParams)
+      this.userFolloweds = res.data
+      console.log("获取用户粉丝列表", res.data);
     },
   }
 })

@@ -22,7 +22,7 @@
           <!-- </el-scrollbar> -->
         </el-main>
         <!-- 回到顶部 -->
-        <el-backtop :bottom="100" target="#myMain" />
+        <el-backtop target="#myMain" :bottom="90" :right="20" />
         <el-footer>
           <Footer />
         </el-footer>

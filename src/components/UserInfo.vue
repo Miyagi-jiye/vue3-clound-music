@@ -30,11 +30,11 @@
         <span>{{loginData.profile.eventCount}}</span>
         <p>动态</p>
       </div>
-      <div class="item">
+      <div class="item" @click="routerPush('userDetail',loginData.profile.userId,'follow')">
         <span>{{loginData.profile.follows}}</span>
         <p>关注</p>
       </div>
-      <div class="item">
+      <div class="item" @click="routerPush('userDetail',loginData.profile.userId,'fans')">
         <span>{{loginData.profile.followeds}}</span>
         <p>粉丝</p>
       </div>
