@@ -1,5 +1,5 @@
 import http from "@/axios/index.js";
-// let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"//????????
+let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"
 
 /*______________________________________登录__________________________________________*/
 // 登录接口
@@ -8,7 +8,7 @@ export function useLogin(obj) {
     method: "post",
     url: "/login/cellphone",
     data: {
-      // cookie: cookie,//跨域的时候需要cookie
+      cookie: cookie,//跨域的时候需要cookie
       phone: obj.phone,
       password: obj.password
     }

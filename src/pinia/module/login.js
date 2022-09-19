@@ -36,7 +36,12 @@ export const useLoginStore = defineStore("login", {
     visitorCookie: '',//游客cookie
     dialogVisible: false,//登录弹出框
   }),
-  getters: {},
+  getters: {
+    // cookie
+    getCookie(state) {
+      return state.loginData.cookie
+    }
+  },
   actions: {
     // 登录
     async get_login() {
@@ -76,8 +81,6 @@ export const useLoginStore = defineStore("login", {
       const res = await useLogout()
       if (res.data.code == 200) {
         this.isLogin = false//登录状态
-        this.loginData = {}//清空数据
-        this.loginParams = {}
         ElMessage.success({ message: '退出成功' })
       }
       console.log("退出登录", res.data);
