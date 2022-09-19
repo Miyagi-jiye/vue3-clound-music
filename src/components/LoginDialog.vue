@@ -22,11 +22,11 @@
               <span>{{loginData.profile.eventCount}}</span>
               <p>动态</p>
             </div>
-            <div class="item">
+            <div class="item" @click="routerPush('userDetail',loginData.profile.userId,'follow')">
               <span>{{loginData.profile.follows}}</span>
               <p>关注</p>
             </div>
-            <div class="item">
+            <div class="item" @click="routerPush('userDetail',loginData.profile.userId,'fans')">
               <span>{{loginData.profile.followeds}}</span>
               <p>粉丝</p>
             </div>
@@ -99,7 +99,9 @@ const cardMouseEnter = () => {
 }
 // 卡片鼠标移出
 const cardMouseLeave = () => {
-  showCard.value = false
+  timer = setTimeout(() => {
+    showCard.value = false
+  }, 300);
   // console.log("4", showCard.value);
 }
 </script>
@@ -160,7 +162,7 @@ const cardMouseLeave = () => {
         color: #34d399;
       }
 
-      // 关注
+      // 动态，关注，粉丝
       .followGroup {
         display: flex;
         flex-direction: row;
@@ -176,6 +178,7 @@ const cardMouseLeave = () => {
           transition: .3s;
 
           &:hover {
+            cursor: pointer;
             color: #00aeec;
 
             p {
@@ -185,7 +188,6 @@ const cardMouseLeave = () => {
 
           span {
             font-size: 18px;
-            cursor: pointer;
           }
 
           p {

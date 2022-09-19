@@ -69,7 +69,7 @@ app.use(VueLazyLoad, {
     //   console.log('loaded', el)
     // }
   },
-  delay: 500//手动延时
+  // delay: 500//手动延时
 })
 
 app.mount('#app')

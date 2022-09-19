@@ -135,7 +135,10 @@ watch(activeTab, () => {
 })
 // 监听路由参数id的变化
 watch(() => route.query, () => {
-  init()
+  // 只在当前页触发
+  if (route.name == "userDetail") {
+    init()
+  }
 })
 // 分页点击事件
 const emitPage = (name) => {

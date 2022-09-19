@@ -15,6 +15,9 @@
 import { ref, reactive } from "vue"
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from "element-plus";
+import { useLoginStore } from "@/pinia/module/login.js"
+import { storeToRefs } from "pinia";
+const { loginData, isLogin } = storeToRefs(useLoginStore())
 // 路由
 const router = useRouter()
 const route = useRoute()
@@ -36,7 +39,7 @@ const menuStore = reactive([
     id: 2,
     groupName: '我的音乐',
     children: [
-      { name: '我喜欢', icon: 'icon-like' },
+      { name: '我喜欢', icon: 'icon-like', path: '/myLike' },
       { name: '本地歌曲', icon: 'icon-computer' },
       { name: '下载歌曲', icon: 'icon-download-three' },
       { name: '最近播放', icon: 'icon-play-two' }
@@ -46,12 +49,16 @@ const menuStore = reactive([
 // 点击激活菜单跳转相应页面
 const currentActive = (item) => {
   currentPath.value = item.path;
-  console.log(item.path);
+  console.log(item);
   if (item.path) {
     router.push(item.path);
   } else {
-    ElMessage.error('暂无该路径');
+    ElMessage.warning('暂未开放');
   }
+}
+// 路由跳转
+const routerPush = (name, id) => {
+  router.push({ name: name, params: { id: id } })
 }
 </script>
 

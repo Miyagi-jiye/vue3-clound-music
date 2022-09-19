@@ -10,6 +10,9 @@ export const useUserDetailStore = defineStore("userDetail", {
       createTime: 0,//创建时间
       level: 0,//等级
       listenSongs: 0,//累计听歌
+      identify: {
+        imageUrl: "",//认证图片
+      },//认证信息
       profile: {
         userId: 0,//用户id
         nickname: "用户名",
@@ -17,6 +20,7 @@ export const useUserDetailStore = defineStore("userDetail", {
         gender: 1,//性别
         avatarUrl: "用户头像",
         backgroundUrl: "背景图片",
+        avatarDetail: null,
         birthday: 0,//生日
         city: 0,//城市代码
         province: 0,//省份代码

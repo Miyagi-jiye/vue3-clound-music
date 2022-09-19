@@ -9,7 +9,7 @@ export const useLoginStore = defineStore("login", {
       password: ""
     },
     loginData: {
-      account: {},
+      account: {},//用户信息
       profile: {
         userId: 0,//用户id
         nickname: "用户名",

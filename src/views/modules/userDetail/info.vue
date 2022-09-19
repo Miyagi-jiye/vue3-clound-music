@@ -4,13 +4,14 @@
       <div class="left">
         <div class="avatar">
           <img :src="userDetail.profile.avatarUrl+'?param=300y300'" :alt="'用户ID='+userDetail.profile.userId">
+          <!-- <img v-if="userDetail.profile.avatarDetail!==null" :src="userDetail.profile.avatarDetail.identityIconUrl"
+            alt="vip" class="vipIcon"> -->
         </div>
       </div>
       <div class="right">
-        <div style="display:flex;gap:10px">
-          <!-- 昵称 -->
+        <!-- 昵称，等级，性别，vip -->
+        <div class="row">
           <div class="nickname">{{userDetail.profile.nickname}}</div>
-          <!-- 等级，性别，vip -->
           <div class="iconGroup">
             <icon-male v-if="userDetail.profile.gender==1" theme="outline" size="20" fill="#002bff" />
             <icon-female v-else-if="userDetail.profile.gender==2" theme="outline" size="20" fill="#ff00f7" />
@@ -18,16 +19,25 @@
             <icon-vip-one v-show="userDetail.profile.vipType !== 0" theme="outline" size="20" fill="#34d399" />
           </div>
         </div>
+        <!-- 认证信息 -->
+        <div class="identify" v-if="userDetail.identify">
+          <img :src="userDetail.identify.imageUrl" :alt="userDetail.identify.imageDesc">
+          <p>{{userDetail.identify.imageDesc}}</p>
+        </div>
         <!-- 私信，关注 -->
-        <div class="btnGroup">
-          <el-button round plain type="success">
+        <div class="btnGroup" v-show="userDetail.profile.userId!==loginData.profile.userId">
+          <el-button round plain type="success" v-show="userDetail.profile.userType==2"
+            @click="routerPush('artistDetail',userDetail.profile.artistId)">
             <icon-entertainment theme="outline" size="16" class="el-icon--left" />歌手页
           </el-button>
           <el-button round plain type="warning">
             <icon-communication theme="outline" size="18" class="el-icon--left" />发私信
           </el-button>
-          <el-button round plain type="danger">
+          <el-button round plain type="danger" v-show="userDetail.profile.followed==false">
             <icon-plus theme="outline" size="18" class="el-icon--left" />关注
+          </el-button>
+          <el-button round plain type="danger" v-show="userDetail.profile.followed==true">
+            <icon-check theme="outline" size="18" class="el-icon--left" />已关注
           </el-button>
         </div>
         <div class="birthday">生日：{{timestampToTime(userDetail.profile.birthday,"年月日")}}</div>
@@ -56,8 +66,18 @@
 </template>
 
 <script setup>
+import { useLoginStore } from "@/pinia/module/login.js"
+import { storeToRefs } from "pinia"
 import city from "@/utils/city.js"//城市代码
 import { timestampToTime } from "@/utils/timestamp.js"//时间戳转换
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+const { loginData } = storeToRefs(useLoginStore())
+
+const routerPush = (name, id) => {
+  router.push({ name: name, params: { id: id } })
+}
 
 defineProps({
   userDetail: {
@@ -75,6 +95,7 @@ defineProps({
         gender: 1,//性别
         avatarUrl: "用户头像",
         backgroundUrl: "背景图片",
+        avatarDetail: null,//头像详情
         birthday: 0,//生日
         city: 0,//城市代码
         province: 0,//省份代码
@@ -111,6 +132,7 @@ const createDayFilter = (day) => {
   margin-left: 0;
 }
 
+// 昵称
 .nickname {
   font-size: 24px;
   font-weight: bold;
@@ -118,6 +140,7 @@ const createDayFilter = (day) => {
   white-space: nowrap;
 }
 
+// 等级性别vip
 .iconGroup {
   display: flex;
   flex-direction: row;
@@ -135,6 +158,25 @@ const createDayFilter = (day) => {
   border: 2px solid #d33434;
   border-radius: 4px;
   cursor: pointer;
+}
+
+// 认证信息
+.identify {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  background-color: #fff1f0ab;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #f56c6c;
+  }
 }
 
 .userDetail-info {
@@ -174,13 +216,24 @@ const createDayFilter = (day) => {
       .avatar {
         width: 160px;
         height: 160px;
+        position: relative;
 
         img {
           border-radius: 50%;
           width: 100%;
           object-fit: cover;
         }
+
+        .vipIcon {
+          width: 30px;
+          height: 30px;
+          position: absolute;
+          right: 0;
+          bottom: 0;
+        }
       }
+
+
     }
 
     .right {
@@ -198,7 +251,10 @@ const createDayFilter = (day) => {
         font-size: 14px;
       }
 
-
+      .row {
+        display: flex;
+        gap: 10px
+      }
 
       .followGroup {
         width: 100%;

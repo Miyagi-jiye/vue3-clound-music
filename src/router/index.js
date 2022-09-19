@@ -110,6 +110,15 @@ const routes = [
         },
       },
       {
+        path: 'myLike',
+        name: 'myLike',
+        component: () => import("@/views/modules/myLike/index.vue"),
+        meta: {
+          menu: 'myLike',
+          keepAlive: true,
+        },
+      },
+      {
         path: 'test',
         name: 'test',
         component: () => import("@/views/modules/test/index.vue"),

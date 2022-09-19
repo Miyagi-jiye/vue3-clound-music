@@ -6,8 +6,8 @@ import { useLoginStore } from "@/pinia/module/login.js"
 import { storeToRefs } from "pinia"
 
 if (import.meta.env.MODE == "development") {
-  // axios.defaults.baseURL = '/api';
-  axios.defaults.baseURL = 'http://guowei.fun:3000';
+  axios.defaults.baseURL = '/api';
+  // axios.defaults.baseURL = 'http://guowei.fun:3000';
 } else if (import.meta.env.MODE == 'production') {
   //跨域代理地址：http://124.223.49.16:9999/wyy 
   //服务器地址：http://guowei.fun:3000
@@ -16,7 +16,7 @@ if (import.meta.env.MODE == "development") {
 // axios.defaults.withCredentials = true;//Cookie跨域
 
 const http = axios.create({
-  // withCredentials: true,// 跨域请求时是否需要使用凭证
+  withCredentials: true,// 跨域请求时是否需要使用凭证
   // baseURL: '/api', //默认请求路径 import.meta.env.VITE_APP_NETEASE_MUSIC_SERVER_ADDR
 });
 

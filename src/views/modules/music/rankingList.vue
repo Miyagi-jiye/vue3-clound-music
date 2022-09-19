@@ -66,7 +66,7 @@ const playMusic = (id) => {
 
   .vfor {
     width: 100%;
-    height: auto;
+    height: 160px;
     display: flex;
     flex-direction: row;
     align-items: center;

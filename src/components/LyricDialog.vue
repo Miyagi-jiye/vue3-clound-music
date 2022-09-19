@@ -67,7 +67,7 @@ const showView = () => {
     lyricShow.value = false
     i = 0
   }
-  console.log(i);
+  console.log("切换显示界面", i);
 }
 const prop = defineProps({
   currentPlayMusic: {

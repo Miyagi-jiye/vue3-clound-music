@@ -18,7 +18,7 @@
           <icon-plus theme="filled" size="16" :strokeWidth="3" class="icon" />
           <p>关注</p>
         </div>
-        <div class="follow" v-show="item.followed==true">
+        <div class="follow" v-show="item.followed==true&&item.mutual==false">
           <p class="follow-true">已关注</p>
         </div>
         <div class="follow" v-show="item.followed==true&&item.mutual==true">

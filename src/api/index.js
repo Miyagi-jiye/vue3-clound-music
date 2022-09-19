@@ -1,5 +1,5 @@
 import http from "@/axios/index.js";
-let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"//????????
+// let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"//????????
 
 /*______________________________________登录__________________________________________*/
 // 登录接口
@@ -8,7 +8,7 @@ export function useLogin(obj) {
     method: "post",
     url: "/login/cellphone",
     data: {
-      cookie: cookie,
+      // cookie: cookie,//跨域的时候需要cookie
       phone: obj.phone,
       password: obj.password
     }
@@ -741,5 +741,30 @@ export function useUserRecord(obj) {
       uid: obj.uid,
       type: obj.type
     }
+  });
+}
+// 获取每日推荐歌单(登录后调用)
+export function useRecommendResource() {
+  return http({
+    method: "get",
+    url: "/recommend/resource"
+  });
+}
+// 获取每日推荐歌曲(登录后调用)
+export function useRecommendSongs() {
+  return http({
+    method: "get",
+    url: "/recommend/songs"
+  });
+}
+// 喜欢音乐列表(登录后调用)
+// 必选参数 : uid: 用户 id
+// 接口地址 : /likelist
+// 调用例子 : /likelist?uid=32953014
+export function useLikelist(uid) {
+  return http({
+    method: "get",
+    url: "/likelist",
+    params: { uid: uid }
   });
 }

@@ -78,7 +78,7 @@ import Footer from "@/views/layout/components/footer/footer.vue";
   border-bottom: 1px solid var(--el-border-color);
   box-sizing: border-box;
   /* 溢出显示滚动 */
-  overflow: auto;
+  // overflow: auto;
 }
 
 .el-main {
