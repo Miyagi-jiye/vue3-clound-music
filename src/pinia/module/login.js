@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useLogin, useLoginStatus, useLogout, useRegisterAnonimous } from "@/api/index.js"
+import { useRecommendSongs, useRecommendResource, useLogin, useLoginStatus, useLogout, useRegisterAnonimous, useLoginQrKey, useLoginQrCreate, useLoginQrCheck, useUserAccount } from "@/api/index.js"
 import { ElMessage } from 'element-plus'
 
 export const useLoginStore = defineStore("login", {
@@ -32,9 +32,11 @@ export const useLoginStore = defineStore("login", {
       token: '',
       cookie: ''
     },
-    isLogin: false,
+    isLogin: false,//是否登录
     visitorCookie: '',//游客cookie
     dialogVisible: false,//登录弹出框
+    loginQrKey: '',//登录二维码key
+    loginQrUrl: '',//登录二维码url
   }),
   getters: {
     // cookie
@@ -66,11 +68,9 @@ export const useLoginStore = defineStore("login", {
           })
           this.loginData = res.data
           this.isLogin = true//登录状态
-          this.dialogVisible = false
-          // this.loginData.token = "bearer" + this.loginData.token//格式化token
+          this.dialogVisible = false//关闭登录弹出框
           console.log("登录成功", res.data);
-          const res1 = await useLoginStatus()
-          console.log("登录状态", res1.data);
+          return res.data
         }
       } catch (error) {
         console.log("登录捕获错误", error);
@@ -91,6 +91,37 @@ export const useLoginStore = defineStore("login", {
       this.visitorCookie = res.data.cookie
       console.log("获取游客cookie", res.data);
     },
+    // 获取二维码key
+    async get_loginQrKey() {
+      const res = await useLoginQrKey();
+      this.loginQrKey = res.data.data.unikey
+      console.log("获取二维码key", res.data);
+    },
+    // 获取二维码
+    async get_loginQrCreate() {
+      const res = await useLoginQrCreate(this.loginQrKey);
+      this.loginQrUrl = res.data.data.qrurl
+      console.log("获取二维码", res.data);
+    },
+    // 检测二维码状态
+    async get_loginQrCheck() {
+      const res = await useLoginQrCheck(this.loginQrKey);
+      console.log("检测二维码状态", res.data);
+      return res.data
+    },
+    // 获取用户信息
+    async get_userAccount() {
+      const res = await useUserAccount();
+      this.loginData = res.data
+      console.log("获取用户信息", res.data);
+      return res.data
+    },
+    // 获取登录状态(没有效果)
+    async get_loginStatus() {
+      const res = await useLoginStatus();
+      console.log("获取登录状态", res.data);
+    },
+
   },
   // 开启数据持久化
   persist: true,

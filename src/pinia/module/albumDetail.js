@@ -3,7 +3,10 @@ import { useAlbum, useCommentAlbum } from "@/api/index.js";
 
 export const useAlbumDetailStore = defineStore("albumDetail", {
   state: () => ({
-    album: {},//专辑详情
+    album: {
+      album: {},
+      songs: []
+    },//专辑详情
     commentAlbum: {
       comments: [],
       hotComments: [],

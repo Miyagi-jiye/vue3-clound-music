@@ -117,12 +117,20 @@ export const usePlaylistStore = defineStore("playlist", {
       return res.data;
     },
     // 添加歌单全部歌曲到播放列表
-    push_musicToPlayList() {
-      this.toPlayList = this.playlist.tracks;
-      if (this.toPlayList.length !== 0) {
-        this.change_playMusic(this.toPlayList[0])// 从歌单第一首开始播放
+    push_musicToPlayList(array) {
+      // 如果有传递参数
+      if (array) {
+        this.toPlayList = array
+        if (this.toPlayList.length !== 0) {
+          this.change_playMusic(this.toPlayList[0])// 从歌单第一首开始播放
+        }
       } else {
-        return false
+        this.toPlayList = this.playlist.tracks;
+        if (this.toPlayList.length !== 0) {
+          this.change_playMusic(this.toPlayList[0])// 从歌单第一首开始播放
+        } else {
+          return false
+        }
       }
     },
     // 改变当前播放音乐

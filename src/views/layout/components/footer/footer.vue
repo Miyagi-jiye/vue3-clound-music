@@ -204,6 +204,17 @@ watch(
     console.log("歌曲id发生变化", currentPlayMusic.value.id);
     playIconClick()//播放
   })
+// 监听播放状态的变化
+watch(
+  () => audioStatus.value,
+  () => {
+    console.log("播放状态发生变化", audioStatus.value);
+    if (audioStatus.value) {
+      playIconClick()//播放
+    } else {
+      pauseIconClick()//暂停
+    }
+  })
 </script>
 
 <style lang="less" scoped>

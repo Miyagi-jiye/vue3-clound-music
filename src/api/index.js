@@ -1,5 +1,7 @@
 import http from "@/axios/index.js";
+import { Data } from "@icon-park/vue-next";
 let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"
+// const cookie = "MUSIC_U=0eebe54dffcc5593e42fb58092670c612c3ebb7c08b31fe934909f3d1842087b519e07624a9f005371501b74f8cc7569ff0179c5ff5fe40811d460498fba833256458de2dffffeb17a561ba977ae766d; __remember_me=true; __csrf=bb8a8ca4d3daea80583b250f49a6c4bf; NMTID=00Ouj5ZYuCPBozm7kQRiebN3D2MgE0AAAGDVozZag"
 
 /*______________________________________登录__________________________________________*/
 // 登录接口
@@ -8,10 +10,10 @@ export function useLogin(obj) {
     method: "post",
     url: "/login/cellphone",
     data: {
-      cookie: cookie,//跨域的时候需要cookie
+      // cookie: cookie,//跨域的时候需要cookie
       phone: obj.phone,
-      password: obj.password
-    }
+      password: obj.password,
+    },
   });
 }
 // 退出登录
@@ -25,7 +27,15 @@ export function useLogout() {
 export function useLoginStatus() {
   return http({
     method: "get",
-    url: "/login/status"
+    url: "/login/status",
+    timestamp: Date.now() //防止缓存
+  });
+}
+// 刷新登录
+export function useLoginRefresh() {
+  return http({
+    method: "get",
+    url: "/login/refresh"
   });
 }
 // 获取游客cookie
@@ -33,6 +43,48 @@ export function useRegisterAnonimous() {
   return http({
     method: "get",
     url: "/register/anonimous",
+  });
+}
+// 1. 二维码 key 生成接口
+export function useLoginQrKey() {
+  return http({
+    method: "get",
+    url: "/login/qr/key",
+    params: {
+      timestamp: Date.now() //防止缓存
+    }
+  });
+}
+// 2. 二维码生成接口
+// 必选参数: key,由第一个接口生成
+// 可选参数: qrimg 传入后会额外返回二维码图片 base64 编码
+export function useLoginQrCreate(key) {
+  return http({
+    method: "get",
+    url: "/login/qr/create",
+    params: {
+      key: key,
+      qrimg: true,
+      timestamp: Date.now()
+    },
+  });
+}
+// 3. 二维码检测扫码状态接口
+// 必选参数: key,由第一个接口生成
+// 轮询此接口可获取二维码扫码状态,
+// 800 为二维码过期,
+// 801 为等待扫码,
+// 802 为待确认,
+// 803 为授权登录成功(803 状态码下会返回 cookies)
+export function useLoginQrCheck(key) {
+  return http({
+    method: "get",
+    url: "/login/qr/check",
+    params: {
+      key: key,
+      qrimg: true,
+      timestamp: Date.now()
+    },
   });
 }
 /*______________________________________首页推荐__________________________________________*/
@@ -760,11 +812,21 @@ export function useRecommendSongs() {
 // 喜欢音乐列表(登录后调用)
 // 必选参数 : uid: 用户 id
 // 接口地址 : /likelist
-// 调用例子 : /likelist?uid=32953014
 export function useLikelist(uid) {
   return http({
     method: "get",
     url: "/likelist",
     params: { uid: uid }
+  });
+}
+// 获取私人 FM(登录后调用)
+export function usePersonalFm() {
+  return http({
+    method: "get",
+    url: "/personal_fm",
+    // 时间戳
+    params: {
+      timestamp: Date.now()
+    }
   });
 }

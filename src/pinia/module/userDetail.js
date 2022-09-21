@@ -179,7 +179,7 @@ export const useUserDetailStore = defineStore("userDetail", {
     async get_userFollows(uid) {
       this.userFollowsParams.uid = uid
       const res = await useUserFollows(this.userFollowsParams)
-      if (res.data.more == false) {
+      if (this.userFollows.more == false) {
         this.userFollows = res.data
       }
       else {

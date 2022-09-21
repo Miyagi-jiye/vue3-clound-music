@@ -1,5 +1,5 @@
 <template>
-  <div class="myLike" v-if="likeListSongs">
+  <div class="myLike">
     <!-- 标题 -->
     <div class="title" :style="{backgroundImage:'url('+likeListSongs[0].al.picUrl+')'}">
       <div class="mask">
@@ -42,12 +42,14 @@
 </template>
 
 <script setup>
-import PlayAllButton from "@/components/PlayAllButton.vue";
+import PlayAllButton from "@/components/PlayAllButton.vue";// 播放全部按钮
 import SongListTag from "@/components/SongListTag.vue";//歌曲列表tag
 import { usePlaylistStore } from "@/pinia/module/playlist.js"
 import { useMyLikeStore } from "@/pinia/module/myLike.js"
 import { useLoginStore } from "@/pinia/module/login.js"
 import { storeToRefs } from "pinia";
+// import { defineAsyncComponent } from "vue";// 异步组件
+// const a = defineAsyncComponent(() => import("@/components/PlayAllButton.vue"))//异步组件
 // 歌单列表
 const { currentPlayMusic } = storeToRefs(usePlaylistStore())
 const { change_playMusic, push_toPlayList } = usePlaylistStore()//改变当前播放对象,添加到播放列表

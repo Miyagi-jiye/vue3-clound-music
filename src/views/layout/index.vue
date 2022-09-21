@@ -15,7 +15,18 @@
           <router-view v-slot="{ Component }">
             <Transition name="slide-fade">
               <!-- <KeepAlive> -->
-              <component :is="Component" />
+              <Suspense>
+                <!-- 主要内容 -->
+                <component :is="Component" />
+                <!-- 加载中状态 -->
+                <template #fallback>
+                  正在加载...
+                  正在加载...
+                  正在加载...
+                  正在加载...
+                  正在加载...
+                </template>
+              </Suspense>
               <!-- </KeepAlive> -->
             </Transition>
           </router-view>

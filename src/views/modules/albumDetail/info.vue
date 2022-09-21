@@ -1,27 +1,26 @@
 <template>
   <div class="info">
-    <!-- <img :src="album.picUrl + '?param=180y180'" alt="" class="filter"> -->
     <div class="flex">
       <div class="left">
-        <img :src="album.picUrl + '?param=180y180'" alt="封面">
+        <img :src="myData.album.picUrl + '?param=180y180'" alt="封面">
       </div>
       <div class="right">
-        <p class="title">{{ album.name }}</p>
+        <p class="title">{{ myData.album.name }}</p>
         <!-- 改动部分 -->
         <div class="alias">
-          <p v-for="item in album.artists">{{ item.name }}</p>
+          <p v-for="item in myData.album.artists">{{ item.name }}</p>
         </div>
         <!-- 改动部分 -->
         <div class="box">
-          <p>发布时间：{{ timestampToTime(album.publishTime) }}</p>
-          <p v-if="album.subType">音源：{{ album.subType }}</p>
-          <p v-if="album.company">版权：{{ album.company }}</p>
+          <p>发布时间：{{ timestampToTime(myData.album.publishTime) }}</p>
+          <p v-if="myData.album.subType">音源：{{ myData.album.subType }}</p>
+          <p v-if="myData.album.company">版权：{{ myData.album.company }}</p>
         </div>
         <div class="description">
-          <MoreText :text="album.description" :end="90" v-if="album.description" />
+          <MoreText :text="myData.album.description" :end="90" v-if="myData.album.description" />
         </div>
         <!-- 全部播放 -->
-        <PlayAllButton />
+        <PlayAllButton :myData="myData.songs" />
       </div>
     </div>
   </div>
@@ -32,18 +31,23 @@ import MoreText from '@/views/modules/playlist/MoreText.vue'// 更多详情组�
 import PlayAllButton from "@/components/PlayAllButton.vue"//全部播放，收藏，更多
 
 defineProps({
-  album: {
+  myData: {
     type: Object,
-    default: () => ({
-      id: 0,//专辑id
-      // description: '描述',
-      name: '专辑名',
-      picUrl: '',
-      subType: "音源",
-      company: "版权",
-      artists: [{ name: "歌手" }],
-      publishTime: 123456
-    })
+    default: () => (
+      {
+        album: {
+          id: 0,//专辑id
+          // description: '描述',
+          name: '专辑名',
+          picUrl: '',
+          subType: "音源",
+          company: "版权",
+          artists: [{ name: "歌手" }],
+          publishTime: 123456
+        },
+        songs: []
+      }
+    )
   }
 })
 /* 时间戳转换为时间 */

@@ -111,8 +111,6 @@ init()
 console.log(route.query);
 // 监听激活tab变化
 watch(activeTab, () => {
-  // 清空关注数据
-  userFollows.value.follow = []
 
   if (activeTab.value == 'create') {
     get_userPlaylist(route.query.id)//获取用户歌单
@@ -133,10 +131,14 @@ watch(activeTab, () => {
     get_userFolloweds(route.query.id)//获取用户粉丝
   }
 })
-// 监听路由参数id的变化
+// 监听路由参数的变化
 watch(() => route.query, () => {
   // 只在当前页触发
   if (route.name == "userDetail") {
+    // 先清空上一个用户的关注数据
+    userFollows.value.follow = []
+    userFollows.value.more = false
+    userFollowsParams.value.offset = 1
     init()
   }
 })

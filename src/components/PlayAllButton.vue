@@ -16,16 +16,16 @@
 
 <script setup>
 import { usePlaylistStore } from "@/pinia/module/playlist.js"//播放列表
-import { useAlbumDetailStore } from "@/pinia/module/albumDetail.js"//专辑详情
-import { storeToRefs } from "pinia";
 
-const { album } = storeToRefs(useAlbumDetailStore())//专辑数据
-const { toPlayList, currentPlayMusic } = storeToRefs(usePlaylistStore())//播放列表数据
+const { push_musicToPlayList } = usePlaylistStore()//播放列表方法
 
+// 接收歌单数据[{}]
+const prop = defineProps({
+  myData: Array
+})
 // 全部播放
 const playAll = () => {
-  toPlayList.value = album.value.songs
-  currentPlayMusic.value = album.value.songs[0]
+  push_musicToPlayList(prop.myData)
 }
 </script>
 

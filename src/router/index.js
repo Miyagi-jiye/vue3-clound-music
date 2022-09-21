@@ -119,6 +119,15 @@ const routes = [
         },
       },
       {
+        path: 'dailySongs',
+        name: 'dailySongs',
+        component: () => import("@/views/modules/dailySongs/index.vue"),
+        meta: {
+          menu: 'dailySongs',
+          keepAlive: true,
+        },
+      },
+      {
         path: 'test',
         name: 'test',
         component: () => import("@/views/modules/test/index.vue"),

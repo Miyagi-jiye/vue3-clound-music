@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    <p>{{  title  }}</p>
+    <p>{{ title }}</p>
     <icon-right theme="outline" size="22" :strokeWidth="2" />
   </div>
 </template>
@@ -22,7 +22,10 @@ defineProps({
   align-content: center;
   justify-content: flex-start;
   flex-wrap: nowrap;
-  font-size: 18px;
-  margin: 20px 0;
+  // font-size: 18px;
+  font-size: 30px;
+  font-weight: bold;
+  width: 100%;
+  padding: 30px 0;
 }
 </style>

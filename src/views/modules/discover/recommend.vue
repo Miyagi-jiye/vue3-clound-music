@@ -10,7 +10,8 @@
           @click="playMusic(item.id)" />
         <div class="playCount">
           <icon-headset theme="filled" size="12" :strokeWidth="4" />
-          <text>{{ playCountFilter(item.playCount) }}</text>
+          <text v-if="item.playCount">{{ playCountFilter(item.playCount) }}</text>
+          <text v-else-if="item.playcount">{{ playCountFilter(item.playcount) }}</text>
         </div>
       </div>
       <div class="name">

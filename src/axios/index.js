@@ -6,10 +6,10 @@ import { storeToRefs } from "pinia"
 
 if (import.meta.env.MODE == "development") {
   // axios.defaults.baseURL = 'http://localhost:3000';//本地环境
-  axios.defaults.baseURL = 'http://guowei.fun:3000';
+  // axios.defaults.baseURL = 'http://guowei.fun:3000';
+  axios.defaults.baseURL = '/api';//代理环境
 } else if (import.meta.env.MODE == 'production') {
   axios.defaults.baseURL = 'http://guowei.fun:3000';
-  //跨域代理地址：http://124.223.49.16:9999/wyy 
 }
 // axios.defaults.withCredentials = true;//Cookie跨域
 

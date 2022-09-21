@@ -67,6 +67,7 @@ const routerPush = (name, id) => {
     cursor: pointer;
 
     &:hover {
+      border-radius: 8px;
       background-color: var(--my-hover-background-color);
     }
 

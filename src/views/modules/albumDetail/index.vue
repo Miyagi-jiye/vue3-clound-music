@@ -1,6 +1,6 @@
 <template>
   <div class="albumDetail" v-if="album.songs">
-    <Info :album="album.album" class="info" />
+    <Info :myData="album" class="info" />
     <el-tabs v-model="activeTab" class="tab">
       <el-tab-pane lazy :label="`歌曲 ${album.songs.length}`" name="tracks">
         <SongList :tracks="album.songs" :options="1" class="songList" />
