@@ -1,24 +1,7 @@
 <template>
   <div class="myLike">
-    <!-- 标题 -->
-    <div class="title" :style="{backgroundImage:'url('+likeListSongs[0].al.picUrl+')'}">
-      <div class="mask">
-        <div class="left hidden-less-600">
-          <p class="day">{{day}}</p>
-        </div>
-        <div class="right">
-          <div class="top">
-            <p>每日歌曲推荐</p>
-            <p>根据你的音乐口味生成，每天6:00更新</p>
-          </div>
-          <PlayAllButton />
-        </div>
-      </div>
-    </div>
-    <!-- 功能栏 -->
     <!-- 歌曲列表 -->
-    <div v-for="(item,index) in likeListSongs" :key="index" class="vfor" @dblclick="play(item)"
-      :class="{activeSong:currentPlayMusic.id == item.id }">
+    <div v-for="(item,index) in likeListSongs" :key="index" class="vfor" @dblclick="play(item)">
       <div class="left">{{index+1}}</div>
       <img v-lazy="item.al.picUrl+'?param=50y50'" :alt="'歌曲ID='+item.id" class="img hidden-less-400">
       <div class="center">
@@ -42,17 +25,10 @@
 </template>
 
 <script setup>
-import PlayAllButton from "@/components/PlayAllButton.vue";// 播放全部按钮
 import SongListTag from "@/components/SongListTag.vue";//歌曲列表tag
-import { usePlaylistStore } from "@/pinia/module/playlist.js"
 import { useMyLikeStore } from "@/pinia/module/myLike.js"
 import { useLoginStore } from "@/pinia/module/login.js"
 import { storeToRefs } from "pinia";
-// import { defineAsyncComponent } from "vue";// 异步组件
-// const a = defineAsyncComponent(() => import("@/components/PlayAllButton.vue"))//异步组件
-// 歌单列表
-const { currentPlayMusic } = storeToRefs(usePlaylistStore())
-const { change_playMusic, push_toPlayList } = usePlaylistStore()//改变当前播放对象,添加到播放列表
 // 我喜欢
 const { likeListSongs } = storeToRefs(useMyLikeStore())
 const { get_likeList, get_songDetailAll } = useMyLikeStore()//获取歌曲详情
@@ -65,18 +41,11 @@ const init = async () => {
   get_songDetailAll()//获取歌曲详情
 }
 
-let day = new Date().getDate()
 // 是否已经有了数据，没有则初始化请求数据
 if (likeListSongs.value.length == 0) {
   init()
 }
 
-// 播放音乐
-const play = async (obj) => {
-  await change_playMusic(obj)
-  await push_toPlayList(obj)
-  console.log(currentPlayMusic.value);
-}
 </script>
 
 <style lang="less" scoped>
@@ -85,59 +54,6 @@ const play = async (obj) => {
   color: #16da92 !important;
   border-radius: 4px !important;
   background-color: var(--my-hover-background-color) !important;
-}
-
-.title {
-
-  .mask {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(4px);
-    // 布局
-    display: flex;
-    flex-direction: row;
-
-    .left {
-      width: 200px;
-      padding: 20px;
-      position: relative;
-      // 居中
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-
-      .day {
-        font-size: 60px;
-        font-weight: 700;
-        color: #fff;
-        text-shadow: 0 0 10px #000;
-      }
-    }
-
-    .right {
-      flex: 1;
-      z-index: 1;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-
-      .top {
-        display: flex;
-        flex-direction: column;
-
-        p:nth-child(1) {
-          font-size: 24px;
-          font-weight: 700;
-        }
-
-        p:nth-child(2) {
-          font-size: 14px;
-          margin-top: 10px;
-        }
-      }
-    }
-  }
 }
 
 .myLike {

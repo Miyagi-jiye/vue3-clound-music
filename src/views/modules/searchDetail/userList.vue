@@ -2,8 +2,8 @@
   <div class="userList">
     <div v-for="item in userprofiles" class="vfor">
       <div class="img-box">
-        <img :src="item.avatarUrl+'?param=100y100'" :alt="'用户ID='+item.userId" class="img">
-        <img v-if="item.avatarDetail" :src="item.avatarDetail.identityIconUrl+'?param=10y10'" alt="音乐人图标"
+        <img v-lazy="item.avatarUrl+'?param=100y100'" :alt="'用户ID='+item.userId" class="img">
+        <img v-if="item.avatarDetail" v-lazy="item.avatarDetail.identityIconUrl+'?param=10y10'" alt="音乐人图标"
           class="img-icon">
       </div>
       <p class="nickname whiteSpace" @click="routerPush('userDetail',item.userId)">
@@ -29,20 +29,20 @@ const router = useRouter()
 defineProps({
   userprofiles: {
     type: Array,
-    default: () => [{
-      avatarUrl: "用户头像",
-      backgroundUrl: "背景图片",
-      gender: 0,//0:保密 1:男性 2:女性
-      city: 12456,//城市代码
-      province: 123456,//省份代码
-      nickname: "用户名",
-      signature: "个人签名",
-      vipType: 12,//vip类型
-      userType: 123,//用户类型
-      userId: 123456,//用户id
-      avatarDetail: { identityIconUrl: '音乐人icon' },
-      followeds: 123456,//粉丝数
-    }]
+    // default: () => [{
+    //   avatarUrl: "用户头像",
+    //   backgroundUrl: "背景图片",
+    //   gender: 0,//0:保密 1:男性 2:女性
+    //   city: 12456,//城市代码
+    //   province: 123456,//省份代码
+    //   nickname: "用户名",
+    //   signature: "个人签名",
+    //   vipType: 12,//vip类型
+    //   userType: 123,//用户类型
+    //   userId: 123456,//用户id
+    //   avatarDetail: { identityIconUrl: '音乐人icon' },
+    //   followeds: 123456,//粉丝数
+    // }]
   }
 })
 // 过滤性别

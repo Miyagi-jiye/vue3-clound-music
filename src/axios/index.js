@@ -1,20 +1,16 @@
 import axios from "axios";
 import NProgress from "nprogress"; //引入nprogress 进度条插件
 import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
-import { useLoginStore } from "@/pinia/module/login.js"
-import { storeToRefs } from "pinia"
 
 if (import.meta.env.MODE == "development") {
-  // axios.defaults.baseURL = 'http://localhost:3000';//本地环境
-  // axios.defaults.baseURL = 'http://guowei.fun:3000';
   axios.defaults.baseURL = '/api';//代理环境
 } else if (import.meta.env.MODE == 'production') {
   axios.defaults.baseURL = 'http://guowei.fun:3000';
 }
-// axios.defaults.withCredentials = true;//Cookie跨域
+// axios.defaults.withCredentials = true;
 
 const http = axios.create({
-  withCredentials: true,// 跨域请求时是否需要使用凭证
+  withCredentials: true,// Cookie跨域请求时是否需要使用凭证
   // baseURL: '/api', 
 });
 
@@ -24,9 +20,8 @@ http.interceptors.request.use(
     // 开启进度条
     NProgress.start();
     // 添加 token 验证的 Authorization 字段
-    const { loginData } = storeToRefs(useLoginStore())
     // 如果token存在
-    // if (loginData.value.token !== "") {
+    // if (token) {
     // config.headers['token'] = loginData.value.token
     // config.headers.common['token'] = loginData.value.token
     // config.headers.accessToken = loginData.value.token
@@ -58,7 +53,6 @@ http.interceptors.response.use(
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
     // console.log("响应错误", error);
-    // 对请求错误做些什么
     return Promise.reject(error);
   }
 );

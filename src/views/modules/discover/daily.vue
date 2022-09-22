@@ -1,5 +1,5 @@
 <template>
-  <div class="daily">
+  <div class="discover-daily">
     <!-- 每日推荐 -->
     <div class="left">
       <img :src="dailySongs[0].al.picUrl" alt="每日推荐" class="img">
@@ -91,7 +91,7 @@ const pause = () => {
 </script>
 
 <style lang="less" scoped>
-.daily {
+.discover-daily {
   display: flex;
   flex-direction: row;
   gap: 24px;

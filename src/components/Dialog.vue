@@ -68,7 +68,7 @@ const login = () => {
       const res = await get_login().finally(() => btnLoding.value = false)// 请求结束，按钮关闭加载
       if (res.code === 200) {
         dialogVisible.value = false// 关闭弹框
-        get_userAccount()// 获取用户信息
+        // get_userAccount()// 获取用户信息
         router.push({ path: '/' })// 跳转到首页
       } else {
         ElMessage.error(res.message)

@@ -13,7 +13,7 @@
 defineProps({
   artists: {
     type: Array,
-    default: () => []
+    default: []
   }
 })
 const emit = defineEmits(['routerEmit'])

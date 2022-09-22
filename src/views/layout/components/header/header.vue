@@ -7,7 +7,7 @@
       </div>
       <div class="right">
         <LoginDialog />
-        <FullScreenIcon iconSize="20" />
+        <!-- <FullScreenIcon iconSize="20" /> -->
         <HamburgerIcon iconSize="28" class="hidden-more-800" />
       </div>
     </div>

@@ -1,9 +1,9 @@
 <template>
-  <div class="banner">
+  <div class="discover-banner" v-if="myData">
     <Swiper slides-per-group-auto slides-per-view="auto" :navigation="true" :grab-cursor="true">
-      <SwiperSlide v-for="item in myData" :key="item.imageUrl">
+      <SwiperSlide v-for="(item,index) in myData" :key="index">
         <img v-if="item.imageUrl" v-img-lazy="item.imageUrl + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
-          class="banner-image"/>
+          class="banner-image" />
         <img v-else-if="item.pic" v-img-lazy="item.pic + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
           class="banner-image" />
       </SwiperSlide>
@@ -18,7 +18,7 @@ import "swiper/css"; // 引入Swiper样式
 defineProps({
   myData: {
     type: Array,
-    default: () => [{ imageUrl: "", pic: "" }],
+    // default: () => [{ imageUrl: "", pic: "" }],
   },
 });
 </script>

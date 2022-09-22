@@ -1,6 +1,5 @@
 import http from "@/axios/index.js";
-import { Data } from "@icon-park/vue-next";
-let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"
+// let cookie = "NMTID=00O2zdMzw3ro2vamEYruQj_KNE_T_wAAAGDRp9Odw"
 // const cookie = "MUSIC_U=0eebe54dffcc5593e42fb58092670c612c3ebb7c08b31fe934909f3d1842087b519e07624a9f005371501b74f8cc7569ff0179c5ff5fe40811d460498fba833256458de2dffffeb17a561ba977ae766d; __remember_me=true; __csrf=bb8a8ca4d3daea80583b250f49a6c4bf; NMTID=00Ouj5ZYuCPBozm7kQRiebN3D2MgE0AAAGDVozZag"
 
 /*______________________________________登录__________________________________________*/
@@ -14,6 +13,10 @@ export function useLogin(obj) {
       phone: obj.phone,
       password: obj.password,
     },
+    // params: {
+    //   phone: obj.phone,
+    //   password: obj.password,
+    // }
   });
 }
 // 退出登录
@@ -505,6 +508,16 @@ export function useMvExclusiveRcmd() {
   });
 }
 /*______________________________________视频__________________________________________*/
+// 获取推荐视频
+// 可选参数 : offset: 默认 0
+// 接口地址 : /video/timeline/recommend
+export function useVideoTimelineRecommend(offset) {
+  return http({
+    method: "get",
+    url: "/video/timeline/recommend",
+    params: { offset: offset * 8 }
+  });
+}
 // 获取视频标签列表
 export function useVideoGroupList() {
   return http({

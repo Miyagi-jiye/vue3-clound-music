@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="discover-recommend">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="cardImg">
         <img v-if="item.picUrl" class="discoverImg" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
@@ -49,7 +49,7 @@ const playMusic = async (id) => {
 </script>
 
 <style lang="less" scoped>
-.recommend {
+.discover-recommend {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 20px;

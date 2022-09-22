@@ -2,12 +2,12 @@
   <div class="info">
     <div class="flex">
       <div class="left">
-        <img :src="myData.coverImgUrl + '?param=180y180'" alt="封面">
+        <img v-lazy="myData.coverImgUrl + '?param=180y180'" alt="封面">
       </div>
       <div class="right">
         <p class="title">{{ myData.name }}</p>
         <div class="box">
-          <img class="avatar" :src="myData.creator.avatarUrl + '?param=40y40'" alt="作者">
+          <img class="avatar" v-lazy="myData.creator.avatarUrl + '?param=40y40'" alt="作者">
           <span class="nickname">{{ myData.creator.nickname }}</span>
           <div class="tags">
             <a v-for="item in myData.tags" :key="item">#{{ item }}</a>
@@ -45,17 +45,17 @@ const { push_musicToPlayList } = usePlaylistStore()
 defineProps({
   myData: {
     type: Object,
-    default: () => ({
-      coverImgUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-      name: '默认标题',
-      creator: {
-        avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-        nickname: '默认昵称',
-        backgroundUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      },
-      tags: ['默认标签1', '默认标签2', '默认标签3'],
-      description: '默认描述'
-    })
+    // default: () => ({
+    //   coverImgUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+    //   name: '默认标题',
+    //   creator: {
+    //     avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+    //     nickname: '默认昵称',
+    //     backgroundUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+    //   },
+    //   tags: ['默认标签1', '默认标签2', '默认标签3'],
+    //   description: '默认描述'
+    // })
   }
 })
 

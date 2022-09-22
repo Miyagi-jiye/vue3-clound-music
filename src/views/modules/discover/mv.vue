@@ -1,24 +1,31 @@
 <template>
-  <div class="MV">
+  <div class="discover-MV">
     <div class="vfor" v-for="item in myData" :key="item.id">
       <div class="mv">
+
         <img v-if="item.picUrl" class="img" v-lazy="item.picUrl + '?param=200y100'" :alt="'MVID=' + item.id"
           :key="item.id">
         <img v-else-if="item.cover" class="img" v-lazy="item.cover + '?param=400y200'" :alt="'MVID=' + item.id">
         <img v-else-if="item.coverUrl" class="img" v-lazy="item.coverUrl + '?param=400y200'" :alt="'MVID=' + item.vid"
           :key="item.vid">
+          
         <div class="playCount">
           <icon-play theme="outline" size="12" :strokeWidth="4" title='播放量/播放时长' />
+
           <p v-if="item.playCount">{{ playCountFilter(item.playCount) }}</p>
           <p v-else-if="item.durationms">{{ formatTime(item.durationms) }}</p>
         </div>
+
         <icon-play-one v-if="item.id" class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
           @click="routerPush('videoDetail', item.id)" />
         <icon-play-one v-else-if="item.vid" class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
           @click="routerPush('videoDetail', item.vid)" />
+
       </div>
+
       <p v-if="item.name" class="name">{{ item.name }}</p>
       <p v-else-if="item.title" class="name">{{ item.title }}</p>
+
       <p v-if="item.artistName" class="artistName" @click="routerPush('artistDetail',item.artistId)">
         {{ item.artistName }}
       </p>
@@ -37,19 +44,19 @@ import { useRouter } from "vue-router"
 defineProps({
   myData: {
     type: Array,
-    default: () => [{
-      id: 123456,
-      vid: 123466,
-      artistId: 123456,//歌手id
-      artistName: '默认作者',
-      name: '默认歌曲',
-      playCount: '默认播放量',
-      picUrl: '',
-      cover: '',
-      coverUrl: '',
-      durationms: 123456,//总时长
-      creator: [{ userId: 123456, userName: "用户名" }]
-    }]
+    // default: () => [{
+    //   id: 123456,
+    //   vid: 123466,
+    //   artistId: 123456,//歌手id
+    //   artistName: '默认作者',
+    //   name: '默认歌曲',
+    //   playCount: '默认播放量',
+    //   picUrl: '',
+    //   cover: '',
+    //   coverUrl: '',
+    //   durationms: 123456,//总时长
+    //   creator: [{ userId: 123456, userName: "用户名" }]
+    // }]
   }
 })
 
@@ -73,7 +80,7 @@ function formatTime(time) {
 </script>
 
 <style lang="less" scoped>
-.MV {
+.discover-MV {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); //自动分配列宽
   grid-gap: 20px;

@@ -2,7 +2,7 @@
   <div class="albumList">
     <div v-for="item in albums" :key="item.id" class="vfor">
       <div class="img-box">
-        <img :src="item.picUrl+'?param=60y60'" :alt="'专辑ID='+item.id" class="img">
+        <img v-lazy="item.picUrl+'?param=60y60'" :alt="'专辑ID='+item.id" class="img">
         <icon-eyes theme="outline" size="25" :strokeWidth="4" title='查看详情' class="icon-play"
           @click="routerPush('albumDetail',item.id)" />
       </div>
@@ -23,16 +23,16 @@
 defineProps({
   albums: {
     type: Array,
-    default: () => [{
-      id: 123456,
-      name: "专辑名",
-      artist: {},
-      artists: [{ id: 123456, name: "歌手" }],
-      company: "公司版权",
-      picUrl: "图片链接",
-      publishTime: 11111111,//发布时间
-      size: 3 //歌曲数
-    }]
+    // default: () => [{
+    //   id: 123456,
+    //   name: "专辑名",
+    //   artist: {},
+    //   artists: [{ id: 123456, name: "歌手" }],
+    //   company: "公司版权",
+    //   picUrl: "图片链接",
+    //   publishTime: 11111111,//发布时间
+    //   size: 3 //歌曲数
+    // }]
   }
 })
 const emit = defineEmits(['routerEmit'])

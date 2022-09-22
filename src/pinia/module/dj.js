@@ -4,7 +4,7 @@ import { useDjBanner, useDjPersonalizeRecommend, usePersonalizedDjprogram } from
 export const useDjStore = defineStore("dj", {
   state: () => ({
     djBanner: [],//全部mv
-    djPersonalizeRecommend:[],//个性推荐
+    djPersonalizeRecommend: [],//个性推荐
   }
   ),
   getters: {},
@@ -18,8 +18,21 @@ export const useDjStore = defineStore("dj", {
     // 获取电台个性推荐
     async get_djPersonalizeRecommend() {
       const res = await useDjPersonalizeRecommend()
-      this.djPersonalizeRecommend = res.data.data
-      console.log("获取电台个性推荐", res.data);
+      // 修改数据结构
+      this.djPersonalizeRecommend = res.data.data.map((item) => {
+        return {
+          id: item.id,
+          picUrl: item.picUrl,
+          name: item.rcmdText,
+          programCount: item.programCount,
+          playCount: item.subCount,
+          secondCategory: item.secondCategory,
+          desc: item.desc,
+          artistName: item.dj.nickname,
+        };
+      });
+      // this.djPersonalizeRecommend = res.data.data
+      console.log("获取电台个性推荐", res.data, this.djPersonalizeRecommend);
     },
   }
 })

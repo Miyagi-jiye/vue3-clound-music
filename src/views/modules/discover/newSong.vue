@@ -1,5 +1,5 @@
 <template>
-  <div class="newSong">
+  <div class="discover-newSong">
     <div class="flex" v-for="item in myData" :key="item.id">
       <span class="father">
         <img class="img" v-lazy="item.picUrl + '?param=100y100'" :alt="'新歌ID=' + item.id">
@@ -32,7 +32,7 @@ const play = (id) => {
 </script>
 
 <style lang="less" scoped>
-.newSong {
+.discover-newSong {
   display: grid;
   // 自适应列
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

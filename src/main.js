@@ -45,7 +45,7 @@ app.directive("img-lazy", {
       // isIntersecting 是否在视口中,返回布尔值
       if (isIntersecting) {
         el.src = binding.value;
-        stop();
+        stop();//图片出现在视口中后，停止监听
       }
       // console.log("图片懒加载触发状态:", isIntersecting, "绑定懒加载图片链接:", binding.value, "绑定元素:", el);
     });
@@ -57,9 +57,9 @@ app.use(VueLazyLoad, {
   error: viteSvg,//错误图片
   lifecycle: {
     // 加载中
-    // loading: (el) => {
-    //   console.log('loading', el)
-    // },
+    loading: (el) => {
+      // console.log('loading', el)
+    },
     // 加载失败
     error: (el) => {
       console.log('error', el)
@@ -69,7 +69,7 @@ app.use(VueLazyLoad, {
     //   console.log('loaded', el)
     // }
   },
-  // delay: 500//手动延时
+  // delay: 1000//手动延时
 })
 
 app.mount('#app')

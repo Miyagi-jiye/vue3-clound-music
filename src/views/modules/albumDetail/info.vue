@@ -33,21 +33,21 @@ import PlayAllButton from "@/components/PlayAllButton.vue"//全部播放，收�
 defineProps({
   myData: {
     type: Object,
-    default: () => (
-      {
-        album: {
-          id: 0,//专辑id
-          // description: '描述',
-          name: '专辑名',
-          picUrl: '',
-          subType: "音源",
-          company: "版权",
-          artists: [{ name: "歌手" }],
-          publishTime: 123456
-        },
-        songs: []
-      }
-    )
+    // default: () => (
+    //   {
+    //     album: {
+    //       id: 0,//专辑id
+    //       // description: '描述',
+    //       name: '专辑名',
+    //       picUrl: '',
+    //       subType: "音源",
+    //       company: "版权",
+    //       artists: [{ name: "歌手" }],
+    //       publishTime: 123456
+    //     },
+    //     songs: []
+    //   }
+    // )
   }
 })
 /* 时间戳转换为时间 */

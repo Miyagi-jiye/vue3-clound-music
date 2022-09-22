@@ -86,6 +86,7 @@ const { loginData, isLogin, dialogVisible } = storeToRefs(useLoginStore())//数�
 const { get_logout } = useLoginStore()//方法
 
 const router = useRouter()
+console.log(loginData.value);
 
 // name:跳转页面，id:参数，activeTab：激活tab
 const routerPush = (name, id, activeTab) => {

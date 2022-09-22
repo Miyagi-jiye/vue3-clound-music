@@ -1,11 +1,16 @@
 <template>
   <div class="video">
     <el-tabs class="tab" v-model="activeTab">
-      <el-tab-pane lazy label="视频" name="video"> </el-tab-pane>
       <el-tab-pane lazy label="MV" name="mv">
         <Filter @clickEmit="emitMvAll" />
         <MV :myData="mvAll" class="MV" />
         <Pagination :myData="mvAllParams" :mvTotal="mvTotal" @emitClick="emitPage" class="pagination" />
+      </el-tab-pane>
+      <el-tab-pane lazy label="视频" name="video">
+        <MV :myData="videoTimelineRecommend" class="MV" />
+        <div class="loadMore">
+          <p @click="loadMore">加载更多</p>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -21,11 +26,16 @@ import { storeToRefs } from "pinia";
 
 const activeTab = ref("mv"); // 默认激活菜单
 
-const { get_videoGroupList, get_mvAll } = useVideoStore();
-const { mvAll, mvAllParams, mvTotal } = storeToRefs(useVideoStore());
+const { get_videoGroupList, get_mvAll, get_videoTimelineRecommend } = useVideoStore();
+const { mvAll, mvAllParams, mvTotal, videoTimelineRecommend, videoTimelineRecommendOffset } = storeToRefs(useVideoStore());
 
-// get_videoGroupList()
-get_mvAll();//初始化获取mv视频
+const init = () => {
+  get_videoGroupList()//获取视频分类
+  get_mvAll();//初始化获取mv视频
+  get_videoTimelineRecommend();//初始化获取推荐视频
+}
+
+init()
 
 // 筛选点击事件
 const emitMvAll = (e) => {
@@ -38,6 +48,11 @@ const emitMvAll = (e) => {
 // 分页点击事件
 const emitPage = () => {
   get_mvAll();
+};
+// 加载更多
+const loadMore = () => {
+  videoTimelineRecommendOffset.value++;
+  get_videoTimelineRecommend();
 };
 </script>
 
@@ -74,6 +89,25 @@ const emitPage = () => {
   z-index: 1;
 }
 
+.loadMore {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  color: #34d399;
+  font-size: 14px;
+
+  p {
+    cursor: pointer;
+
+    &:hover {
+      color: rgba(8, 88, 59, 0.733);
+    }
+  }
+}
+
+// 加载更多视频
 .video {
   padding: 0 20px 20px 20px;
   background-color: #fff;
