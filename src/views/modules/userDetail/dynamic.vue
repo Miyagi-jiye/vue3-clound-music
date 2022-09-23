@@ -70,7 +70,7 @@ const events = computed(() => userEvents.value.events)
 const typeFilter = (type) => {
   switch (type) {
     case 18:
-      return "分享单曲";
+      return "分享歌曲";
     case 19:
       return "分享专辑";
     case 17 || 28:

@@ -30,7 +30,8 @@
           </div>
         </div>
         <div class="control">
-          <icon-unlike theme="filled" size="20" :strokeWidth="3" title='不喜欢' class="play-one unlike" />
+          <icon-unlike theme="filled" size="20" :strokeWidth="3" title='不喜欢' class="play-one unlike"
+            @click="playNext('垃圾桶')" />
           <icon-play-one v-show="audioStatus==false" theme="filled" size="25" :strokeWidth="3" title='点击播放'
             class="play-one" @click="play" />
           <icon-pause v-show="audioStatus==true" theme="filled" size="25" :strokeWidth="3" title='点击暂停' class="play-one"
@@ -47,6 +48,7 @@
 </template>
 
 <script setup>
+import { debounce } from "@/utils/debounce.js";
 import { ref, inject } from "vue"
 import { useRouter } from 'vue-router'
 import { usePlaylistStore } from "@/pinia/module/playlist.js"//播放列表
@@ -69,7 +71,12 @@ const routerPush = (name) => {
   router.push({ name: name })
 }
 
-const playNext = () => {
+// 下一首（添加防抖函数）
+const playNext = debounce((value) => {
+  if (value) {
+    console.log("添加到垃圾桶");
+    // TODO: 添加到垃圾桶
+  }
   fmIndex.value++
   // 当前播放的歌曲索引等于歌曲列表长度-1时，获取更多歌曲列表
   if (fmIndex.value == prop.fm.length - 1) {
@@ -79,7 +86,7 @@ const playNext = () => {
   if (audioStatus.value == true) {
     get_songDetail(prop.fm[fmIndex.value].id)//播放单首歌曲
   }
-}
+}, 300)
 
 const play = () => {
   get_songDetail(prop.fm[fmIndex.value].id)//播放单首歌曲

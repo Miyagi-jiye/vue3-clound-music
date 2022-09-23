@@ -20,13 +20,15 @@
       <div class="qrcode-vue" v-show="showView=='qr'">
         <qrcode-vue :value="value" :size="size" level="H" />
       </div>
+      <!-- 验证码登录 -->
       <template #footer>
-        <!-- 密码登录 -->
+        <!-- 显示密码登录 -->
         <div v-show="showView=='pwd'">
           <el-button class="loginBtn" type="primary" @click="login()" :loading="btnLoding">登录</el-button>
-          <img :src="scanCode" alt="二维码登录" class="scan-code" @click="switchLogin()">
+          <p class="captcha" @click="switchDialog('forget')">忘记密码</p>
+          <img :src="scanCode" alt="二维码登录" class="scan-code" @click="switchDialog('qr')">
         </div>
-        <!-- 二维码登录 -->
+        <!-- 显示二维码登录 -->
         <div v-show="showView=='qr'" style="text-align:center">{{qrStatus}}</div>
       </template>
     </el-dialog>
@@ -60,69 +62,77 @@ let loginRules = reactive({
     { min: 6, max: 16, message: '请输入正确的密码', trigger: 'blur' }
   ]
 })
-// 登录
+// 手机登录
 const login = () => {
   loginFormRef.value.validate(async (valid) => {
     if (valid) {
       btnLoding.value = true// 按钮开始加载
-      const res = await get_login().finally(() => btnLoding.value = false)// 请求结束，按钮关闭加载
-      if (res.code === 200) {
-        dialogVisible.value = false// 关闭弹框
-        // get_userAccount()// 获取用户信息
-        router.push({ path: '/' })// 跳转到首页
-      } else {
-        ElMessage.error(res.message)
-      }
+      get_login()
+        .then((res) => {
+          if (res.data.code == 200) router.push({ path: '/' })
+        })
+        .finally(() => btnLoding.value = false)// 请求结束，按钮关闭加载
     } else {
       console.log('表单验证不通过')
       return false
     }
   })
 }
-// 显示界面
+// 默认显示界面
 let showView = ref('pwd')
 // 二维码登录
 let value = ref('')// 二维码内容
 let size = ref(200)// 二维码大小
-// 定时器
-let timer = null
+// 定时器 (二维码登录 watch监听)
+let qrTime = null
 let qrStatus = ref('加载中...')// 二维码状态
-// 800 为二维码过期,
-// 801 为等待扫码,
-// 802 为待确认,
-// 803 为授权登录成功(803 状态码下会返回 cookies)
-const switchLogin = async () => {
-  showView.value = 'qr'// 切换登录界面
-  // 获取二维码key
+// 二维码登录
+const QrLogin = async () => {
+  // 1.获取二维码key
   await get_loginQrKey()
-  // 获取二维码
+  // 2.获取二维码url
   await get_loginQrCreate()
-  // 二维码内容
+  // 3.赋值显示二维码内容
   value.value = loginQrUrl.value
-  // 轮询二维码状态
-  timer = setInterval(async () => {
+  // 4.轮询二维码状态 (800 为二维码过期,802 为待确认,803 为授权登录成功(803 状态码下会返回 cookies))
+  qrTime = setInterval(async () => {
     const res = await get_loginQrCheck()
-    qrStatus.value = res.message
+    qrStatus.value = res.message// 二维码状态显示到页面上
     if (res.code == 800) {
-      switchLogin()// 二维码过期，重新获取
+      QrLogin()// 二维码过期，重新获取
     }
     if (res.code === 803) {
-      clearInterval(timer)// 清除定时器
+      clearInterval(qrTime)// 清除定时器
       ElMessage.success('登录成功')
       dialogVisible.value = false// 关闭弹框
-      get_userAccount()// 获取用户信息
       isLogin.value = true// 登录状态
       console.log("登录状态", isLogin.value);
     }
   }, 1000)
 }
+// 切换登录方式
+const switchDialog = (view) => {
+  if (view == 'pwd') {
+    console.log("密码登录");
+    showView.value = 'pwd'
+  }
+  if (view == 'qr') {
+    console.log("二维码登录");
+    showView.value = 'qr'
+    QrLogin()// 调用二维码登录接口
+  }
+  if (view == 'forget') {
+    console.log("忘记密码");
+    ElMessage.warning('功能开发中...')
+  }
+}
 // 监听弹框显示状态
 watch(dialogVisible, (val) => {
   if (!val) {
-    // 返回密码登录
+    // 返回密码登录界面
     showView.value = 'pwd'
-    // 清除定时器
-    clearInterval(timer)
+    // 清除轮询定时器
+    clearInterval(qrTime)
   }
 })
 </script>
@@ -145,10 +155,36 @@ watch(dialogVisible, (val) => {
   padding: 20px;
 }
 
+// 密码登录
 .loginBtn {
   width: 100%;
   border-radius: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+// 验证码
+.captcha {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  font-size: 14px;
+
+  &:hover {
+    cursor: pointer;
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      border-radius: 50%;
+      color: #34d399;
+      background-color: #34d399;
+    }
+  }
 }
 
 // 二维码登录

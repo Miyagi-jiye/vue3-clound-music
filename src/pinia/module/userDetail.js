@@ -61,6 +61,9 @@ export const useUserDetailStore = defineStore("userDetail", {
           },
           json: {
             msg: '',//动态内容
+            song: {
+              name: '',//歌曲名
+            },//歌曲信息
           },
           type: 0,//18 分享单曲,19 分享专辑,17、28 分享电台节目,22 转发,39 发布视频,35、13 分享歌单,24 分享专栏文章,41、21 分享视频
           showTime: 0,
@@ -155,14 +158,31 @@ export const useUserDetailStore = defineStore("userDetail", {
     async get_userEvent(uid) {
       this.userEventParams.uid = uid//设置uid
       const res = await useUserEvent(this.userEventParams)
-      // 格式化json数据
-      res.data.events.map(item => item.json = JSON.parse(item.json));
-      // 如果还有转发内容的也转换一下
-      res.data.events.forEach(item1 => {
-        if (item1.json.event) {
-          item1.json.event.json = JSON.parse(item1.json.event.json)
-        }
-      });
+      // 递归获取用户动态
+      if (res.data.more) {
+        this.userEventParams.lasttime = res.data.lasttime
+        this.get_userEvent(uid)
+      }
+      // // 格式化json数据
+      // res.data.events.map(item => item.json = JSON.parse(item.json));
+      // // 如果还有转发内容的也转换一下
+      // res.data.events.forEach(item1 => {
+      //   if (item1.json.event) {
+      //     item1.json.event.json = JSON.parse(item1.json.event.json)
+      //   }
+      // });
+      // 递归格式化json数据
+      function formatJson(data) {
+        data.map(item => item.json = JSON.parse(item.json));
+        data.forEach(item1 => {
+          if (item1.json.event) {
+            formatJson([item1.json.event])
+          }
+        });
+      }
+      formatJson(res.data.events)
+      // 深拷贝数据
+      this.userEvent = JSON.parse(JSON.stringify(res.data.events))
       this.userEvents = res.data
       console.log("获取用户动态", this.userEvents);
     },

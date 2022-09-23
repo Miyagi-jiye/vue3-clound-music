@@ -635,6 +635,16 @@ export function useDjHot() {
     url: "/dj/hot",
   });
 }
+// 电台 - 推荐
+// 说明 : 登录后调用此接口 , 可获得推荐电台
+// 接口地址 : /dj/recommend
+// 调用例子 : /dj/recommend
+export function useDjRecommend() {
+  return http({
+    method: "get",
+    url: "/dj/recommend",
+  });
+}
 /*______________________________________用户__________________________________________*/
 // 获取用户详情
 export function useUserDetail(uid) {
