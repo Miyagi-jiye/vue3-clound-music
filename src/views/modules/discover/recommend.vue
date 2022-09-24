@@ -1,6 +1,6 @@
 <template>
   <div class="discover-recommend">
-    <div class="vfor" v-for="item in myData" :key="item.id">
+    <div class="vfor" v-for="item in myData.slice(0,end)" :key="item.id">
       <div class="cardImg">
         <img v-if="item.picUrl" class="discoverImg" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
           :key="item.id" @click="routerPush('playlist',item.id)">
@@ -29,10 +29,14 @@ import { playCountFilter } from '@/utils/playCountFilter'// 过滤播放量
 const router = useRouter()
 const { get_songlistDetail, push_musicToPlayList } = usePlaylistStore()
 
-defineProps({
+const prop = defineProps({
   myData: {
     type: Array,
     default: () => [{ id: 123456, picUrl: '', coverImgUrl: '', name: '默认简介', playCount: 999 }]
+  },
+  end: {
+    type: Number,
+    default: 10
   }
 })
 

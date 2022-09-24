@@ -159,6 +159,34 @@ export function useSonglistComment(id, obj) {
     }
   });
 }
+// 精品歌单标签列表
+// 说明 : 调用此接口 , 可获取精品歌单标签列表
+// 接口地址 : /playlist/highquality/tags
+// 调用例子 : /playlist/highquality/tags
+export function useHighqualityTags() {
+  return http({
+    method: "get",
+    url: "/playlist/highquality/tags"
+  });
+}
+// 获取精品歌单
+// 说明 : 调用此接口 , 可获取精品歌单
+// 可选参数 : cat: tag, 比如 " 华语 "、" 古风 " 、" 欧美 "、" 流行 ", 默认为 "全部",可从精品歌单标签列表接口获取(/playlist/highquality/tags)
+// limit: 取出歌单数量 , 默认为 50
+// before: 分页参数,取上一页最后一个歌单的 updateTime 获取下一页数据
+// 接口地址 : /top/playlist/highquality
+// 调用例子 : /top/playlist/highquality?before=1503639064232&limit=3
+export function useHighquality(obj) {
+  return http({
+    method: "get",
+    url: "/top/playlist/highquality",
+    params: {
+      cat: obj.cat,
+      limit: obj.limit,
+      before: obj.before
+    }
+  });
+}
 /*______________________________________歌曲__________________________________________*/
 // 获取歌曲详情
 export function useSongDetail(id) {
@@ -410,6 +438,16 @@ export function useAlbum(id) {
     method: "get",
     url: "/album",
     params: { id: id }
+  });
+}
+// 最新专辑
+// 说明 : 调用此接口 ，获取云音乐首页新碟上架数据
+// 接口地址 : /album/newest
+// 调用例子 : /album/newest
+export function useNewestAlbum() {
+  return http({
+    method: "get",
+    url: "/album/newest",
   });
 }
 /*______________________________________MV__________________________________________*/

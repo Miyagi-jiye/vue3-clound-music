@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="VolumeIcon">
     <!-- 图标 -->
     <div class="volumeIcon">
       <component :is="volume === 0 ? 'icon-volume-mute' : volume == 100 ? 'icon-volume-notice' : 'icon-volume-small'"
@@ -62,6 +62,10 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+.VolumeIcon {
+  position: relative;
+}
+
 .volumeIcon :hover {
   color: #34d399;
   cursor: pointer;
@@ -87,5 +91,9 @@ onMounted(() => {
   border-radius: 4px;
   background-color: #fff;
   box-shadow: rgb(0 0 0 / 15%) 0px 2px 8px;
+
+  .p {
+    color: #000;
+  }
 }
 </style>

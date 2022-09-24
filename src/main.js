@@ -19,7 +19,7 @@ import { useIntersectionObserver } from '@vueuse/core';//引入vueuse中的判�
 
 import VueLazyLoad from 'vue3-lazyload'//图片懒加载插件
 import loading from "@/assets/img/loading.gif"//加载图
-import viteSvg from "@/assets/img/vite.svg"//失败图
+import viteSvg from "./assets/img/vite.svg"//失败图
 
 const app = createApp(App)
 
@@ -57,9 +57,9 @@ app.use(VueLazyLoad, {
   error: viteSvg,//错误图片
   lifecycle: {
     // 加载中
-    loading: (el) => {
-      // console.log('loading', el)
-    },
+    // loading: (el) => {
+    // console.log('loading', el)
+    // },
     // 加载失败
     error: (el) => {
       console.log('error', el)

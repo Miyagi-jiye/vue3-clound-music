@@ -13,7 +13,7 @@
             <a v-for="item in myData.tags" :key="item">#{{ item }}</a>
           </div>
         </div>
-        <div class="description">
+        <div class="description" v-if="myData.description">
           <MoreText :text="myData.description" :end="90" />
         </div>
         <div class="btnGroup">

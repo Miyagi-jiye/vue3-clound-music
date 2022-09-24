@@ -1,7 +1,7 @@
 <template>
   <div class="myLike">
     <!-- 歌曲列表 -->
-    <div v-for="(item,index) in likeListSongs" :key="index" class="vfor" @dblclick="play(item)">
+    <div v-for="(item,index) in likeListSongs" :key="index" class="vfor">
       <div class="left">{{index+1}}</div>
       <img v-lazy="item.al.picUrl+'?param=50y50'" :alt="'歌曲ID='+item.id" class="img hidden-less-400">
       <div class="center">
@@ -18,13 +18,14 @@
         </div>
       </div>
       <div class="right">
-        <icon-play theme="outline" size="20" class="play" @click="play(item)" />
+        <PlayButton :myData="item" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import PlayButton from "@/views/modules/myLike/playButton.vue";//播放按钮
 import SongListTag from "@/components/SongListTag.vue";//歌曲列表tag
 import { useMyLikeStore } from "@/pinia/module/myLike.js"
 import { useLoginStore } from "@/pinia/module/login.js"

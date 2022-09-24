@@ -1,12 +1,20 @@
 import { defineStore } from "pinia";
-import { useBanner, useRecommend, useNewSong, useMv, useRecommendResource, useRecommendSongs, usePersonalFm } from "@/api/index.js";
+import { useHighquality, useHighqualityTags, useNewestAlbum, useBanner, useRecommend, useNewSong, useMv, useRecommendResource, useRecommendSongs, usePersonalFm } from "@/api/index.js";
 
 export const useDiscoverStore = defineStore("discover", {
   state: () => ({
-    banner: [],
-    recommend: [],
-    newSong: [],
-    mv: [],
+    banner: [],// 轮播图
+    recommend: [],// 推荐歌单
+    newSong: [],// 最新音乐
+    mv: [],// 最新mv
+    album: [],//最新专辑
+    tags: [],// 精品歌单标签
+    highquality: [],// 精品歌单
+    highqualityParams: {
+      limit: 8,
+      before: 0,
+      cat: "华语",
+    },// 精品歌单参数
     privateRecommend: [],//私人推荐
     dailySongs: [
       {
@@ -52,6 +60,24 @@ export const useDiscoverStore = defineStore("discover", {
       const res = await useMv();
       this.mv = res.data.result;
       console.log("获取推荐MV", res.data);
+    },
+    // 获取新专辑
+    async get_newestAlbum() {
+      const res = await useNewestAlbum();
+      this.album = res.data.albums;
+      console.log("获取新专辑", res.data);
+    },
+    // 获取精品歌单标签
+    async get_highqualityTags() {
+      const res = await useHighqualityTags();
+      this.tags = res.data.tags;
+      console.log("获取精品歌单标签", res.data);
+    },
+    // 获取精品歌单
+    async get_highquality() {
+      const res = await useHighquality(this.highqualityParams);
+      this.highquality = res.data.playlists;
+      console.log("获取精品歌单", res.data);
     },
     // 获取每日专属推荐歌单
     async get_recommendResource() {

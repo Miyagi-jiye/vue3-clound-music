@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+import VolumeIcon from "@/components/VolumeIcon.vue"//音量组件
 import { ref, watch, inject } from "vue";
 import { formatTime } from "@/utils/formatPlayMusicTime.js"//格式化播放时间
 

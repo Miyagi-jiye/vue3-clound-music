@@ -2,7 +2,7 @@
   <div class="info">
     <div class="flex">
       <div class="left">
-        <img :src="myData.album.picUrl + '?param=180y180'" alt="封面">
+        <img v-lazy="myData.album.picUrl + '?param=180y180'" alt="封面">
       </div>
       <div class="right">
         <p class="title">{{ myData.album.name }}</p>
@@ -16,8 +16,8 @@
           <p v-if="myData.album.subType">音源：{{ myData.album.subType }}</p>
           <p v-if="myData.album.company">版权：{{ myData.album.company }}</p>
         </div>
-        <div class="description">
-          <MoreText :text="myData.album.description" :end="90" v-if="myData.album.description" />
+        <div class="description" v-if="myData.album.description">
+          <MoreText :text="myData.album.description" :end="90" />
         </div>
         <!-- 全部播放 -->
         <PlayAllButton :myData="myData.songs" />

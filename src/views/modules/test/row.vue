@@ -16,12 +16,13 @@
       </div>
     </div>
     <div class="right">
-      <icon-play theme="outline" size="20" class="play" @click="play(item)" />
+      <PlayButton :myData="item" />
     </div>
   </div>
 </template>
 
 <script setup>
+import PlayButton from "@/views/modules/myLike/playButton.vue";//播放按钮
 import SongListTag from "@/components/SongListTag.vue";//歌曲列表tag
 
 defineProps({
@@ -161,14 +162,6 @@ defineProps({
     gap: 4px;
     font-size: 14px;
     color: #6a6a6a;
-
-    .play {
-      cursor: pointer;
-
-      &:hover {
-        color: #34d399;
-      }
-    }
   }
 }
 </style>

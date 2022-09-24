@@ -15,12 +15,13 @@
 
 <script setup>
 import { usePlaylistStore } from "@/pinia/module/playlist.js"
-import { storeToRefs } from "pinia"
 
 defineProps({
   myData: {
     type: Array,
-    default: () => [{ id: 123456, picUrl: '', name: '默认简介', song: { artists: [{ name: '默认作者' }] } }]
+    default: () => [
+      // { id: 123456, picUrl: '', name: '默认简介', song: { artists: [{ name: '默认作者' }] } }
+    ]
   }
 })
 
