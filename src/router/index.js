@@ -128,6 +128,15 @@ const routes = [
         },
       },
       {
+        path: 'allPlaylist',
+        name: 'allPlaylist',
+        component: () => import("@/views/modules/allPlaylist/index.vue"),
+        meta: {
+          menu: 'allPlaylist',
+          keepAlive: true,
+        }
+      },
+      {
         path: 'test',
         name: 'test',
         component: () => import("@/views/modules/test/index.vue"),

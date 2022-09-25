@@ -4,10 +4,9 @@
       <p>{{ title }}</p>
       <icon-right theme="outline" size="22" :strokeWidth="2" />
     </div>
-    <template v-if="right">
-      <div class="right" @click="refresh">
-        <p>刷新</p>
-        <icon-refresh theme="outline" size="22" :strokeWidth="2" class="refresh" />
+    <template v-if="showRight">
+      <div class="right" @click="rightClick">
+        <p :style="{'font-size':right.size+'px'}">{{right.text}}</p>
       </div>
     </template>
   </div>
@@ -20,19 +19,23 @@ defineProps({
     default: () => '默认标题'
   },
   right: {
+    type: Object,
+    default: () => ({
+      text: '查看全部',
+      size: 16,
+    })
+  },
+  showRight: {
     type: Boolean,
     default: () => false
   }
 })
-const emit = defineEmits(['emitClick'])
-// 点击刷新执行动画
-const refresh = () => {
-  const refresh = document.querySelector('.refresh')
-  refresh.style.animation = 'rotate 1.5s infinite linear'
-  setTimeout(() => {
-    refresh.style.animation = ''
-  }, 1500)
-  emit('emitClick')
+
+const emit = defineEmits(['rightClick'])
+
+const rightClick = () => {
+  console.log('点击了查看全部')
+  emit('rightClick')
 }
 </script>
 
@@ -58,19 +61,29 @@ const refresh = () => {
     align-content: center;
     justify-content: flex-start;
     flex-wrap: nowrap;
+  }
 
-    p {
-      margin-right: 10px;
-    }
+  .left {
+    user-select: none;
   }
 
   .right {
     font-size: 16px;
     cursor: pointer;
 
+    p {
+      margin-right: 10px;
+      font-weight: 600;
+      opacity: .68;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     .refresh {
       // &:hover {
-      //   animation: rotate 1.5s infinite linear;
+      //   animation: rotate 1.5s infinite linear;// 旋转动画 1.5s 无限循环 线性
       // }
 
       @keyframes rotate {

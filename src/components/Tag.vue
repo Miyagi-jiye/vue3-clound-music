@@ -51,7 +51,7 @@ const emit = defineEmits(['emitClick'])
 const show = ref(false)// 是否展开
 
 watch(() => prop.activeTag, (val) => {
-  console.log("激活tg", val);
+  console.log("激活tag", val);
   emit('emitClick', val)
 })
 </script>

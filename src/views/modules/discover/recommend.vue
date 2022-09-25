@@ -1,23 +1,45 @@
 <template>
   <div class="discover-recommend">
-    <div class="vfor" v-for="item in myData.slice(0,end)" :key="item.id">
-      <div class="cardImg">
-        <img v-if="item.picUrl" class="discoverImg" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
-          :key="item.id" @click="routerPush('playlist',item.id)">
-        <img v-else-if="item.coverImgUrl" class="discoverImg" v-lazy="item.coverImgUrl + '?param=300y300'"
-          :alt="'歌单ID=' + item.id" @click="routerPush('playlist',item.id)">
-        <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
-          @click="playMusic(item.id)" />
-        <div class="playCount">
-          <icon-headset theme="filled" size="12" :strokeWidth="4" />
-          <text v-if="item.playCount">{{ playCountFilter(item.playCount) }}</text>
-          <text v-else-if="item.playcount">{{ playCountFilter(item.playcount) }}</text>
+    <template v-if="end!==0">
+      <div class="vfor" v-for="item in myData.slice(0,end)" :key="item.id">
+        <div class="cardImg">
+          <img v-if="item.picUrl" class="discoverImg" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
+            :key="item.id" @click="routerPush('playlist',item.id)">
+          <img v-else-if="item.coverImgUrl" class="discoverImg" v-lazy="item.coverImgUrl + '?param=300y300'"
+            :alt="'歌单ID=' + item.id" @click="routerPush('playlist',item.id)">
+          <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
+            @click="playMusic(item.id)" />
+          <div class="playCount">
+            <icon-headset theme="filled" size="12" :strokeWidth="4" />
+            <text v-if="item.playCount">{{ playCountFilter(item.playCount) }}</text>
+            <text v-else-if="item.playcount">{{ playCountFilter(item.playcount) }}</text>
+          </div>
+        </div>
+        <div class="name">
+          {{ item.name }}
         </div>
       </div>
-      <div class="name">
-        {{ item.name }}
+    </template>
+    <template v-else>
+      <div class="vfor" v-for="item in myData" :key="item.id">
+        <div class="cardImg">
+          <img v-if="item.picUrl" class="discoverImg" v-lazy="item.picUrl + '?param=300y300'" :alt="'歌单ID=' + item.id"
+            :key="item.id" @click="routerPush('playlist',item.id)">
+          <img v-else-if="item.coverImgUrl" class="discoverImg" v-lazy="item.coverImgUrl + '?param=300y300'"
+            :alt="'歌单ID=' + item.id" @click="routerPush('playlist',item.id)">
+          <icon-play-one class="playIcon" theme="filled" size="50" :strokeWidth="4" title='点击播放'
+            @click="playMusic(item.id)" />
+          <div class="playCount">
+            <icon-headset theme="filled" size="12" :strokeWidth="4" />
+            <text v-if="item.playCount">{{ playCountFilter(item.playCount) }}</text>
+            <text v-else-if="item.playcount">{{ playCountFilter(item.playcount) }}</text>
+          </div>
+        </div>
+        <div class="name">
+          {{ item.name }}
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -34,12 +56,12 @@ const prop = defineProps({
     type: Array,
     default: () => [{ id: 123456, picUrl: '', coverImgUrl: '', name: '默认简介', playCount: 999 }]
   },
+  // 显示数量
   end: {
     type: Number,
-    default: 10
+    // default: 100
   }
 })
-
 // 跳转到歌单详情页
 const routerPush = (name, id) => {
   router.push({ name: name, query: { id: id } })

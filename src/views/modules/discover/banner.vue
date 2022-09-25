@@ -2,9 +2,9 @@
   <div class="discover-banner" v-if="myData">
     <Swiper slides-per-group-auto slides-per-view="auto" :navigation="true" :grab-cursor="true">
       <SwiperSlide v-for="(item,index) in myData" :key="index">
-        <img v-if="item.imageUrl" v-img-lazy="item.imageUrl + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
+        <img v-if="item.imageUrl" :src="item.imageUrl + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
           class="banner-image" />
-        <img v-else-if="item.pic" v-img-lazy="item.pic + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
+        <img v-else-if="item.pic" :src="item.pic + '?param=1080y400'" :alt="item.typeTitle + item.targetId"
           class="banner-image" />
       </SwiperSlide>
     </Swiper>

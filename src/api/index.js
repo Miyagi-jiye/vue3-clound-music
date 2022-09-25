@@ -126,6 +126,26 @@ export function useDj() {
     url: "/personalized/djprogram"
   });
 }
+// 新歌速递
+// 说明 : 调用此接口 , 可获取新歌速递
+// 必选参数 :
+// type: 地区类型 id,对应以下:
+// 全部:0
+// 华语:7
+// 欧美:96
+// 日本:8
+// 韩国:16
+// 接口地址 : /top/song
+// 调用例子 : /top/song?type=96
+export function useTopSong(type) {
+  return http({
+    method: "get",
+    url: "/top/song",
+    params: {
+      type: type
+    }
+  });
+}
 /*______________________________________歌单__________________________________________*/
 // 获取歌单详情
 export function useSonglistDetail(id) {
@@ -194,6 +214,25 @@ export function useSongDetail(id) {
     method: "get",
     url: "/song/detail",
     params: { ids: id }
+  });
+}
+// 歌曲评论
+// 说明 : 调用此接口 , 传入音乐 id 和 limit 参数 , 可获得该音乐的所有评论 ( 不需要登录 )
+// 必选参数 : id: 音乐 id
+// 可选参数 : limit: 取出评论数量 , 默认为 20
+// offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+// before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+// 接口地址 : /comment/music
+// 调用例子 : /comment/music?id=186016&limit=1 对应晴天评论
+export function useSongComment(id, obj) {
+  return http({
+    method: "get",
+    url: "/comment/music",
+    params: {
+      id: id,
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
   });
 }
 // 获取歌单所有歌曲
@@ -448,6 +487,23 @@ export function useNewestAlbum() {
   return http({
     method: "get",
     url: "/album/newest",
+  });
+}
+// 数字专辑-新碟上架
+// 说明 : 调用此接口 ,可获取数字专辑-新碟上架
+// 可选参数 :
+// limit : 返回数量 , 默认为 30
+// offset : 偏移数量，用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+// 接口地址 : /album/list
+// 调用例子 : /album/list?limit=10
+export function useAlbumList(obj) {
+  return http({
+    method: "get",
+    url: "/album/list",
+    params: {
+      limit: obj.limit,
+      offset: (obj.offset - 1) * obj.limit,
+    }
   });
 }
 /*______________________________________MV__________________________________________*/

@@ -1,47 +1,68 @@
 <template>
-  <div style="height:calc(100vh - 70px - 56px)">
-    <el-auto-resizer>
-      <template #default="{ height, width }">
-        <el-table-v2 :columns="columns" :data="data" :width="width" :height="height" fixed :cache="2">
-          <!-- 头部插槽 -->
-          <!-- <template #header="{ cells,columns,headerIndex }">
-            <span>=>{{columns}}=>{{headerIndex}}</span>
-          </template> -->
-          <!-- 行插槽 -->
-          <template #row='props'>
-            <Row :item="props.rowData" :index="props.rowIndex" />
-          </template>
-        </el-table-v2>
+  <el-space direction="vertical" alignment="flex-start">
+    <el-button @click="setLoading">Click me to reload</el-button>
+    <el-skeleton style="width: 240px" :loading="loading" animated :count="3">
+      <!-- 骨架屏 -->
+      <template #template>
+        <el-skeleton-item variant="image" style="width: 400px; height: 267px" />
+        <el-skeleton-item variant="h3" style="width: 50%" />
+        <el-skeleton-item variant="text" style="margin-right: 16px" />
+        <el-skeleton-item variant="text" style="width: 30%" />
       </template>
-    </el-auto-resizer>
-  </div>
+      <!-- 真实ui -->
+      <template #default>
+        <el-card v-for="item in lists" :key="item.name" :body-style="{ padding: '0px', marginBottom: '1px' }">
+          <img :src="item.imgUrl" class="image multi-content" />
+          <div style="padding: 14px">
+            <span>{{ item.name }}</span>
+            <div class="bottom card-header">
+              <div class="time">{{ currentDate }}</div>
+              <el-button text class="button">Operation button</el-button>
+            </div>
+          </div>
+        </el-card>
+      </template>
+    </el-skeleton>
+  </el-space>
 </template>
 
-<script setup>
-import Row from "@/views/modules/test/row.vue";
-import { useMyLikeStore } from "@/pinia/module/myLike.js"
-import { storeToRefs } from "pinia";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
 
-const { likeListSongs } = storeToRefs(useMyLikeStore())// 我喜欢
-
-const generateColumns = (length = 10, props) =>
-  Array.from({ length }).map(() => (
-    {
-      ...props,//列属性
-      title: '我喜欢的音乐',//表头
-      width: 150,//列宽
-    }
-  ))
-
-const columns = generateColumns(1)
-const data = likeListSongs.value//数据
-</script>
-
-<style lang="less" scoped>
-:deep(.el-table-v2__row) {
-  border-bottom: none;
-  display: flex;
-  align-items: normal;
-  transition: none;
+interface ListItem {
+  imgUrl: string;
+  name: string;
 }
-</style>
+
+const loading = ref(true);
+const lists = ref<ListItem[]>([]);
+const currentDate = new Date().toDateString();
+
+const setLoading = () => {
+  loading.value = true;
+  // setTimeout(() => {
+  //   loading.value = false;
+  // }, 2000);
+};
+
+onMounted(() => {
+  loading.value = false;
+  lists.value = [
+    {
+      imgUrl:
+        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+      name: "Deer",
+    },
+    {
+      imgUrl:
+        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
+      name: "Horse",
+    },
+    {
+      imgUrl:
+        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
+      name: "Mountain Lion",
+    },
+  ];
+});
+</script>

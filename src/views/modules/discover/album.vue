@@ -7,21 +7,22 @@
           <icon-play-one theme="filled" size="25" :strokeWidth="4" title='查看详情' />
         </button>
         <!-- 专辑封面 -->
-        <img class="album-picUrl" v-lazy="item.picUrl+'?param=200y200'" :alt="'专辑ID='+item.id"
-          @click="routerPush('albumDetail',item.id)">
+        <img class="album-picUrl" v-lazy="item.picUrl+'?param=200y200'" :alt="'专辑ID='+item.id">
         <!-- 专辑阴影 -->
         <div class="shadow" :style="{backgroundImage:'url('+item.picUrl+'?param=10y10)'}"></div>
-        <!-- 专辑遮罩 -->
-        <!-- <div class="mask" :style="{backgroundImage:'url('+coverAll+')'}"></div> -->
       </div>
       <div class="album-name title" @click="routerPush('albumDetail',item.id)">{{item.name}}</div>
-      <div class="album-artist title" @click="routerPush('artistDetail',item.artist.id)">{{item.artist.name}}</div>
+      <!-- 有作者id -->
+      <div class="album-artist title" v-if="item.artist.id" @click="routerPush('artistDetail',item.artist.id)">
+        {{item.artist.name}}
+      </div>
+      <!-- 没有作者id -->
+      <div class="album-artist title" v-else>{{item.artist.name}}</div>
     </div>
   </div>
 </template>
 
 <script setup>
-import coverAll from "@/assets/img/coverall.png"
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -109,15 +110,6 @@ const routerPush = (name, id) => {
       &:hover {
         background: hsla(0, 0%, 100%, .44);
       }
-    }
-
-    .mask {
-      width: 209px;
-      height: 178px;
-      background-position: 0 -986px;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
   }
 

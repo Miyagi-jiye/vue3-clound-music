@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useSonglistDetail, useSonglistComment, useMusicUrl, useLyric, useSongDetail, useSongDetailAll } from "@/api/index.js";
+import { useSongComment, useSonglistDetail, useSonglistComment, useMusicUrl, useLyric, useSongDetail, useSongDetailAll } from "@/api/index.js";
 import vue from "@/assets/img/vue.svg"//默认播放音乐的图片
 
 export const usePlaylistStore = defineStore("playlist", {
@@ -26,6 +26,10 @@ export const usePlaylistStore = defineStore("playlist", {
     toPlayList: [{ id: 1, name: 'Vue.js 渐进式JavaScript 框架', ar: [{ id: 12345, name: '尤雨溪' }], al: { id: 12345, name: '专辑', picUrl: vue }, dt: 0 }],//歌单播放列表
     lyric: [],//歌词
     songs: {},//单首歌曲详情
+    songCommentParams: {
+      limit: 20,
+      offset: 1
+    },//单首歌曲评论参数
     songsAll: [],//全部歌曲详情
     audioStatus: false,//播放状态
     audioCurrentTime: 0,// 当前播放时间
@@ -71,6 +75,12 @@ export const usePlaylistStore = defineStore("playlist", {
     }
   },
   actions: {
+    // 获取单首歌曲评论
+    async get_songComment(id) {
+      const { data } = await useSongComment(id, this.songCommentParams);
+      console.log("获取单首歌曲评论", data);
+      return data;
+    },
     // 获取单首歌曲详情,并播放
     async get_songDetail(id) {
       const res = await useSongDetail(id);

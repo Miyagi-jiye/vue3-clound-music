@@ -37,7 +37,8 @@
       </div>
       <div class="list hidden-less-1000">
         <p>{{ formatTime(audioCurrentTime) }} / {{ formatTime(audioDuration) }}</p>
-        <icon-text-message theme="outline" size="22" :strokeWidth="3" title='歌曲评论' />
+        <icon-text-message theme="outline" size="22" :strokeWidth="3" title='歌曲评论'
+          @click="get_songComment(currentPlayMusic.id)" />
         <!-- 待播放歌曲列表 -->
         <MusicListIcon iconSize='24' />
       </div>
@@ -69,7 +70,7 @@ const {
   playSpeed,
   volume
 } = storeToRefs(usePlaylistStore())
-const { pre_music, next_music } = usePlaylistStore()
+const { pre_music, next_music, get_songComment } = usePlaylistStore()
 
 // 定义虚拟dom对象
 const audio = ref('')

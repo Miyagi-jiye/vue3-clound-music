@@ -10,9 +10,10 @@ export const useDiscoverStore = defineStore("discover", {
     album: [],//最新专辑
     tags: [],// 精品歌单标签
     highquality: [],// 精品歌单
+    highqualityMore: false,// 精品歌单是否显示更多
     highqualityParams: {
-      limit: 8,
-      before: 0,
+      limit: 10,
+      before: 0,// 精品歌单最后一次请求时间
       cat: "华语",
     },// 精品歌单参数
     privateRecommend: [],//私人推荐
@@ -77,6 +78,7 @@ export const useDiscoverStore = defineStore("discover", {
     async get_highquality() {
       const res = await useHighquality(this.highqualityParams);
       this.highquality = res.data.playlists;
+      this.highqualityMore = res.data.more;
       console.log("获取精品歌单", res.data);
     },
     // 获取每日专属推荐歌单
