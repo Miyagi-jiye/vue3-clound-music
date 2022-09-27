@@ -118,7 +118,7 @@ onMounted(() => {
     const container = document.querySelector('.right-side')//歌词容器dom
     // dom渲染完毕
     if (active && container) {
-      container.scrollTop = active.offsetHeight * index.value - (container.clientHeight / 2)//滚动条距离顶部距离
+      container.scrollTop = active.offsetHeight * index.value - (container.clientHeight / 2) + active.offsetHeight//滚动条距离顶部距离
     }
   })
 })

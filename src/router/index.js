@@ -1,8 +1,13 @@
 import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
 import NProgress from "nprogress"; //引入nprogress 进度条插件
 import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
+import { ElMessage } from "element-plus";
+import { useLoginStore } from "@/pinia/module/login.js"
 
 const layout = () => import("@/views/layout/index.vue")
+// 定义路由黑名单(需要登陆才能访问的路由)
+const blacklist = ['myLike']
+
 // 路由配置
 const routes = [
   {
@@ -169,14 +174,19 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // // 开启进度条
   // NProgress.start();
-  // 登录页直接放行
-  if (to.path === "/login") return next();
-  // // 获取token
-  // const TOKEN = window.sessionStorage.getItem("token");
-  // // 没有token就跳转到登录页
-  // if (!TOKEN) return next("/login");
-  // // 有token就放行
-  next();
+  // 判断是否在黑名单中
+  if (blacklist.includes(to.name)) {
+    // 判断是否登录
+    const { isLogin } = useLoginStore()
+    if (isLogin) {
+      next()
+    } else {
+      ElMessage.warning('请先进行登录')
+      return
+    }
+  } else {
+    next();
+  }
 });
 
 // 页面路由切换完毕的时候

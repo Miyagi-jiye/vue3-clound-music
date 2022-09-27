@@ -1,8 +1,10 @@
 <template>
   <div class="allPlaylist">
+    <!-- 大标题 -->
     <div class="title">
       <p>{{route.query.type}}</p>
     </div>
+    <!-- 显示内容 -->
     <div v-show="route.query.type == '精品歌单'">
       <Tag :myData="tags" :activeTag="highqualityParams.cat" :end="8" @emitClick="tagClick" />
       <Recommend :myData="highquality" />
@@ -15,45 +17,48 @@
       <Album :myData="albumList" />
       <div class="loadMore" @click="loadMore('新专速递')">加载更多</div>
     </div>
+    <div v-show="route.query.type == '新歌速递'">
+      <Tag :myData="newSongParamsData" :activeTag="newSongParams.name" @emitClick="tagClick1" />
+      <Album :myData="newSong" />
+    </div>
+    <div v-show="route.query.type == '最新MV'">
+      <Tag :myData="newMvParamsData" :activeTag="newMvParams.area" @emitClick="tagClick2" />
+      <Mv :myData="newMv" />
+    </div>
   </div>
 </template>
 
 <script setup>
+import Mv from "@/views/modules/discover/mv.vue";
 import Album from "@/views/modules/discover/album.vue";
 import Tag from "@/components/Tag.vue";
 import Recommend from "@/views/modules/discover/recommend.vue";
-
 import { useRoute } from "vue-router";
 import { useAllPlaylistStore } from "@/pinia/module/allPlaylist.js";
 import { storeToRefs } from "pinia";
+
 const {
   get_highquality,
   get_highqualityTags,
-  get_newestAlbum,
-  get_banner,
   get_recommend,
-  get_newSong,
-  get_mv,
-  get_recommendResource,
-  get_recommendSongs,
-  get_personalFm,
   get_albumList,
+  get_topSong,
+  get_newMv
 } = useAllPlaylistStore();
 const {
   highquality,
   highqualityParams,
   highqualityMore,
   tags,
-  banner,
   recommend,
-  newSong,
-  mv,
-  privateRecommend,
-  dailySongs,
-  fm,
-  album,
   albumList,
-  albumListParams
+  albumListParams,
+  newSong,
+  newSongParams,
+  newSongParamsData,
+  newMv,
+  newMvParams,
+  newMvParamsData
 } = storeToRefs(useAllPlaylistStore());
 const route = useRoute();
 
@@ -64,8 +69,11 @@ const init = () => {
   } else if (route.query.type == "推荐歌单") {
     get_recommend();
   } else if (route.query.type == "新专速递") {
-    // get_newestAlbum();
     get_albumList();
+  } else if (route.query.type == "新歌速递") {
+    get_topSong();
+  } else if (route.query.type == "最新MV") {
+    get_newMv();
   }
 };
 init()
@@ -79,6 +87,54 @@ const tagClick = (val) => {
   highquality.value = [];
   get_highquality();
 };
+// 点击新歌速递标签
+const tagClick1 = (val) => {
+  switch (val) {
+    case "华语":
+      newSongParams.value.type = 7;
+      newSongParams.value.name = "华语";
+      break;
+    case "欧美":
+      newSongParams.value.type = 96;
+      newSongParams.value.name = "欧美";
+      break;
+    case "日本":
+      newSongParams.value.type = 8;
+      newSongParams.value.name = "日本";
+      break;
+    case "韩国":
+      newSongParams.value.type = 16;
+      newSongParams.value.name = "韩国";
+      break;
+    case "全部":
+      newSongParams.value.type = 0;
+      newSongParams.value.name = "全部";
+      break;
+  }
+  get_topSong();
+
+};
+// 点击最新MV标签
+const tagClick2 = (val) => {
+  switch (val) {
+    case "内地":
+      newMvParams.value.area = "内地";
+      break;
+    case "港台":
+      newMvParams.value.area = "港台";
+      break;
+    case "欧美":
+      newMvParams.value.area = "欧美";
+      break;
+    case "日本":
+      newMvParams.value.area = "日本";
+      break;
+    case "韩国":
+      newMvParams.value.area = "韩国";
+      break;
+  }
+  get_newMv();
+};
 
 // 加载更多
 const loadMore = () => {
@@ -86,7 +142,7 @@ const loadMore = () => {
     get_highquality();
   }
   if (route.query.type == "新专速递") {
-    albumListParams.value.limit += 10;
+    albumListParams.value.limit += 20;
     get_albumList();
   }
 };

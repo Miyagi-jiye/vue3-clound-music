@@ -2,8 +2,11 @@
   <div class="discover-album">
     <div v-for="item in myData" :key="item.id" class="vfor">
       <div class="cover">
-        <!-- 播放按钮 -->
-        <button class="playIcon" @click="routerPush('albumDetail',item.id)">
+        <!-- 播放按钮,有没有歌曲id或者专辑id -->
+        <button v-if="item.songId" class="playIcon" @click="get_songDetail(item.songId)">
+          <icon-play-one theme="filled" size="25" :strokeWidth="4" title='点击播放' />
+        </button>
+        <button v-else-if="item.id" class="playIcon" @click="routerPush('albumDetail',item.id)">
           <icon-play-one theme="filled" size="25" :strokeWidth="4" title='查看详情' />
         </button>
         <!-- 专辑封面 -->
@@ -12,11 +15,10 @@
         <div class="shadow" :style="{backgroundImage:'url('+item.picUrl+'?param=10y10)'}"></div>
       </div>
       <div class="album-name title" @click="routerPush('albumDetail',item.id)">{{item.name}}</div>
-      <!-- 有作者id -->
+      <!-- 有没有作者id -->
       <div class="album-artist title" v-if="item.artist.id" @click="routerPush('artistDetail',item.artist.id)">
         {{item.artist.name}}
       </div>
-      <!-- 没有作者id -->
       <div class="album-artist title" v-else>{{item.artist.name}}</div>
     </div>
   </div>
@@ -24,6 +26,8 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { usePlaylistStore } from "@/pinia/module/playlist.js"
+const { get_songDetail } = usePlaylistStore()//pinia中的方法
 
 const router = useRouter()
 

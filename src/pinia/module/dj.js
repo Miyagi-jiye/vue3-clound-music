@@ -52,5 +52,7 @@ export const useDjStore = defineStore("dj", {
       });
       console.log("获取推荐电台", res.data, this.djRecommend);
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

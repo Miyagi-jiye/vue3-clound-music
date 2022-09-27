@@ -6,7 +6,7 @@
         <div class="name">{{item.name}}</div>
       </div>
       <!-- 收起 -->
-      <div class="vfor" @click="show=false">
+      <div v-if="myData.length > end" class="vfor" @click="show=false">
         <div class="name">
           <icon-to-top theme="filled" size="18" fill="#34d399" :strokeWidth="3" />
           <p>收起</p>
@@ -19,7 +19,7 @@
         <div class="name">{{item.name}}</div>
       </div>
       <!-- 全部 -->
-      <div class="vfor" @click="show=true">
+      <div v-if="myData.length > end" class="vfor" @click="show=true">
         <div class="name">
           <icon-all-application theme="filled" size="18" fill="#34d399" :strokeWidth="3" />
           <p>全部</p>
@@ -38,7 +38,7 @@ const prop = defineProps({
     default: () => []
   },
   activeTag: {
-    type: String,
+    type: [String, Number],
   },
   end: {
     type: Number,

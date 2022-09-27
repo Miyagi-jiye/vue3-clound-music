@@ -216,5 +216,7 @@ export const useUserDetailStore = defineStore("userDetail", {
       this.userFolloweds = res.data
       console.log("获取用户粉丝列表", res.data);
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

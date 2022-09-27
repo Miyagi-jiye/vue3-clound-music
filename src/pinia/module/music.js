@@ -85,5 +85,7 @@ export const useMusicStore = defineStore("music", {
       this.artistMV = res.data.mvs
       console.log("获取歌手热门MV", res.data);
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

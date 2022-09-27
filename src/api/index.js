@@ -565,11 +565,14 @@ export function useMvAll(obj) {
 // 可选参数 : 
 // area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
 // limit: 取出数量 , 默认为 30
-export function useMvFirst(area = "全部") {
+export function useMvFirst(obj = {}) {
   return http({
     method: "get",
     url: "/mv/first",
-    params: { area: area }
+    params: {
+      area: obj.area,
+      limit: obj.limit
+    }
   });
 }
 // 获取 mv 排行

@@ -19,5 +19,7 @@ export const useArtistDetailStore = defineStore("artistDetail", {
       this.artistDesc = res.data
       console.log("获取歌手详细描述", res.data);
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

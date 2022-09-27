@@ -1,1 +1,0 @@
-import{_ as e,o as c,c as o,k as t}from"./index.20afdda4.js";const s={},n=t("h1",null,"404\u9875\u9762",-1),_=[n];function r(a,l){return c(),o("div",null,_)}const f=e(s,[["render",r]]);export{f as default};

@@ -10,7 +10,7 @@
         <el-header>
           <Header />
         </el-header>
-        <el-main id="myMain">
+        <el-main id="myMain" class="test">
           <!-- <el-scrollbar> -->
           <router-view v-slot="{ Component }">
             <Transition name="slide-fade">
@@ -42,6 +42,12 @@
 import Header from "@/views/layout/components/header/header.vue";
 import Menu from "@/views/layout/components/aside/menu.vue";
 import Footer from "@/views/layout/components/footer/footer.vue";
+// #myMain 滚动条回到顶部
+import { onBeforeUpdate } from "vue";
+onBeforeUpdate(() => {
+  document.querySelector('.test').scrollTop = 0;
+});
+
 </script>
 
 <style lang="less" scoped>

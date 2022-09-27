@@ -70,5 +70,7 @@ export const useVideoDetailStore = defineStore("videoDetail", {
         console.log("获取MV评论", res.data);
       }
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

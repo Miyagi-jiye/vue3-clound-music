@@ -12,12 +12,9 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue"
+import { ref, reactive, watch } from "vue"
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from "element-plus";
-import { useLoginStore } from "@/pinia/module/login.js"
-import { storeToRefs } from "pinia";
-const { loginData, isLogin } = storeToRefs(useLoginStore())
 // 路由
 const router = useRouter()
 const route = useRoute()
@@ -48,7 +45,6 @@ const menuStore = reactive([
 ])
 // 点击激活菜单跳转相应页面
 const currentActive = (item) => {
-  currentPath.value = item.path;
   console.log(item);
   if (item.path) {
     router.push(item.path);
@@ -56,10 +52,10 @@ const currentActive = (item) => {
     ElMessage.warning('暂未开放');
   }
 }
-// 路由跳转
-const routerPush = (name, id) => {
-  router.push({ name: name, params: { id: id } })
-}
+// 监听路由变化
+watch(route, (val) => {
+  currentPath.value = val.path
+})
 </script>
 
 <style lang="less" scoped>

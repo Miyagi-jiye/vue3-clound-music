@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>搜索高亮跳转</title>
+  <style>
+    .app {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .input {
+      width: 100%;
+      max-width: 300px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+
+    .button {
+      width: 100%;
+      max-width: 50px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #ccc;
+    }
+
+    #content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .text {
+      width: 350px;
+      height: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      overflow: auto;
+    }
+
+    .text span {
+      color: red;
+      background-color: yellow;
+    }
+
+    .shake {
+      animation: shake 0.2s linear 0s infinite alternate;
+    }
+
+    /* 窗口抖动动画 */
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(5px);
+      }
+
+      50% {
+        transform: translateX(0);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .next {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .next .button {
+      width: 100%;
+      max-width: 100px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .next .button:hover {
+      background-color: #ccc;
+    }
+
+    .previous {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .previous .button {
+      width: 100%;
+      max-width: 100px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .previous .button:hover {
+      background-color: #ccc;
+    }
+
+    .count {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .index {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 输入框 -->
+    <div class="search">
+      <input type="text" class="input" placeholder="请输入要搜索的内容">
+      <button class="button">搜索</button>
+    </div>
+    <!-- 内容 -->
+    <div id="content">
+      <div class="text"></div>
+    </div>
+    <!-- 上一个 -->
+    <div class="previous">
+      <button class="button">查找上一个</button>
+    </div>
+    <!-- 下一个 -->
+    <div class="next">
+      <button class="button">查找下一个</button>
+    </div>
+    <!-- 累计匹配 -->
+    <div class="count"></div>
+    <!-- 当前第几项 -->
+    <div class="index"></div>
+  </div>
+</body>
+
+<script>
+  // 定义初始化数据
+  let content = "【喜迎二十大】 金秋时节，福建省浦城县仙阳镇阳墩村的数百亩农田里，用紫叶稻和黄叶稻种植出的“喜迎二十大”五个大字分外醒目。村民林景新说，这些年，党和国家出台了很多好政策，让大家对种田更有信心了，“这组稻田彩绘就代表了村民们的心声”。浦城县是福建产粮大县，是全国商品粮基地县之一。浦城县农业农村局副局长张述斌告诉记者，今年浦城再生稻种植面积6万亩，目前头季机收基本完成，总产达3.956万吨，11月上旬再生季将陆续成熟收割，预计总产达1.92万吨。9月23日，农历秋分，风吹稻香中迎来了第五个“中国农民丰收节”。福建今年的丰收节以“庆丰收，迎盛会”为主题，全省各地组织开展丰收嘉年华、金秋丰收消费季、乡村休闲旅游、农耕文化体验、农民体育赛事等接地气的系列活动。在“丰收节”福鼎分会场，身着民族服装的畲族姑娘手捧福鼎白茶、槟榔芋等农产品，现场举行历史悠久的晒秋仪式……从平原到高山，从山村到渔家，从畲乡到客邑，放眼八闽乡村，各地立足农时农事区域特色，共同庆丰收、话丰收、晒丰收、享丰收。乡村在稻花香里说丰年，都市则在奋进曲中谋跨越，跑出了发展加速度。【喜迎二十大】 金秋时节，福建省浦城县仙阳镇阳墩村的数百亩农田里，用紫叶稻和黄叶稻种植出的“喜迎二十大”五个大字分外醒目。村民林景新说，这些年，党和国家出台了很多好政策，让大家对种田更有信心了，“这组稻田彩绘就代表了村民们的心声”。浦城县是福建产粮大县，是全国商品粮基地县之一。浦城县农业农村局副局长张述斌告诉记者，今年浦城再生稻种植面积6万亩，目前头季机收基本完成，总产达3.956万吨，11月上旬再生季将陆续成熟收割，预计总产达1.92万吨。9月23日，农历秋分，风吹稻香中迎来了第五个“中国农民丰收节”。福建今年的丰收节以“庆丰收，迎盛会”为主题，全省各地组织开展丰收嘉年华、金秋丰收消费季、乡村休闲旅游、农耕文化体验、农民体育赛事等接地气的系列活动。在“丰收节”福鼎分会场，身着民族服装的畲族姑娘手捧福鼎白茶、槟榔芋等农产品，现场举行历史悠久的晒秋仪式……从平原到高山，从山村到渔家，从畲乡到客邑，放眼八闽乡村，各地立足农时农事区域特色，共同庆丰收、话丰收、晒丰收、享丰收。乡村在稻花香里说丰年，都市则在奋进曲中谋跨越，跑出了发展加速度。【喜迎二十大】 金秋时节，福建省浦城县仙阳镇阳墩村的数百亩农田里，用紫叶稻和黄叶稻种植出的“喜迎二十大”五个大字分外醒目。村民林景新说，这些年，党和国家出台了很多好政策，让大家对种田更有信心了，“这组稻田彩绘就代表了村民们的心声”。浦城县是福建产粮大县，是全国商品粮基地县之一。浦城县农业农村局副局长张述斌告诉记者，今年浦城再生稻种植面积6万亩，目前头季机收基本完成，总产达3.956万吨，11月上旬再生季将陆续成熟收割，预计总产达1.92万吨。9月23日，农历秋分，风吹稻香中迎来了第五个“中国农民丰收节”。福建今年的丰收节以“庆丰收，迎盛会”为主题，全省各地组织开展丰收嘉年华、金秋丰收消费季、乡村休闲旅游、农耕文化体验、农民体育赛事等接地气的系列活动。在“丰收节”福鼎分会场，身着民族服装的畲族姑娘手捧福鼎白茶、槟榔芋等农产品，现场举行历史悠久的晒秋仪式……从平原到高山，从山村到渔家，从畲乡到客邑，放眼八闽乡村，各地立足农时农事区域特色，共同庆丰收、话丰收、晒丰收、享丰收。乡村在稻花香里说丰年，都市则在奋进曲中谋跨越，跑出了发展加速度。【喜迎二十大】 金秋时节，福建省浦城县仙阳镇阳墩村的数百亩农田里，用紫叶稻和黄叶稻种植出的“喜迎二十大”五个大字分外醒目。村民林景新说，这些年，党和国家出台了很多好政策，让大家对种田更有信心了，“这组稻田彩绘就代表了村民们的心声”。浦城县是福建产粮大县，是全国商品粮基地县之一。浦城县农业农村局副局长张述斌告诉记者，今年浦城再生稻种植面积6万亩，目前头季机收基本完成，总产达3.956万吨，11月上旬再生季将陆续成熟收割，预计总产达1.92万吨。9月23日，农历秋分，风吹稻香中迎来了第五个“中国农民丰收节”。福建今年的丰收节以“庆丰收，迎盛会”为主题，全省各地组织开展丰收嘉年华、金秋丰收消费季、乡村休闲旅游、农耕文化体验、农民体育赛事等接地气的系列活动。在“丰收节”福鼎分会场，身着民族服装的畲族姑娘手捧福鼎白茶、槟榔芋等农产品，现场举行历史悠久的晒秋仪式……从平原到高山，从山村到渔家，从畲乡到客邑，放眼八闽乡村，各地立足农时农事区域特色，共同庆丰收、话丰收、晒丰收、享丰收。乡村在稻花香里说丰年，都市则在奋进曲中谋跨越，跑出了发展加速度。"
+  let text = document.querySelector('.text');//显示内容
+  let searchInput = document.querySelector('.input');//输入框
+  let searchButton = document.querySelector('.button');//搜索按钮
+  let count = document.querySelector('.count');//显示匹配的内容个数
+  let nextButton = document.querySelector('.next');//显示跳转下一个匹配内容的按钮
+  let preButton = document.querySelector('.previous');//显示跳转上一个匹配内容的按钮
+  let showIndex = document.querySelector('.index');//显示当前是第几个匹配的内容
+  let index = 0;//记录当前是第几个匹配的内容
+
+  // 显示内容
+  text.innerHTML = content;
+  // 搜索函数
+  function search() {
+    let searchValue = searchInput.value;
+    if (searchValue) {
+      let reg = new RegExp(searchValue, 'g');
+      let newContent = content.replace(reg, `<span id="active">${searchValue}</span>`);
+      text.innerHTML = newContent;
+      // 跳转到第一个匹配的搜索内容的位置
+      let active = document.querySelectorAll('#active');
+      if (active.length > 0) {
+        active[0].scrollIntoView();
+        // text.scrollTop = active[0].offsetTop - 100;//-100是为了让搜索内容在页面的中间位置
+      } else {
+        alert('没有匹配的内容')
+      }
+      // 显示匹配的内容个数
+      count.innerHTML = `共找到${active.length}个匹配的内容`;
+      // 显示当前是第几个匹配的内容
+      showIndex.innerHTML = `当前是第${index + 1}个匹配的内容`;
+    }
+  }
+  // 输入框按下回车键
+  searchInput.onkeydown = function (e) {
+    if (e.keyCode === 13) {
+      search();
+    }
+  }
+  // 输入框清空还原内容
+  searchInput.oninput = function () {
+    if (!searchInput.value) {
+      text.innerHTML = content;
+    }
+  }
+  // 点击搜索按钮，输入框内容为空时，点击搜索按钮不执行搜索，添加抖动动画，输入框红色边框
+  searchButton.onclick = function () {
+    if (!searchInput.value) {
+      searchInput.classList.add('shake');
+      searchInput.style.border = '1px solid red';
+      setTimeout(() => {
+        searchInput.classList.remove('shake');
+        searchInput.style.border = '1px solid #ccc';
+      }, 600);//600是动画执行时间,刚好重复3次
+    } else {
+      search();
+    }
+  }
+  // 显示跳转下一个匹配内容的按钮,从第一个开始往下查找并绿色高亮，查找下一个时恢复原来的颜色
+  nextButton.onclick = function () {
+    let active = document.querySelectorAll('#active');
+    if (active.length > 0) {
+      active[index].style.backgroundColor = 'yellow';//恢复原来的颜色
+      index++;
+      if (index > active.length - 1) {
+        index = 0;
+      }
+      active[index].style.backgroundColor = 'green';//绿色高亮
+      active[index].scrollIntoView();
+      // 显示当前是第几个匹配的内容
+      showIndex.innerHTML = `当前是第${index + 1}个匹配的内容`;
+    } else {
+      alert('没有匹配的内容')
+    }
+  }
+  // 显示跳转上一个匹配内容的按钮,从最后一个开始往上查找并绿色高亮，查找上一个时恢复原来的颜色
+  preButton.onclick = function () {
+    let active = document.querySelectorAll('#active');
+    if (active.length > 0) {
+      active[index].style.backgroundColor = 'yellow';//恢复原来的颜色
+      index--;
+      if (index < 0) {
+        index = active.length - 1;
+      }
+      active[index].style.backgroundColor = 'green';//绿色高亮
+      active[index].scrollIntoView();
+      // 显示当前是第几个匹配的内容
+      showIndex.innerHTML = `当前是第${index + 1}个匹配的内容`;
+    } else {
+      alert('没有匹配的内容')
+    }
+  }
+</script>
+
+</html>

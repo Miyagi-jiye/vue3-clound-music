@@ -42,5 +42,7 @@ export const useSearchStore = defineStore("search", {
             console.log("获取歌曲详情", res.data);
             return res.data.songs[0]
         },
-    }
+    },
+    // 开启数据持久化
+    persist: true,
 })

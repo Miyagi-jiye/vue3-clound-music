@@ -48,5 +48,7 @@ export const useAlbumDetailStore = defineStore("albumDetail", {
       this.album = res.data
       console.log("获取专辑详情", res.data);
     }
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

@@ -5,7 +5,7 @@ import "nprogress/nprogress.css"; //引入nprogress 进度条样式文件
 if (import.meta.env.MODE == "development") {
   axios.defaults.baseURL = '/api';//代理环境
 } else if (import.meta.env.MODE == 'production') {
-  axios.defaults.baseURL = 'http://guowei.fun:3000';//生产环境
+  axios.defaults.baseURL = 'http://guowei.fun:3000/api';//生产环境
 }
 // axios.defaults.withCredentials = true;
 

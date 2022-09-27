@@ -78,5 +78,7 @@ export const useVideoStore = defineStore("video", {
       }
       console.log("获取全部MV视频", res.data);
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

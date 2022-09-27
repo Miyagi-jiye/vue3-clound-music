@@ -71,5 +71,7 @@ export const useSearchDetailStore = defineStore("searchDetail", {
       this.djRadiosCount = res.data.result.djRadiosCount
       console.log("详细搜索返回数据", res.data);
     },
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })

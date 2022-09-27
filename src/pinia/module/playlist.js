@@ -247,7 +247,9 @@ export const usePlaylistStore = defineStore("playlist", {
       console.log("格式化后的歌词", lyricArray);
       return lyricArray;
     }
-  }
+  },
+  // 开启数据持久化
+  persist: true,
 })
 
 // 导出并重命名

@@ -109,6 +109,8 @@ export const useDiscoverStore = defineStore("discover", {
       this.fmIndex++
     }
   },
+  // 开启数据持久化
+  persist: true,
 })
 
 // 导出并重命名

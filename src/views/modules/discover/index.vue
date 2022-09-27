@@ -30,12 +30,14 @@
             @rightClick="routerPush('allPlaylist','精品歌单')" />
           <Tag :myData="tags" :activeTag="highqualityParams.cat" :end="8" @emitClick="tagClick" />
           <Recommend :myData="highquality" :end="10" />
-          <Title title="新歌速递" />
+          <Title title="新歌速递" :showRight="true" :right="{ text: '查看全部', size: 14 }"
+            @rightClick="routerPush('allPlaylist','新歌速递')" />
           <NewSong :myData="newSong" />
           <Title title="新专速递" :showRight="true" :right="{ text: '查看全部', size: 14 }"
             @rightClick="routerPush('allPlaylist','新专速递')" />
           <Album :myData="album" />
-          <Title title="最新MV" />
+          <Title title="最新MV" :showRight="true" :right="{ text: '查看全部', size: 14 }"
+            @rightClick="routerPush('allPlaylist','最新MV')" />
           <Mv :myData="mv" />
         </div>
         <!-- 已登录 -->
